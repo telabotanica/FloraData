@@ -311,6 +311,7 @@
 												function(pos) {
 													$("#lat_field").val(pos.coords.latitude);
 													$("#long_field").val(pos.coords.longitude);
+													alert(pos.coords.longitude);
 												}, 
 												function(error) {
 												    alert('code: '    + error.code    + '\n' +
