@@ -123,9 +123,8 @@
 		
 		
 		<div class="container">
-			
 								<form id="form-obs" action="#" autocomplete="on">
-									<div class="row">
+												<div class="row">
 										<div>
 											<label for="referentiel" title="Réferentiel">
 												Référentiel
@@ -171,7 +170,47 @@
 									</div>
 							
 							
-							
+			<ul class="nav nav-tabs" id="myTab">						
+<li class="active"><a href="#" onclick="$.('#precisions').hide();">Afficher</a></li>
+<li><a href="#profile">Précisions lieu</a></li>
+<li><a href="#messages">Précisions plante</a></li>
+<li><a href="#settings">Settings</a></li>
+</ul>
+ 
+<div id="precisions" class="tab-content">
+	<div class="tab-pane active" id="home">...</div>
+	<div class="tab-pane" id="profile">
+			<form id="form-station" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+				<div class="row-fluid">
+					<div class="span4" rel="tooltip" 
+						title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+						<label for="lieudit">Lieu-dit</label>
+						<div>
+							<input type="text" id="lieudit" class="span2" name="lieudit"/>
+						</div>
+					</div>
+					<div class="span4" rel="tooltip" 
+						title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+						<label for="station">Station</label>
+						<div>
+							<input type="text" id="station" class="span2" name="station"/>
+						</div>
+					</div>
+					<div class="span4" rel="tooltip" 
+						title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+						<label for="milieux">Habitat</label>
+						<div>
+							<input type="text" id="milieu" class="span2" name="milieu" />
+						</div>
+					</div>
+				</div>
+			</form>	
+	</div>
+	<div class="tab-pane" id="messages">..f.</div>
+	<div class="tab-pane" id="settings">.ytrytyty..</div>
+</div>
+			
+														
 									<div class="margin-top-1em gris-bg">
 										<label>
 											Localisation de l'appareil
@@ -197,7 +236,14 @@
 												((''+month).length<2 ? '0' : '') + month + '/' +
 												d.getFullYear()
 											);
+											
+											    $('#myTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+    })
 										</script>
+										
+										
 									</div>
 									
 																		
@@ -222,11 +268,14 @@
 											</button>
 										</div>
 									</div>
+			
 							
 								</form>
-								
 								<a href="lieu.html"> Précisions lieu</a>
 		</div>
+			<script>
+				alert(navigator.online);
+			</script>
 		
 		
 		
