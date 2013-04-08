@@ -1,0 +1,61 @@
+
+
+
+.background (@color) {		background: @color;		}
+
+.bold {		font-weight: bold;		}
+
+.border-radius {	.border-radius;	}
+.border-radius (@radius: 2em) {
+	border-radius: @radius;
+	-moz-border-radius: @radius;
+	-webkit-border-radius: @radius;
+}
+
+
+.gradient ( @color_start; @position_start; @color_end; @position_end ) {
+	background-image: linear-gradient(top, @color_start 0%, @color_end 100%);
+	background-image: -o-linear-gradient(top, @color_start 0%, @color_end 100%);
+	background-image: -moz-linear-gradient(top, @color_start 0%, @color_end 100%);
+	background-image: -webkit-linear-gradient(top, @color_start 0%, @color_end 100%);
+	background-image: -ms-linear-gradient(top, @color_start 0%, @color_end 100%);
+
+	background-image: -webkit-gradient(
+		linear,
+		@position_start,
+		@position_end,
+		color-stop(0, @color_start),
+		color-stop(1, @color_end)
+	);
+
+	height: 20px;
+	display: block;
+}
+
+.margin (@radius: 1em) {	margin: @radius;		}
+.margin-top (@radius: 1em) {		margin-top: @radius;	}
+.margin-right (@radius: 1em) {	margin-right: @radius;	}
+.margin-bottom (@radius: 1em) {	margin-bottom: @radius;	}
+.margin-left (@radius: 1em) {	margin-left: @radius;	}
+.margin-center () {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.padding (@radius: 1em) {	padding: @radius;		}
+.padding-top (@radius: 1em) {	padding-top: @radius;	}
+.padding-right (@radius: 1em) {	padding-right: @radius;	}
+.padding-bottom (@radius: 1em) {	padding-bottom: @radius;}
+.padding-left (@radius: 1em) {	padding-left: @radius;	}
+
+
+.box-shadow (@decalage-x; @decalage-y; @fondu; @color; ) {
+	box-shadow: @arguments;
+}
+.shadow (@color; @decalage-x: 0pt; @decalage-y: 1px; @fondu: 1px;) {
+	text-shadow: @decalage-x @decalage-y @fondu @color;
+}
+
+
+.width (@length) 	{	width: @length;		}
+.height (@length) 	{	height: @length;	}

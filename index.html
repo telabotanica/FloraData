@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head> 
+		<title>Carnet en ligne</title> 
+		
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="content-style-type" content="text/css" />
+		<meta http-equiv="content-script-type" content="text/javascript" />
+		<meta http-equiv="content-language" content="fr" />
+		<meta http-equiv="cache-control" content="no-cache">
+		
+		<!-- Favicones -->
+		<link rel="shortcut icon" type="image/x-icon" href="img/s_favicon.ico" />
+		
+		<!-- Viewport -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+		
+		
+		<!-- CSS -->
+		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
+		<link href="css/bootstrap.mobile.css" rel="stylesheet" type="text/css"/>
+			
+		
+		<!-- my CSS -->
+		<link href="less/bootstrap.less" rel="stylesheet/less" type="text/css" />
+		<link href="less/ailante-bs.less" rel="stylesheet/less" type="text/css" />
+		
+		<!-- Javascript -->
+		<script src="http://www.tela-botanica.org/commun/jquery/1.7.1/jquery-1.7.1.min.js"></script>
+	</head>
+	
+	
+	<body> 
+		
+		<header class="row clearfix margin-bottom-1em white-bg black">
+			<a href="index.html">
+				<img src="img/_logo_tela_alpha.png" class="pull-left span2 logo" />
+			</a>
+
+			<div class="pull-left titre span8">
+				Ajout observations <br /> Carnet en ligne
+			</div>
+		</header>
+		
+		
+		
+		<div class="container">
+			
+							
+							
+							<div class="margin-top-1em gris-bg">
+								<label>
+									Localisation de l'appareil
+								</label>
+								<input type="text" class="btn disabled" id="lat_field" name="latitude" />
+								<input type="text" class="btn disabled" id="long_field" name="longitude" />
+								<input type="text" class="btn disabled" id="long_field" name="date" value="<?= date('d F Y (H\hi\m\i\ns)'); ?>" />
+							 
+								<script>
+									navigator.geolocation.getCurrentPosition(
+										function(pos) {
+											$("#lat_field").val(pos.coords.latitude);
+											$("#long_field").val(pos.coords.longitude);
+										}
+									);
+								</script>
+							</div>
+		</div>
+		
+		
+		
+		<footer class="vert-fonce-bg white">
+			<div class="row margin-ud-1em">
+				<div class="span2 margin-left-05em">
+					<a href="">
+						Ajout
+					</a>
+				</div>
+				<div class="span2 margin-right-05em">
+					<a href="">
+						Accueil
+					</a>
+				</div>
+				<div class="span2 margin-right-05em">
+					<a href="">
+						Espèces
+					</a>
+				</div>
+				<div class="span2 margin-right-05em">
+					<a href="">
+						Mon profil
+					</a>
+				</div>
+			</div>
+		</footer>
+		
+		
+		<script src="js/less-1.3.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</body>
+	
+</html>
