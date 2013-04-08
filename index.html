@@ -119,7 +119,7 @@
 				Ajout observations <br /> Carnet en ligne
 			</div>
 			
-			<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
+			<img src="img/s_info_alpha.png" class="pull-left span1 logo" />
 		</header>
 		
 		
@@ -171,10 +171,11 @@
 										</span>
 									</div>
 							
-							<a href="#" id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</a>
+							<div id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</div>
 			<ul class="nav nav-tabs" id="myTab">						
 <li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
 <li><a href="#precisions-plante">Précisions plante</a></li>
+<li><a href="#localisation">Z</a></li>
 </ul>
  
 <div id="precisions-txt" hidden="true">
@@ -218,13 +219,10 @@
 							<input type="text" id="stade_ph" name="stade_ph"/>
 						</div>
 					</div>
-				</div>
 			</form>	
 		</div>
-	</div>
-</div> 
-			
-														
+		<div class="tab-pane" id="localisation">
+			<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data" autocomplete="off">											
 									<div class="margin-top-1em gris-bg">
 										<label>
 											Localisation de l'appareil
@@ -269,6 +267,11 @@
 										
 										
 									</div>
+			</form>	
+		</div>
+	</div>
+</div> 
+			
 									
 																		
 			
@@ -280,8 +283,7 @@
 										</h4>
 									</div>
 			
-									<img id="myImage" src="" width="50%" style="display:none" />
-									<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
+									<img id="myImage" src="" width="50%" style="display:none" onclick="deletePhoto();"/>
 									
 									
 									
@@ -299,6 +301,15 @@
 		</div>
     <script type="text/javascript">
         function OnLoad () {
+													alert('GPS1');
+											navigator.geolocation.getCurrentPosition(
+												function(pos) {
+													$("#lat_field").val(pos.coords.latitude);
+													$("#long_field").val(pos.coords.longitude);
+													alert('GPS');
+												}
+											);
+													alert('GPS2');
             if ('onLine' in navigator) {
                 if (navigator.onLine) {
                     alert ("Your browser is working online.");
