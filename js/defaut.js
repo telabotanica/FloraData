@@ -274,8 +274,8 @@ $(document).ready(function() {
 	
 	ajouterAutocompletionNoms();
 	
-	configurerFormValidator();
-	definirReglesFormValidator();
+	//configurerFormValidator();
+	//definirReglesFormValidator();
 		
 	$("#courriel_confirmation").on('paste', bloquerCopierCollerCourriel);
 		
@@ -429,16 +429,14 @@ function basculerAffichageCoord() {
 }
 
 function ajouterObs() {
-	if (validerFormulaire() == true) {
-		obsNbre = obsNbre + 1;
-		$(".obs-nbre").text(obsNbre);
-		$(".obs-nbre").triggerHandler('changement');
-		afficherObs();
-		stockerObsData();
-		supprimerMiniature();
-	} else {
-		afficherPanneau('#dialogue-form-invalide');
-	}
+	$("#liste-obs").prepend(
+		$("#myImage").attr('src') +
+		'<br /> Qui voilà ?! <br /> '+
+		$('#referentiel').val() + ' (ref)<br />' +
+		$('#taxon').val() + ' (taxon)<br />' +
+		$('#lieudit').val() + ' (lieudit)<br />' +
+		$('#abondance').val() + ' (abondance)<br />'
+	);
 }
 
 function afficherObs() {
