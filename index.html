@@ -169,46 +169,58 @@
 										</span>
 									</div>
 							
-							
+							<a href="#" id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</a>
 			<ul class="nav nav-tabs" id="myTab">						
-<li class="active"><a href="#" onclick="$.('#precisions').hide();">Afficher</a></li>
-<li><a href="#profile">Précisions lieu</a></li>
-<li><a href="#messages">Précisions plante</a></li>
-<li><a href="#settings">Settings</a></li>
+<li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
+<li><a href="#precisions-plante">Précisions plante</a></li>
 </ul>
  
-<div id="precisions" class="tab-content">
-	<div class="tab-pane active" id="home">...</div>
-	<div class="tab-pane" id="profile">
-			<form id="form-station" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
-				<div class="row-fluid">
-					<div class="span4" rel="tooltip" 
-						title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
-						<label for="lieudit">Lieu-dit</label>
+<div id="precisions-txt" hidden="true">
+	<div class="tab-content">
+		<div class="tab-pane active" id="precisions-lieu">
+			<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+				<div rel="tooltip" 
+					title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+					<label for="lieudit">Lieu-dit</label>
+					<div>
+						<input type="text" id="lieudit" name="lieudit"/>
+					</div>
+				</div>
+				<div rel="tooltip" 
+					title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+					<label for="station">Station</label>
+					<div>
+						<input type="text" id="station" name="station"/>
+					</div>
+				</div>
+				<div rel="tooltip" 
+					title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+					<label for="milieux">Habitat</label>
+					<div>
+						<input type="text" id="milieu" name="milieu" />
+					</div>
+				</div>
+			</form>	
+		</div>
+		<div class="tab-pane" id="precisions-plante">
+			<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+					<div>
+						<label for="abondance">Abondance</label>
 						<div>
-							<input type="text" id="lieudit" class="span2" name="lieudit"/>
+							<input type="text" id="abondance" name="abondance"/>
 						</div>
 					</div>
-					<div class="span4" rel="tooltip" 
-						title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
-						<label for="station">Station</label>
+					<div>
+						<label for="stade_ph">Stade phénologique</label>
 						<div>
-							<input type="text" id="station" class="span2" name="station"/>
-						</div>
-					</div>
-					<div class="span4" rel="tooltip" 
-						title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
-						<label for="milieux">Habitat</label>
-						<div>
-							<input type="text" id="milieu" class="span2" name="milieu" />
+							<input type="text" id="stade_ph" name="stade_ph"/>
 						</div>
 					</div>
 				</div>
 			</form>	
+		</div>
 	</div>
-	<div class="tab-pane" id="messages">..f.</div>
-	<div class="tab-pane" id="settings">.ytrytyty..</div>
-</div>
+</div> 
 			
 														
 									<div class="margin-top-1em gris-bg">
@@ -238,9 +250,19 @@
 											);
 											
 											    $('#myTab a').click(function (e) {
-    e.preventDefault();
-    $(this).tab('show');
-    })
+													e.preventDefault();
+													$(this).tab('show');
+												})
+												
+												function inverse_precisions(d) {
+													if ($('#precisions-txt').is(":visible")) {
+														$('#precisions-txt').hide();
+														document.getElementById(d).innerHTML = "Afficher les précisions";
+													} else {
+														$('#precisions-txt').show();
+														document.getElementById(d).innerHTML = "Masquer les précisions";
+													}
+												}
 										</script>
 										
 										
@@ -261,8 +283,8 @@
 									
 									
 									
-									<div class="row-fluid">
-										<div class="span12 centre">
+									<div class="row">
+										<div class="span12 align-center">
 											<button id="ajouter-obs" class="btn btn-primary btn-large" type="button">
 												Ajouter Obs
 											</button>
@@ -271,11 +293,23 @@
 			
 							
 								</form>
-								<a href="lieu.html"> Précisions lieu</a>
+								<a onclick="OnLoad();">Test Connexion</a>
 		</div>
-			<script>
-				alert(navigator.online);
-			</script>
+    <script type="text/javascript">
+        function OnLoad () {
+            if ('onLine' in navigator) {
+                if (navigator.onLine) {
+                    alert ("Your browser is working online.");
+                }
+                else {
+                    alert ("Your browser is working offline.");
+                }
+            }
+            else {
+                alert ("Your browser does not support the onLine property.");
+            }
+        }
+    </script>
 		
 		
 		

@@ -26,10 +26,8 @@
 	
 	function onPhotoDataSuccess(imageData) {
 		// On récupère le chemin de la photo
-		alert(imageData);
 		npath = imageData.replace("file://localhost",'');
 		var path = imageData.replace("file://localhost",'');
-		alert(imageData);
 		
 		// On affiche la preview
 		$('#myImage').attr('src', path);
