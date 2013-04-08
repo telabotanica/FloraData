@@ -112,14 +112,16 @@
 		
 		<header class="row clearfix margin-bottom-1em white-bg black">
 			<a href="index.html">
-				<img src="img/_logo_tela.png" class="pull-left span2 logo" />
+				<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
 			</a>
 
-			<div class="pull-left titre span8">
+			<div class="pull-left titre span7">
 				Ajout observations <br /> Carnet en ligne
 			</div>
 			
-			<img src="img/s_info_alpha.png" class="pull-left span1 logo" />
+			<div class="margin-top-1em">
+				<img src="img/s_info_alpha.png" class="pull-left span1 logo " />
+			</div>
 		</header>
 		
 		
@@ -171,7 +173,10 @@
 										</span>
 									</div>
 							
-							<div id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</div>
+							<div class="align-center margin-top-1em">
+								<div class="btn" id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</div>
+							</div>
+							
 			<ul class="nav nav-tabs" id="myTab">						
 <li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
 <li><a href="#precisions-plante">Précisions plante</a></li>
@@ -223,7 +228,7 @@
 		</div>
 		<div class="tab-pane" id="localisation">
 			<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data" autocomplete="off">											
-									<div class="margin-top-1em gris-bg">
+									<div class="margin-top-1em gris-bg span10">
 										<label>
 											Localisation de l'appareil
 										</label>
@@ -283,7 +288,8 @@
 										</h4>
 									</div>
 			
-									<img id="myImage" src="" width="50%" style="display:none" onclick="deletePhoto();"/>
+									<img id="myImage" src="" width="50%" style="display:none"/>
+									<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
 									
 									
 									
@@ -301,15 +307,16 @@
 		</div>
     <script type="text/javascript">
         function OnLoad () {
-													alert('GPS1');
 											navigator.geolocation.getCurrentPosition(
 												function(pos) {
 													$("#lat_field").val(pos.coords.latitude);
 													$("#long_field").val(pos.coords.longitude);
-													alert('GPS');
+												}, 
+												function(error) {
+												    alert('code: '    + error.code    + '\n' +
+														  'message: ' + error.message + '\n');
 												}
 											);
-													alert('GPS2');
             if ('onLine' in navigator) {
                 if (navigator.onLine) {
                     alert ("Your browser is working online.");
@@ -340,7 +347,7 @@
 						Accueil
 					</a>
 				</div>
-				<div class="span2 margin-right-05em">
+				<div class="span3 margin-right-05em">
 					<a href="">
 						Espèces
 					</a>
