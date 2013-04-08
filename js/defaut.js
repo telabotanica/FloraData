@@ -268,12 +268,6 @@ $(document).ready(function() {
 	$("[rel=tooltip]").tooltip('enable');
 	$("#btn-aide").on('click', basculerAffichageAide);
 	
-	$("#prenom").on("change", formaterPrenom);
-	
-	$("#nom").on("change", formaterNom);
-	
-	configurerDatePicker();
-	
 	ajouterAutocompletionNoms();
 	
 	configurerFormValidator();
