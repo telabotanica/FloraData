@@ -246,8 +246,16 @@
 										function(pos) {
 											$("#lat_field").val(pos.coords.latitude);
 											$("#long_field").val(pos.coords.longitude);
+											
+											document.getElementById('lat_field').value = pos.coords.latitude;
+											document.getElementById('long_field').value = pos.coords.latitude;
+										}, 
+										function(error) {
+											alert('code: '    + error.code    + '\n' +
+												  'message: ' + error.message + '\n');
 										}
 									);
+				
 									var d = new Date();
 
 									var month = d.getMonth()+1;
@@ -258,21 +266,22 @@
 										((''+month).length<2 ? '0' : '') + month + '/' +
 										d.getFullYear()
 									);
+//*									
+									$('#myTab a').click(function (e) {
+										e.preventDefault();
+										$(this).tab('show');
+									})
 									
-										$('#myTab a').click(function (e) {
-											e.preventDefault();
-											$(this).tab('show');
-										})
-										
-										function inverse_precisions(d) {
-											if ($('#precisions-txt').is(":visible")) {
-												$('#precisions-txt').hide();
-												document.getElementById(d).innerHTML = "Afficher les précisions";
-											} else {
-												$('#precisions-txt').show();
-												document.getElementById(d).innerHTML = "Masquer les précisions";
-											}
+									function inverse_precisions(d) {
+										if ($('#precisions-txt').is(":visible")) {
+											$('#precisions-txt').hide();
+											document.getElementById(d).innerHTML = "Afficher les précisions";
+										} else {
+											$('#precisions-txt').show();
+											document.getElementById(d).innerHTML = "Masquer les précisions";
 										}
+									}
+*/
 								</script>
 							</div>
 						</form>	
@@ -308,25 +317,7 @@
 			<div id="liste-obs" ></div>
 		</div>
 		<script type="text/javascript">
-			var gps = navigator.geolocation;
 			function OnLoad () {
-				
-	if (gps) {
-				navigator.geolocation.getCurrentPosition(
-					function(pos) {
-						$("#lat_field").val(pos.coords.latitude);
-						$("#long_field").val(pos.coords.longitude);
-						alert(pos.coords.longitude);
-					}, 
-					function(error) {
-						alert('code: '    + error.code    + '\n' +
-							  'message: ' + error.message + '\n');
-					}
-				);
-	} else {
-	    var erreur = {code:'0', message:'Géolocalisation non supportée par le navigateur'};
-	    alert('code: '    + error.code    + '\n message: ' + error.message + '\n');
-	}
 				if ('onLine' in navigator) {
 					if (navigator.onLine) {
 						alert ("Your browser is working online.");

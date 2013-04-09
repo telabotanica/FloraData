@@ -1,6 +1,6 @@
 	
 	var npath='';
-	
+/*	
 	function sendform(){
 		var options = new FileUploadOptions();
 		options.fileKey="file";
@@ -14,7 +14,7 @@
 			errorCallback,
 		    options);
 	}
-	
+*/	
 	function capturePhoto() {
 	    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, targetWidth:600  });
 	}
@@ -33,15 +33,11 @@
 		// On affiche la preview
 		$('#myImage').attr('src', path);
 		$('#myImage').show();
-		
-		// On affiche le boutton de suppression
-		$('#button_deletePhoto').show();
 	}
 	
 	function deletePhoto(){
 		$('#myImage').attr('src', '');
 		$('#myImage').hide();
-		$('#button_deletePhoto').hide();
 	}
 	
 	

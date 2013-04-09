@@ -42,6 +42,7 @@ function afficherPanneau(selecteur) {
 
 //+----------------------------------------------------------------------------------------------------------+
 //UPLOAD PHOTO : Traitement de l'image 
+/*
 $(document).ready(function() {
 	
 	$("#effacer-miniature").click(function () {
@@ -87,7 +88,7 @@ $(document).ready(function() {
 		$("#taxon").data(infosAssociee);
 	}
 });
-
+*/
 function isCanvasSupported(){
 	var elem = document.createElement('canvas');
 	return !!(elem.getContext && elem.getContext('2d'));
@@ -201,11 +202,12 @@ function supprimerMiniature() {
 }
 //+---------------------------------------------------------------------------------------------------------+
 // IDENTITÉ
+/*
 $(document).ready(function() {
 	$("#courriel").on('blur', requeterIdentite);
 	$("#courriel").on('keypress', testerLancementRequeteIdentite);
 });
-
+*/
 function testerLancementRequeteIdentite(event) {
 	if (event.which == 13) {
 		requeterIdentite();
@@ -263,6 +265,7 @@ $(document).ready(function() {
 var obsNbre = 0;
 
 $(document).ready(function() {
+/*
 	$(".alert .close").on('click', fermerPanneauAlert);
 	
 	$("[rel=tooltip]").tooltip('enable');
@@ -274,15 +277,15 @@ $(document).ready(function() {
 	
 	ajouterAutocompletionNoms();
 	
-	//configurerFormValidator();
-	//definirReglesFormValidator();
-		
+	configurerFormValidator();
+	definirReglesFormValidator();
+	
 	$("#courriel_confirmation").on('paste', bloquerCopierCollerCourriel);
 		
 	$("a.afficher-coord").on('click', basculerAffichageCoord);
-	
+*/	
 	$("#ajouter-obs").on('click', ajouterObs);
-	
+/*	
 	$(".obs-nbre").on('changement', surChangementNbreObs);
 	
 	$("body").on('click', ".supprimer-obs", supprimerObs);
@@ -290,6 +293,7 @@ $(document).ready(function() {
 	$("#transmettre-obs").on('click', transmettreObs);
 	
 	$("#referentiel").on('change', surChangementReferentiel);
+*/
 });
 
 function configurerFormValidator() {
