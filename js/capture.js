@@ -25,6 +25,7 @@
 	}
 	
 	function onPhotoDataSuccess(imageData) {
+		alert(imageData); 
 		// On récupère le chemin de la photo
 		npath = imageData.replace("file://localhost",'');
 		var path = imageData.replace("file://localhost",'');

@@ -127,214 +127,215 @@
 		
 		
 		<div>
-								<form id="form-obs" action="#" autocomplete="on">
-												<div class="row">
-										<div>
-											<label for="referentiel" title="Réferentiel">
-												Référentiel
-											</label>
-											<span class="input-prepend">
-												<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
-												<select id="referentiel" autocomplete="off">
-													<option value="bdtfx" selected="selected" title="Trachéophytes de France métropolitaine">Métropole (BDTFX)</option>
-													<option value="bdtxa" title="Trachéophytes des Antilles">Antilles françaises (BDTXA)</option>
-												</select>
-											</span>
-										</div>
-									</div>
-									
-									
-									
-									<div id="taxon-input-groupe" class="row" >
-										<label for="taxon" title="Choisissez une espèce">
-											<strong class="obligatoire">*</strong> 
-											Espèce  <em>(ou indication sur la plante)</em>
-										</label>
-										<div class="input-prepend">
-											<span class="add-on">
-												<i class="icon-leaf"></i>
-											</span>
-											<input type="text" id="taxon" name="taxon" value="" />
-										</div>
-									</div>
-									
-									
-									
-									<div class="row">
-										<label for="referentiel" title="Réferentiel">
-											Certitude
-										</label>
-										<span class="input-prepend">
-											<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
-											<select id="referentiel" autocomplete="off">
-												<option value="100" selected="selected" >Certain(e)</option>
-												<option value="0" >Hasard</option>
-											</select>
-										</span>
-									</div>
+			<form id="form-obs" action="#" autocomplete="on">
+				<div class="row">
+					<div>
+						<label for="referentiel" title="Réferentiel">
+							Référentiel
+						</label>
+						<span class="input-prepend">
+							<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
+							<select id="referentiel" autocomplete="off">
+								<option value="bdtfx" selected="selected" title="Trachéophytes de France métropolitaine">Métropole (BDTFX)</option>
+								<option value="bdtxa" title="Trachéophytes des Antilles">Antilles françaises (BDTXA)</option>
+							</select>
+						</span>
+					</div>
+				</div>
+								
+				
+				<div id="taxon-input-groupe" class="row" >
+					<label for="taxon" title="Choisissez une espèce">
+						<strong class="obligatoire">*</strong> 
+						Espèce  <em>(ou indication sur la plante)</em>
+					</label>
+					<div class="input-prepend">
+						<span class="add-on">
+							<i class="icon-leaf"></i>
+						</span>
+						<input type="text" id="taxon" name="taxon" value="" />
+					</div>
+				</div>
+				
+								
+				<div class="row">
+					<label for="referentiel" title="Réferentiel">
+						Certitude
+					</label>
+					<span class="input-prepend">
+						<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
+						<select id="referentiel" autocomplete="off">
+							<option value="100" selected="selected" >Certain(e)</option>
+							<option value="0" >Hasard</option>
+						</select>
+					</span>
+				</div>
+			</form>
 							
-							<div class="align-center margin-top-1em">
-								<div class="btn" id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</div>
-							</div>
 							
+							
+			<div class="align-center margin-top-1em">
+				<div class="btn" id="lien-precisions" onclick="inverse_precisions(this.id);">Afficher les précisions</div>
+			</div>
+					
 			<ul class="nav nav-tabs" id="myTab">						
-<li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
-<li><a href="#precisions-plante">Précisions plante</a></li>
-<li><a href="#localisation">Z</a></li>
-</ul>
+				<li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
+				<li><a href="#precisions-plante">Précisions plante</a></li>
+				<li><a href="#localisation">Z</a></li>
+			</ul>
  
-<div id="precisions-txt" hidden="true">
-	<div class="tab-content">
-		<div class="tab-pane active" id="precisions-lieu">
-			<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
-				<div rel="tooltip" 
-					title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
-					<label for="lieudit">Lieu-dit</label>
-					<div>
-						<input type="text" id="lieudit" name="lieudit"/>
+			<div id="precisions-txt" hidden="true">
+				<div class="tab-content">
+					<div class="tab-pane active" id="precisions-lieu">
+						<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+							<div rel="tooltip" 
+								title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+								<label for="lieudit">Lieu-dit</label>
+								<div>
+									<input type="text" id="lieudit" name="lieudit"/>
+								</div>
+							</div>
+							<div rel="tooltip" 
+								title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+								<label for="station">Station</label>
+								<div>
+									<input type="text" id="station" name="station"/>
+								</div>
+							</div>
+							<div rel="tooltip" 
+								title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+								<label for="milieux">Habitat</label>
+								<div>
+									<input type="text" id="milieu" name="milieu" />
+								</div>
+							</div>
+						</form>	
 					</div>
-				</div>
-				<div rel="tooltip" 
-					title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
-					<label for="station">Station</label>
-					<div>
-						<input type="text" id="station" name="station"/>
+		
+		
+					<div class="tab-pane" id="precisions-plante">
+						<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+								<div>
+									<label for="abondance">Abondance</label>
+									<div>
+										<input type="text" id="abondance" name="abondance"/>
+									</div>
+								</div>
+								<div>
+									<label for="stade_ph">Stade phénologique</label>
+									<div>
+										<input type="text" id="stade_ph" name="stade_ph"/>
+									</div>
+								</div>
+						</form>	
 					</div>
-				</div>
-				<div rel="tooltip" 
-					title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
-					<label for="milieux">Habitat</label>
-					<div>
-						<input type="text" id="milieu" name="milieu" />
-					</div>
-				</div>
-			</form>	
-		</div>
-		<div class="tab-pane" id="precisions-plante">
-			<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
-					<div>
-						<label for="abondance">Abondance</label>
-						<div>
-							<input type="text" id="abondance" name="abondance"/>
-						</div>
-					</div>
-					<div>
-						<label for="stade_ph">Stade phénologique</label>
-						<div>
-							<input type="text" id="stade_ph" name="stade_ph"/>
-						</div>
-					</div>
-			</form>	
-		</div>
-		<div class="tab-pane" id="localisation">
-			<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data" autocomplete="off">											
-									<div class="margin-top-1em gris-bg span10">
-										<label>
-											Localisation de l'appareil
-										</label>
-										<input type="text" class="btn disabled" id="lat_field" name="latitude" />
-										<input type="text" class="btn disabled" id="long_field" name="longitude" />
-										<input type="text" class="btn disabled" id="date" name="date" value="" />
-									 
-										<script>
-											navigator.geolocation.getCurrentPosition(
-												function(pos) {
-													$("#lat_field").val(pos.coords.latitude);
-													$("#long_field").val(pos.coords.longitude);
-												}
-											);
-											var d = new Date();
+		
+		
+					<div class="tab-pane" id="localisation">
+						<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data" autocomplete="off">											
+							<div class="margin-top-1em gris-bg span10">
+								<label>
+									Localisation de l'appareil
+								</label>
+								<input type="text" class="btn disabled" id="lat_field" name="latitude" />
+								<input type="text" class="btn disabled" id="long_field" name="longitude" />
+								<input type="text" class="btn disabled" id="date" name="date" value="" />
+							 
+								<script>
+									navigator.geolocation.getCurrentPosition(
+										function(pos) {
+											$("#lat_field").val(pos.coords.latitude);
+											$("#long_field").val(pos.coords.longitude);
+										}
+									);
+									var d = new Date();
 
-											var month = d.getMonth()+1;
-											var day = d.getDate();
+									var month = d.getMonth()+1;
+									var day = d.getDate();
 
-											$("#date").val(
-												((''+day).length<2 ? '0' : '') + day + '/' +
-												((''+month).length<2 ? '0' : '') + month + '/' +
-												d.getFullYear()
-											);
-											
-											    $('#myTab a').click(function (e) {
-													e.preventDefault();
-													$(this).tab('show');
-												})
-												
-												function inverse_precisions(d) {
-													if ($('#precisions-txt').is(":visible")) {
-														$('#precisions-txt').hide();
-														document.getElementById(d).innerHTML = "Afficher les précisions";
-													} else {
-														$('#precisions-txt').show();
-														document.getElementById(d).innerHTML = "Masquer les précisions";
-													}
-												}
-										</script>
+									$("#date").val(
+										((''+day).length<2 ? '0' : '') + day + '/' +
+										((''+month).length<2 ? '0' : '') + month + '/' +
+										d.getFullYear()
+									);
+									
+										$('#myTab a').click(function (e) {
+											e.preventDefault();
+											$(this).tab('show');
+										})
 										
-										
-									</div>
-			</form>	
-		</div>
-	</div>
-</div> 
+										function inverse_precisions(d) {
+											if ($('#precisions-txt').is(":visible")) {
+												$('#precisions-txt').hide();
+												document.getElementById(d).innerHTML = "Afficher les précisions";
+											} else {
+												$('#precisions-txt').show();
+												document.getElementById(d).innerHTML = "Masquer les précisions";
+											}
+										}
+								</script>
+							</div>
+						</form>	
+					</div>
+				</div> <!-- #tab-content -->
+			</div> <!-- #precisions-txt -->
 			
-									
-																		
+																							
 			
-									<div class="row">
-										<h4>Photo : 
-											<button type="button" onclick="capturePhoto();" class="btn btn-large">
-												<i class="icon-camera"></i>
-											</button>
-										</h4>
-									</div>
+			<div class="row">
+				<h4>Photo : 
+					<button type="button" onclick="capturePhoto();" class="btn btn-large">
+						<i class="icon-camera"></i>
+					</button>
+				</h4>
+			</div>
+
+			<img id="myImage" src="" width="50%" style="display:none"/>
+			<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
 			
-									<img id="myImage" src="" width="50%" style="display:none"/>
-									<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
-									
-									
-									
-									<div class="row">
-										<div class="span12 align-center">
-											<button id="ajouter-obs" class="btn btn-primary btn-large" type="button">
-												Ajouter Obs
-											</button>
-										</div>
-									</div>
+			
+			
+			<div class="row">
+				<div class="span12 align-center">
+					<button id="ajouter-obs" class="btn btn-primary btn-large" type="button">
+						Ajouter Obs
+					</button>
+				</div>
+			</div>
 			
 							
-								</form>
-								<a onclick="OnLoad();">Test Connexion</a>
+			<a onclick="OnLoad();">Test Connexion</a>
+			<div id="liste-obs" ></div>
 		</div>
-    <script type="text/javascript">
-        function OnLoad () {
-											navigator.geolocation.getCurrentPosition(
-												function(pos) {
-													$("#lat_field").val(pos.coords.latitude);
-													$("#long_field").val(pos.coords.longitude);
-													alert(pos.coords.longitude);
-												}, 
-												function(error) {
-												    alert('code: '    + error.code    + '\n' +
-														  'message: ' + error.message + '\n');
-												}
-											);
-            if ('onLine' in navigator) {
-                if (navigator.onLine) {
-                    alert ("Your browser is working online.");
-                }
-                else {
-                    alert ("Your browser is working offline.");
-                }
-            }
-            else {
-                alert ("Your browser does not support the onLine property.");
-            }
-        }
-    </script>
+		<script type="text/javascript">
+			function OnLoad () {
+				navigator.geolocation.getCurrentPosition(
+					function(pos) {
+						$("#lat_field").val(pos.coords.latitude);
+						$("#long_field").val(pos.coords.longitude);
+						alert(pos.coords.longitude);
+					}, 
+					function(error) {
+						alert('code: '    + error.code    + '\n' +
+							  'message: ' + error.message + '\n');
+					}
+				);
+				
+				if ('onLine' in navigator) {
+					if (navigator.onLine) {
+						alert ("Your browser is working online.");
+					}
+					else {
+						alert ("Your browser is working offline.");
+					}
+				}
+				else {
+					alert ("Your browser does not support the onLine property.");
+				}
+			}
+		</script>
 		
-		
-		<div id="liste-obs" ></div>
-		
+				
 		
 		<footer class="vert-fonce-bg white">
 			<div class="row margin-ud-1em">
