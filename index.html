@@ -308,7 +308,10 @@
 			<div id="liste-obs" ></div>
 		</div>
 		<script type="text/javascript">
+			var gps = navigator.geolocation;
 			function OnLoad () {
+				
+	if (gps) {
 				navigator.geolocation.getCurrentPosition(
 					function(pos) {
 						$("#lat_field").val(pos.coords.latitude);
@@ -320,7 +323,10 @@
 							  'message: ' + error.message + '\n');
 					}
 				);
-				
+	} else {
+	    var erreur = {code:'0', message:'Géolocalisation non supportée par le navigateur'};
+	    alert('code: '    + error.code    + '\n message: ' + error.message + '\n');
+	}
 				if ('onLine' in navigator) {
 					if (navigator.onLine) {
 						alert ("Your browser is working online.");
