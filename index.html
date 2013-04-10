@@ -33,77 +33,7 @@
 		
 		<!-- Jquery UI : nécessaire pour l'auto-complétion -->
 		<script type="text/javascript" src="http://www.tela-botanica.org/commun/jquery/jquery-ui/1.8.18/js/jquery-ui-1.8.18.custom.min.js"></script>
-		
-		<!-- Javascript : appli saisie -->
-		<script type="text/javascript">
-		//<![CDATA[
-			// La présence du parametre 'debug' dans l'URL enclenche le dégogage
-			var DEBUG = false;
-			// La présence du parametre 'html5' dans l'URL enclenche les fonctions avancées HTML5
-			var HTML5 = false;
-			// Mot-clé du widget/projet
-			var TAG_PROJET = "WidgetSaisie";
-			// Mots-clés à ajouter aux images
-			var TAG_IMG = "";
-			TAG_IMG = TAG_IMG;
-			// Mots-clés à ajouter aux observations
-			var TAG_OBS = "";
-			TAG_OBS = TAG_OBS;
-			// URL du web service réalisant l'insertion des données dans la base du CEL.
-			var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/eflore/cel/jrest/CelWidgetSaisie";
-			// Code du référentiel utilisé pour les nom scientifiques (de la forme nom:code).
-			var NOM_SCI_REFERENTIEL = "bdtfx:1.01";
-			// Nom du référentiel utilisé pour les nom scientifiques.
-			var NOM_SCI_PROJET = "bdtfx";
-			// Code de la version du référentiel utilisé pour les nom scientifiques.
-			var NOM_SCI_VERSION = "1.01";
-			// Indication de la présence d'une espèce imposée
-			var ESPECE_IMPOSEE = "";
-			// Tableau d'informations sur l'espèce imposée
-			var INFOS_ESPECE_IMPOSEE = Array;
-			// Nombre d'élément dans les listes d'auto-complétion
-			var AUTOCOMPLETION_ELEMENTS_NBRE = 20;
-			// Indication de la présence d'un référentiel imposé
-			var REFERENTIEL_IMPOSE = "";
-			// Indication des version utilisées de chaque référentiel
-			var PROJETS_VERSIONS = {"bdtfx":"1.01","bdtxa":"1.00"};
-			// URL du web service permettant l'auto-complétion des noms scientifiques.
-			var SERVICE_AUTOCOMPLETION_NOM_SCI_URL = "http://www.tela-botanica.org/service:eflore:0.1/bdtfx/noms?"+
-					"masque={masque}&"+
-					"recherche=etendue&"+
-					"retour.champs=famille,nom_retenu,nom_retenu_complet,num_taxonomique,nom_retenu.id&"+
-					//"version.projet="+NOM_SCI_VERSION+"&"+
-					"ns.structure=au"+"&"+
-					"navigation.limite="+AUTOCOMPLETION_ELEMENTS_NBRE;
-			// URL du web service permettant l'auto-complétion des noms scientifiques.
-			var SERVICE_AUTOCOMPLETION_NOM_SCI_URL_TPL = "http://www.tela-botanica.org/service:eflore:0.1/{referentiel}/noms?"+
-					"masque={masque}&"+
-					"recherche=etendue&"+
-					"retour.champs=famille,nom_retenu,nom_retenu_complet,num_taxonomique,nom_retenu.id&"+
-					//"version.projet="+NOM_SCI_VERSION+"&"+
-					"ns.structure=au"+"&"+
-					"navigation.limite="+AUTOCOMPLETION_ELEMENTS_NBRE;
-			// Nombre d'observations max autorisé avant transmission
-			var OBS_MAX_NBRE = 10;
-			// Durée d'affichage en milliseconde des messages d'informations
-			var DUREE_MESSAGE = 15000;
-			// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
-			var SERVICE_NOM_COMMUNE_URL = "http://www.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";
-			// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
-			var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
-			// URL du marqueur à utiliser dans la carte Google Map
-			var GOOGLE_MAP_MARQUEUR_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/marqueurs/epingle.png";
-			// URL de l'icône du chargement en cours
-			var CHARGEMENT_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/chargement.gif";
-			// URL de l'icône du chargement en cours d'une image
-			var CHARGEMENT_IMAGE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/chargement-image.gif";
-			// URL de l'icône du calendrier
-			var CALENDRIER_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/calendrier.png";
-			// URL de l'icône du calendrier
-			var PAS_DE_PHOTO_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/pasdephoto.png";
-		//]]>
-		</script>
-		<script type="text/javascript" src="js/defaut.js"></script>
+
 		<script type="text/javascript" src="js/capture.js"></script>
 	</head>
 	
