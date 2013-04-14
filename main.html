@@ -254,6 +254,12 @@
 									);
 									
 									
+									$('#myTab a').click(function (e) {
+										e.preventDefault();
+										$(this).tab('show');
+									});
+									
+									
 									var d = new Date();
 									var month = d.getMonth()+1;
 									var day = d.getDate();
@@ -312,6 +318,7 @@
 					alert ("Your browser does not support the onLine property.");
 				}
 				
+				alert("Watch ID");
 				watchID = navigator.geolocation.watchPosition(onSuccess, null, { enableHighAccuracy: true });
 			}
 			
