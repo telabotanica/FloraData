@@ -105,6 +105,22 @@
 		</script>
 		<script type="text/javascript" src="js/defaut.js"></script>
 		<script type="text/javascript" src="js/capture.js"></script>
+		<script>
+			document.addEventListener("deviceready", onDeviceReady, false);
+			
+			function onDeviceReady() {
+				KeyEvent.prototype.menuTrigger = function()
+				{
+				  var e = document.createEvent('Events');
+				  e.initEvent('menuKeyDown');
+				  document.dispatchEvent(e);
+				}
+				
+				document.addEventListener("menuKeyDown", function() {
+					alert('menu_pressed');
+				}, false);
+			}
+	</script>
 	</head>
 	
 	
@@ -318,8 +334,7 @@
 					alert ("Your browser does not support the onLine property.");
 				}
 				
-				alert("Watch ID");
-				watchID = navigator.geolocation.watchPosition(onSuccess, null, { enableHighAccuracy: true });
+				watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
 			}
 			
 			
@@ -337,6 +352,11 @@
 								
 				navigator.geolocation.clearWatch(watchID);
 				alert("End Watch");
+			}
+			
+			function onError(error) {
+				alert('code : '    + error.code    + '\n' +
+					  'message : ' + error.message + '\n');
 			}
 		</script>
 		
