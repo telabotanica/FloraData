@@ -1,100 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Carnet en Ligne</title>
-        
-		<!-- CSS -->
-		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
-		<link href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" rel="stylesheet" type="text/css" />
-		
-		<!-- Javascript -->
-		<script src="http://www.tela-botanica.org/commun/jquery/1.7.1/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript" src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
-		<script type="text/javascript" src="js/defaut.js"></script>
-    </head>
-
-    <body>
-	
-	
-<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data">											
-	<div class="margin-top-1em gris-bg span10">
-		<label>
-			Localisation de l'appareil
-		</label>
-		<input type="text" class="btn disabled" id="lat_field" name="latitude" />
-		<input type="text" class="btn disabled" id="long_field" name="longitude" />
-		<input type="text" class="btn disabled" id="date" name="date" value="" />
-
-		<script>
-			navigator.geolocation.getCurrentPosition(
-				function(pos) {
-					$("#lat_field").val(pos.coords.latitude);
-					$("#long_field").val(pos.coords.longitude);
-
-					//document.getElementById('lat_field').value = pos.coords.latitude;
-					//document.getElementById('long_field').value = pos.coords.longitude;
-				}, 
-				function(error) {
-					alert('code: '    + error.code    + '\n' +
-						  'message: ' + error.message + '\n');
-				},
-				{ enableHighAccuracy: true }
-			);
-
-			var d = new Date();
-
-			var month = d.getMonth()+1;
-			var day = d.getDate();
-
-			$("#date").val(
-				((''+day).length<2 ? '0' : '') + day + '/' +
-				((''+month).length<2 ? '0' : '') + month + '/' +
-				d.getFullYear()
-			);
-		</script>
-	</div>
-</form>
-		
-		
-<div class="row">
-	<h4>Photo : 
-		<button type="button" onclick="capturePhoto();" class="btn btn-large">
-			<i class="icon-camera"></i>
-		</button>
-	</h4>
-</div>
-
-<img id="myImage" src="" width="50%" style="display:none"/>
-<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
-
-
-
-<div class="row">
-	<div class="span12 align-center">
-		<button id="ajouter-obs" class="btn btn-primary btn-large" type="button">
-			Ajouter Obs
-		</button>
-	</div>
-</div>
-<div id="liste-obs" ></div>
-	<script type="text/javascript">
-		function OnLoad () {
-			if ('onLine' in navigator) {
-				if (navigator.onLine) {
-					alert ("Your browser is working online.");
-				}
-				else {
-					alert ("Your browser is working offline.");
-				}
-			}
-			else {
-				alert ("Your browser does not support the onLine property.");
-			}
-		}
-	</script>	
-		
-		<script type="text/javascript" src="js/capture.js"></script>
-		<script src="phonegap.js"></script>
-    </body>
-
+  <head>
+   <title>tittle</title>
+   <script>
+     window.location='./main.html';
+   </script>
+  <body>
+  </body>
 </html>
