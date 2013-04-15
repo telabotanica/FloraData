@@ -55,12 +55,13 @@ var OptionsMenu = function(menu) {
     
     // Listen for the menubutton event to hide/show the menu
     document.addEventListener("menubutton", function() {
+		var footer = document.getElementById("footer");
         if (menuDiv.style.display == 'none') {
             menuDiv.style.display = 'block';
-            document.getElementById("footer").style.display = 'none';
+            footer.style.display = 'none';
         } else {
             menuDiv.style.display = 'none';
-            document.getElementById("footer").style.display = 'block';
+            footer.style.display = 'block';
         }
     }, false);
 };

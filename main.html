@@ -12,11 +12,11 @@
 		<!-- Favicones -->
 		<link rel="shortcut icon" type="image/x-icon" href="img/s_favicon.ico" />
 		
-		<!-- Viewport -->
+		<!-- Viewport
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
-		
+		 -->
 		
 		<!-- CSS -->
 		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
@@ -27,8 +27,11 @@
 		<link href="less/bootstrap.less" rel="stylesheet/less" type="text/css" />
 		<link href="less/ailante-bs.less" rel="stylesheet/less" type="text/css" />
 		
+		
 		<!-- Javascript -->
 		<script type="text/javascript" src="http://www.tela-botanica.org/commun/jquery/1.7.1/jquery-1.7.1.min.js"></script>		
+		<script type="text/javascript" src="phonegap.js"></script>		
+		<script type="text/javascript" src="js/optionsMenu.js"></script>
 		
 		
 		<!-- Jquery UI : nécessaire pour l'auto-complétion -->
@@ -111,17 +114,80 @@
 			function onDeviceReady() {
 			
 				var onHelp = function() {
-					alert('Coming soon...');
+					alert('Application soutenue par Tela-Botanice \n'+
+							'Développée par Zedd971');
 				}
 				
 				var onSettings = function() {
-					alert('Voulez-vous vraiment quitter cette application ?');
+					alert(	'Device Name: '     + device.name     + '<br />' + 
+							'Device PhoneGap: ' + device.phonegap + '<br />' + 
+							'Device Platform: ' + device.platform + '<br />' + 
+							'Device UUID: '     + device.uuid     + '<br />' + 
+							'Device Version: '  + device.version  + '<br />'
+						 );
 				}
 				
-				var onTest = function() {
-					alert('null');
+				
+			    // process the confirmation dialog result
+				function onConfirm(button) {
+					alert('You selected button ' + button);
+					if (button == 1) {
+						exitFromApp();
+					}
 				}
-			
+
+				// Show a custom confirmation dialog
+				//
+				var showConfirm = function() {
+					navigator.notification.confirm(
+						'Voulez-vous vraiment quitter CeL Mobile ?',  // message
+						onConfirm,              // callback to invoke with index of button pressed
+						'Quitter',            // title
+						'OUi, je pars., Non, je reste.'          // buttonLabels
+					);
+				}
+				
+				
+				var checkConnection = function() {
+					var networkState = navigator.network.connection.type;
+
+					var states = {};
+					states[Connection.UNKNOWN]  = 'Unknown connection';
+					states[Connection.ETHERNET] = 'Ethernet connection';
+					states[Connection.WIFI]     = 'WiFi connection';
+					states[Connection.CELL_2G]  = 'Cell 2G connection';
+					states[Connection.CELL_3G]  = 'Cell 3G connection';
+					states[Connection.CELL_4G]  = 'Cell 4G connection';
+					states[Connection.NONE]     = 'No network connection';
+
+					alert('Connection type: ' + states[networkState]);
+				}
+				
+				
+				function onError() {
+					alert('onError!');
+				};
+				
+				function onSuccessK(heading) {
+					alert('Heading: ' + heading);
+				};
+
+				var kompass = function() {
+					navigator.compass.getCurrentHeading(onSuccessK, onErrorK);
+				}
+				
+				
+				function onSuccessA(acceleration) {
+					alert('Acceleration X: ' + acceleration.x + '\n' +
+						  'Acceleration Y: ' + acceleration.y + '\n' +
+						  'Acceleration Z: ' + acceleration.z + '\n' +
+						  'Timestamp: '      + acceleration.timestamp + '\n');
+				};
+				var vroum-vroum = function() {
+					navigator.accelerometer.getCurrentAcceleration(onSuccessA, onError);
+				}
+
+
 				var optionsmenu = new OptionsMenu({
 					id: "optionsmenu",
 					items: [
@@ -139,36 +205,43 @@
 						],
 						[ 
 							{
-								label: "Row 2",
+								label: "Accelerometer",
 								image: "img/s_info_alpha.png",
-								action: onHelp
+								action: vroum-vroum
 							} 
 						],
 						[ 
 							{
-								label: "Row 3",
+								label: "Quitter",
 								image: "img/mail.png",
-								action: onTest
+								action: showConfirm
 							},
 							{
-								label: "More Help",
+								label: "Connexion",
 								image: "img/phone.png",
-								action: onHelp
+								action: checkConnection
 							},
 							{
-								label: "Even More Help",
+								label: "Direction ?",
 								image: "img/sms.png",
-								action: onHelp
+								action: kompass
 							} 
 						],
 					],
 				});
 			}
+			
+			function exitFromApp() {				
+				navigator.notification.beep(2);
+				navigator.notification.vibrate(2000);
+
+				navigator.app.exitApp();
+			}
 		</script>
 	</head>
 	
 	
-	<body class="container" onload="onDeviceReady()"> 
+	<body class="container"> 
 		
 		<header class="row clearfix margin-bottom-1em white-bg black">
 			<a href="index.html">
@@ -432,8 +505,6 @@
 		
 		<script type="text/javascript" src="js/less-1.3.3.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="phonegap.js"></script>		
-		<script type="text/javascript" src="js/optionsMenu.js"></script>
 	</body>
 	
 </html>
