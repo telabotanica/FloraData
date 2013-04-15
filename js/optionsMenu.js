@@ -57,8 +57,10 @@ var OptionsMenu = function(menu) {
     document.addEventListener("menubutton", function() {
         if (menuDiv.style.display == 'none') {
             menuDiv.style.display = 'block';
+            document.getElementById("footer").style.display = 'none';
         } else {
             menuDiv.style.display = 'none';
+            document.getElementById("footer").style.display = 'block';
         }
     }, false);
 };

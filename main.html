@@ -28,8 +28,6 @@
 		<link href="less/ailante-bs.less" rel="stylesheet/less" type="text/css" />
 		
 		<!-- Javascript -->
-		<script type="text/javascript" src="phonegap.js"></script>		
-		<script type="text/javascript" src="js/optionsMenu.js"></script>
 		<script type="text/javascript" src="http://www.tela-botanica.org/commun/jquery/1.7.1/jquery-1.7.1.min.js"></script>		
 		
 		
@@ -125,55 +123,46 @@
 				}
 			
 				var optionsmenu = new OptionsMenu({
-				id: "optionsmenu",
-				items: [
-				[ {
-				label: "Settings",
-				image: "img/_logo_sauvages_alpha.png",
-				action: onSettings
-				},
-				{
-				label: "Help",
-				image: "img/_logo_tela.png",
-				action: onHelp
-				} ],
-				[ {
-				label: "Row 2",
-				image: "img/s_info_alpha.png",
-				action: onHelp
-				} ],
-				[ {
-				label: "Row 3",
-				image: "img/mail.png",
-				action: onTest
-				},
-				{
-				label: "More Help",
-				image: "img/phone.png",
-				action: onHelp
-				},
-				{
-				label: "Even More Help",
-				image: "img/sms.png",
-				action: onHelp
-				} ],
-				],
+					id: "optionsmenu",
+					items: [
+						[ 
+							{
+								label: "Settings",
+								image: "img/_logo_sauvages_alpha.png",
+								action: onSettings
+							},
+							{
+								label: "Help",
+								image: "img/_logo_tela.png",
+								action: onHelp
+							} 
+						],
+						[ 
+							{
+								label: "Row 2",
+								image: "img/s_info_alpha.png",
+								action: onHelp
+							} 
+						],
+						[ 
+							{
+								label: "Row 3",
+								image: "img/mail.png",
+								action: onTest
+							},
+							{
+								label: "More Help",
+								image: "img/phone.png",
+								action: onHelp
+							},
+							{
+								label: "Even More Help",
+								image: "img/sms.png",
+								action: onHelp
+							} 
+						],
+					],
 				});
-			
-				alert('device ready');
-				
-				/*
-				KeyEvent.prototype.menuTrigger = function()
-				{
-				  var e = document.createEvent('Events');
-				  e.initEvent('menuKeyDown');
-				  document.dispatchEvent(e);
-				}
-				
-				document.addEventListener("menuKeyDown", function() {
-					alert('menu_pressed');
-				}, false);
-				*/
 			}
 		</script>
 	</head>
@@ -318,7 +307,6 @@
 												  'message: ' + error.message + '\n');
 										},
 										{ enableHighAccuracy: true }
-										
 									);
 									
 									
@@ -416,7 +404,7 @@
 		<div id="myDiv"></div>		
 		
 		
-		<footer class="vert-fonce-bg white">
+		<footer id="footer" class="vert-fonce-bg white">
 			<div class="row margin-ud-1em">
 				<div class="span2 margin-left-05em">
 					<a href="index.html">
@@ -442,8 +430,10 @@
 		</footer>
 		
 		
-		<script src="js/less-1.3.3.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/less-1.3.3.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="phonegap.js"></script>		
+		<script type="text/javascript" src="js/optionsMenu.js"></script>
 	</body>
 	
 </html>
