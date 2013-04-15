@@ -105,7 +105,6 @@
 		</script>
 		<script type="text/javascript" src="js/defaut.js"></script>
 		<script type="text/javascript" src="js/capture.js"></script>
-		<script type="text/javascript" src="js/optionsMenu.js"></script>
 		<script>
 			document.addEventListener("deviceready", onDeviceReady, false);
 			
@@ -121,61 +120,12 @@
 					alert('menu_pressed');
 				}, false);
 			}
-			
-			 var optionsmenu = new OptionsMenu({
-				id: "optionsmenu",
-				items: [
-				[ {
-				label: "Settings",
-				image: "img/_logo_sauvages_alpha.png",
-				action: onSettings
-				},
-				{
-				label: "Help",
-				image: "img/_logo_tela.png",
-				action: onHelp
-				} ],
-				[ {
-				label: "Row 2",
-				image: "img/s_info_alpha.png",
-				action: onHelp
-				} ],
-				[ {
-				label: "Row 3",
-				image: "img/mail.png",
-				action: onTest
-				},
-				{
-				label: "More Help",
-				image: "img/phone.png",
-				action: onHelp
-				},
-				{
-				label: "Even More Help",
-				image: "img/sms.png",
-				action: onHelp
-				} ],
-				],
-			});
-			
-			function onHelp() {
-				alert('Coming soon...');
-			}
-			
-			function onSettings() {
-				alert('Voulez-vous vraiment quitter cette application ?');
-			}
-			
-			function onTest() {
-				$(window).on('beforeunload', function(event) {
-					return 'Êtes vous sûr de vouloir quiter la page?\nLes observations saisies mais non transmises seront perdues.';
-				});
-			}
 	</script>
 	</head>
 	
 	
 	<body class="container"> 
+		<script type="text/javascript" src="js/optionsMenu.js"></script>
 		
 		<header class="row clearfix margin-bottom-1em white-bg black">
 			<a href="index.html">
@@ -333,6 +283,56 @@
 										((''+month).length<2 ? '0' : '') + month + '/' +
 										d.getFullYear()
 									);
+			
+			 var optionsmenu = new OptionsMenu({
+				id: "optionsmenu",
+				items: [
+				[ {
+				label: "Settings",
+				image: "img/_logo_sauvages_alpha.png",
+				action: onSettings
+				},
+				{
+				label: "Help",
+				image: "img/_logo_tela.png",
+				action: onHelp
+				} ],
+				[ {
+				label: "Row 2",
+				image: "img/s_info_alpha.png",
+				action: onHelp
+				} ],
+				[ {
+				label: "Row 3",
+				image: "img/mail.png",
+				action: onTest
+				},
+				{
+				label: "More Help",
+				image: "img/phone.png",
+				action: onHelp
+				},
+				{
+				label: "Even More Help",
+				image: "img/sms.png",
+				action: onHelp
+				} ],
+				],
+			});
+			
+			function onHelp() {
+				alert('Coming soon...');
+			}
+			
+			function onSettings() {
+				alert('Voulez-vous vraiment quitter cette application ?');
+			}
+			
+			function onTest() {
+				$(window).on('beforeunload', function(event) {
+					return 'Êtes vous sûr de vouloir quiter la page?\nLes observations saisies mais non transmises seront perdues.';
+				});
+			}
 								</script>
 							</div>
 						</form>	
