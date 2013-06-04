@@ -12,11 +12,11 @@
 		<!-- Favicones -->
 		<link rel="shortcut icon" type="image/x-icon" href="img/s_favicon.ico" />
 		
-		<!-- Viewport
+		<!-- Viewport -->
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
-		 -->
+		
 		
 		<!-- CSS -->
 		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
@@ -119,11 +119,11 @@
 				}
 				
 				var onSettings = function() {
-					alert(	'Device Name: '     + device.name     + '<br />' + 
-							'Device PhoneGap: ' + device.phonegap + '<br />' + 
-							'Device Platform: ' + device.platform + '<br />' + 
-							'Device UUID: '     + device.uuid     + '<br />' + 
-							'Device Version: '  + device.version  + '<br />'
+					alert(	'Device Name: '     + device.name     + '\n' + 
+							'Device PhoneGap: ' + device.phonegap + '\n' + 
+							'Device Platform: ' + device.platform + '\n' + 
+							'Device UUID: '     + device.uuid     + '\n' + 
+							'Device Version: '  + device.version  + '\n' + 
 						 );
 				}
 				
@@ -143,7 +143,7 @@
 						'Voulez-vous vraiment quitter CeL Mobile ?',  // message
 						onConfirm,              // callback to invoke with index of button pressed
 						'Quitter',            // title
-						'OUi, je pars., Non, je reste.'          // buttonLabels
+						'Je pars., Non ! Je reste.'          // buttonLabels
 					);
 				}
 				
@@ -173,7 +173,7 @@
 				};
 
 				var kompass = function() {
-					navigator.compass.getCurrentHeading(onSuccessK, onErrorK);
+					navigator.compass.getCurrentHeading(onSuccessK, onError);
 				}
 				
 				
