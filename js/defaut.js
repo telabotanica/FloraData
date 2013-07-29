@@ -1,10 +1,18 @@
 //+---------------------------------------------------------------------------------------------------------+
 // GÉNÉRAL
+<<<<<<< HEAD
+=======
+/*
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 $(document).ready(function() {
 	$(window).on('beforeunload', function(event) {
 		return 'Êtes vous sûr de vouloir quiter la page?\nLes observations saisies mais non transmises seront perdues.';
 	});
 });
+<<<<<<< HEAD
+=======
+*/
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 //+----------------------------------------------------------------------------------------------------------+
 // FONCTIONS GÉNÉRIQUES
 /**
@@ -42,6 +50,10 @@ function afficherPanneau(selecteur) {
 
 //+----------------------------------------------------------------------------------------------------------+
 //UPLOAD PHOTO : Traitement de l'image 
+<<<<<<< HEAD
+=======
+/*
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 $(document).ready(function() {
 	
 	$("#effacer-miniature").click(function () {
@@ -87,7 +99,11 @@ $(document).ready(function() {
 		$("#taxon").data(infosAssociee);
 	}
 });
+<<<<<<< HEAD
 
+=======
+*/
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 function isCanvasSupported(){
 	var elem = document.createElement('canvas');
 	return !!(elem.getContext && elem.getContext('2d'));
@@ -201,11 +217,19 @@ function supprimerMiniature() {
 }
 //+---------------------------------------------------------------------------------------------------------+
 // IDENTITÉ
+<<<<<<< HEAD
+=======
+/*
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 $(document).ready(function() {
 	$("#courriel").on('blur', requeterIdentite);
 	$("#courriel").on('keypress', testerLancementRequeteIdentite);
 });
+<<<<<<< HEAD
 
+=======
+*/
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 function testerLancementRequeteIdentite(event) {
 	if (event.which == 13) {
 		requeterIdentite();
@@ -277,7 +301,11 @@ $(document).ready(function() {
 	
 	configurerFormValidator();
 	definirReglesFormValidator();
+<<<<<<< HEAD
 		
+=======
+	
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 	$("#courriel_confirmation").on('paste', bloquerCopierCollerCourriel);
 		
 	$("a.afficher-coord").on('click', basculerAffichageCoord);

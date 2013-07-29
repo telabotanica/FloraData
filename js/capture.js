@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 265b617c779df803bfbc0ee7c17a54d75314206f
 	var npath='';
 /*	
 	function sendform(){
