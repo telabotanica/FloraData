@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head> 
-		<title></title> 
+		<title>Carnet en ligne</title> 
 		
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 		<meta http-equiv="content-style-type" content="text/css" />
@@ -10,7 +10,7 @@
 		<meta http-equiv="cache-control" content="no-cache">
 		
 		<!-- Favicones -->
-		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+		<link rel="shortcut icon" type="image/x-icon" href="img/s_favicon.ico" />
 		
 		<!-- Viewport -->
 		<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -19,771 +19,492 @@
 		
 		
 		<!-- CSS -->
-		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
+		<link href="css/bootstrap.mobile.css" rel="stylesheet" type="text/css"/>
+			
+		
+		<!-- my CSS -->
+		<link href="less/bootstrap.less" rel="stylesheet/less" type="text/css" />
+		<link href="less/ailante-bs.less" rel="stylesheet/less" type="text/css" />
+		
 		
 		<!-- Javascript -->
-		<script src="js/jquery-2.0.2.min.js"></script>	
-		<script src="js/mobile.js"></script>	
+		<script type="text/javascript" src="http://www.tela-botanica.org/commun/jquery/1.7.1/jquery-1.7.1.min.js"></script>		
+		<script type="text/javascript" src="phonegap.js"></script>		
+		<script type="text/javascript" src="js/optionsMenu.js"></script>
+		
+		
+		<!-- Jquery UI : nécessaire pour l'auto-complétion -->
+		<script type="text/javascript" src="http://www.tela-botanica.org/commun/jquery/jquery-ui/1.8.18/js/jquery-ui-1.8.18.custom.min.js"></script>
 		
 		<!-- Javascript : appli saisie -->
 		<script type="text/javascript">
 		//<![CDATA[
-			// Nombre d'observations max autorisé avant transmission
-			var OBS_MAX_NBRE = 10;
-			// Délai d'attente avant de lancer la recherche des noms latins en ms
-			var DELAI_RECHERCHE = 500;
+			// La présence du parametre 'debug' dans l'URL enclenche le dégogage
+			var DEBUG = false;
+			// La présence du parametre 'html5' dans l'URL enclenche les fonctions avancées HTML5
+			var HTML5 = false;
 			// Mot-clé du widget/projet
 			var TAG_PROJET = "WidgetSaisie";
+			// Mots-clés à ajouter aux images
+			var TAG_IMG = "";
+			TAG_IMG = TAG_IMG;
+			// Mots-clés à ajouter aux observations
+			var TAG_OBS = "";
+			TAG_OBS = TAG_OBS;
 			// URL du web service réalisant l'insertion des données dans la base du CEL.
-			//var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/service:cel:CelWidgetSaisie";
-			var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/test-service:cel:CelWidgetSaisie";
-			// URL du web service annuaire des membres du réseau.
-			var SERVICE_ANNUAIRE = "http://www.tela-botanica.org/client/annuaire_nouveau/actuelle/jrest/utilisateur/identite-par-courriel/";
+			var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/eflore/cel/jrest/CelWidgetSaisie";
+			// Code du référentiel utilisé pour les nom scientifiques (de la forme nom:code).
+			var NOM_SCI_REFERENTIEL = "bdtfx:1.01";
+			// Nom du référentiel utilisé pour les nom scientifiques.
+			var NOM_SCI_PROJET = "bdtfx";
+			// Code de la version du référentiel utilisé pour les nom scientifiques.
+			var NOM_SCI_VERSION = "1.01";
+			// Indication de la présence d'une espèce imposée
+			var ESPECE_IMPOSEE = "";
+			// Tableau d'informations sur l'espèce imposée
+			var INFOS_ESPECE_IMPOSEE = Array;
+			// Nombre d'élément dans les listes d'auto-complétion
+			var AUTOCOMPLETION_ELEMENTS_NBRE = 20;
+			// Indication de la présence d'un référentiel imposé
+			var REFERENTIEL_IMPOSE = "";
+			// Indication des version utilisées de chaque référentiel
+			var PROJETS_VERSIONS = {"bdtfx":"1.01","bdtxa":"1.00"};
+			// URL du web service permettant l'auto-complétion des noms scientifiques.
+			var SERVICE_AUTOCOMPLETION_NOM_SCI_URL = "http://www.tela-botanica.org/service:eflore:0.1/bdtfx/noms?"+
+					"masque={masque}&"+
+					"recherche=etendue&"+
+					"retour.champs=famille,nom_retenu,nom_retenu_complet,num_taxonomique,nom_retenu.id&"+
+					//"version.projet="+NOM_SCI_VERSION+"&"+
+					"ns.structure=au"+"&"+
+					"navigation.limite="+AUTOCOMPLETION_ELEMENTS_NBRE;
+			// URL du web service permettant l'auto-complétion des noms scientifiques.
+			var SERVICE_AUTOCOMPLETION_NOM_SCI_URL_TPL = "http://www.tela-botanica.org/service:eflore:0.1/{referentiel}/noms?"+
+					"masque={masque}&"+
+					"recherche=etendue&"+
+					"retour.champs=famille,nom_retenu,nom_retenu_complet,num_taxonomique,nom_retenu.id&"+
+					//"version.projet="+NOM_SCI_VERSION+"&"+
+					"ns.structure=au"+"&"+
+					"navigation.limite="+AUTOCOMPLETION_ELEMENTS_NBRE;
+			// Nombre d'observations max autorisé avant transmission
+			var OBS_MAX_NBRE = 10;
+			// Durée d'affichage en milliseconde des messages d'informations
+			var DUREE_MESSAGE = 15000;
 			// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
 			var SERVICE_NOM_COMMUNE_URL = "http://www.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";
-			// Texte en absence de connexion
-			var TEXTE_HORS_LIGNE = 'Aucune connexion.';
-			// Texte en absence de compte
-			var TEXTE_NON_COMPTE = 'Aucun compte enregistré.';
-			// Texte en presence de compte
-			var TEXTE_OUI_COMPTE = 'Ajouter au compte ';
-			// Texte d'identification des observations
-			var TEXTE_OBS = 'obsId';
-			// Texte d'identification des photos
-			var TEXTE_PHOTO = 'photoId';
+			// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
+			var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
+			// URL du marqueur à utiliser dans la carte Google Map
+			var GOOGLE_MAP_MARQUEUR_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/marqueurs/epingle.png";
+			// URL de l'icône du chargement en cours
+			var CHARGEMENT_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/chargement.gif";
+			// URL de l'icône du chargement en cours d'une image
+			var CHARGEMENT_IMAGE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/chargement-image.gif";
+			// URL de l'icône du calendrier
+			var CALENDRIER_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/calendrier.png";
+			// URL de l'icône du calendrier
+			var PAS_DE_PHOTO_ICONE_URL = "http://www.tela-botanica.org/widget:cel:modules/saisie/squelettes/defaut/img/icones/pasdephoto.png";
 		//]]>
-		</script>	
+		</script>
+		<script type="text/javascript" src="js/defaut.js"></script>
+		<script type="text/javascript" src="js/capture.js"></script>
+		<script>
+			document.addEventListener("deviceready", onDeviceReady, false);
+			
+			function onDeviceReady() {
+			
+				var onHelp = function() {
+					alert('Application soutenue par Tela-Botanice \n'+
+							'Développée par Zedd971');
+				}
+				
+				var onSettings = function() {
+					alert(	'Device Name: '     + device.name     + '\n' + 
+							'Device PhoneGap: ' + device.phonegap + '\n' + 
+							'Device Platform: ' + device.platform + '\n' + 
+							'Device UUID: '     + device.uuid     + '\n' + 
+							'Device Version: '  + device.version  + '\n' + 
+						 );
+				}
+				
+				
+			    // process the confirmation dialog result
+				function onConfirm(button) {
+					alert('You selected button ' + button);
+					if (button == 1) {
+						exitFromApp();
+					}
+				}
+
+				// Show a custom confirmation dialog
+				//
+				var showConfirm = function() {
+					navigator.notification.confirm(
+						'Voulez-vous vraiment quitter CeL Mobile ?',  // message
+						onConfirm,              // callback to invoke with index of button pressed
+						'Quitter',            // title
+						'Je pars., Non ! Je reste.'          // buttonLabels
+					);
+				}
+				
+				
+				var checkConnection = function() {
+					var networkState = navigator.network.connection.type;
+
+					var states = {};
+					states[Connection.UNKNOWN]  = 'Unknown connection';
+					states[Connection.ETHERNET] = 'Ethernet connection';
+					states[Connection.WIFI]     = 'WiFi connection';
+					states[Connection.CELL_2G]  = 'Cell 2G connection';
+					states[Connection.CELL_3G]  = 'Cell 3G connection';
+					states[Connection.CELL_4G]  = 'Cell 4G connection';
+					states[Connection.NONE]     = 'No network connection';
+
+					alert('Connection type: ' + states[networkState]);
+				}
+				
+				
+				function onError() {
+					alert('onError!');
+				};
+				
+				function onSuccessK(heading) {
+					alert('Heading: ' + heading);
+				};
+
+				var kompass = function() {
+					navigator.compass.getCurrentHeading(onSuccessK, onError);
+				}
+				
+				
+				function onSuccessA(acceleration) {
+					alert('Acceleration X: ' + acceleration.x + '\n' +
+						  'Acceleration Y: ' + acceleration.y + '\n' +
+						  'Acceleration Z: ' + acceleration.z + '\n' +
+						  'Timestamp: '      + acceleration.timestamp + '\n');
+				};
+				var vroum_vroum = function() {
+					navigator.accelerometer.getCurrentAcceleration(onSuccessA, onError);
+				}
+
+
+				var optionsmenu = new OptionsMenu({
+					id: "optionsmenu",
+					items: [
+						[ 
+							{
+								label: "Settings",
+								image: "img/_logo_sauvages_alpha.png",
+								action: onSettings
+							},
+							{
+								label: "Help",
+								image: "img/_logo_tela.png",
+								action: onHelp
+							} 
+						],
+						[ 
+							{
+								label: "Accelerometer",
+								image: "img/s_info_alpha.png",
+								action: vroum_vroum
+							} 
+						],
+						[ 
+							{
+								label: "Quitter",
+								image: "img/mail.png",
+								action: showConfirm
+							},
+							{
+								label: "Connexion",
+								image: "img/phone.png",
+								action: checkConnection
+							},
+							{
+								label: "Direction ?",
+								image: "img/sms.png",
+								action: kompass
+							} 
+						],
+					],
+				});
+			}
+			
+			function exitFromApp() {				
+				navigator.notification.beep(2);
+				navigator.notification.vibrate(2000);
+
+				navigator.app.exitApp();
+			}
+		</script>
 	</head>
 	
-	<body> 
-		<header></header>
-		<style>
-			.well {
-				margin-bottom: 0px;
-			}
-			.modal-body {
-				padding-top: 0px;
-			}
-			
-			#accueil .well {
-				margin: 10px 2px 0px 10px;
-			}
-			
-			#saisie-obs hr {
-				margin: 0px 0px 10px;
-			}
-			
-			.navbar {
-				background: #2b3891;
-			}
-			.navbar .nav > li > a {
-				color: #FFF;
-				text-shadow: none;
-			}
-			.navbar .nav > li > a:hover, .navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
-				color: #2b3891;
-				background: #FFF;
-			}
-			
-			.infos .btn {
-				padding: 0pt;
-				border-radius: 1em 1em 0pt 0pt;
-				background: #FFF;
-			}
-			.infos h5 {
-				padding-left: 1em;
-				color: rgb(237, 120, 38);
-			}
-			.infos .collapse > div {
-				padding: 0.5em 1em;
-			}
-			
-			.modal {
-				top: 0%;
-				width: 320px;
-				overflow-x: scroll;
-				margin-left: -160px;
-			}
-		</style>
+	
+	<body class="container"> 
 		
-		
-		<div class="container row-fluid" id="chargement">
-			<a href="#" class="vers-choix">
-				<img src="img/flora_clapas.jpg" />
+		<header class="row clearfix margin-bottom-1em white-bg black">
+			<a href="index.html">
+				<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
 			</a>
-		</div>
-		
-		
-		<div class="container hide row-fluid" id="accueil">
-			<div class="modal-header clearfix">
-				<a href="index.html" class="accueil">
-					<img src="img/_logo_tela.png" class="pull-left span4" />
-					<img src="img/_logo.jpg" class="pull-right span8" />
-				</a>
-			</div>
-			<p class="text-center">Bienvenue sur <i>Flora Clapas</i>, le grand projet botanique de la Ville de Montpellier !</p> 		
-			<div class="well well-small">
-				<a href="#choix-parcours" class="vers-parcours">
-					<h4>Découvrir les parcours de la ville</h4>
-				</a>
-			</div>
-			<div class="well well-small">
-				<a href="#choix-libre" class="vers-libre">
-					<h4>Se promener librement</h4>
-				</a>
-			</div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="choix-parcours">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-				<h4 class="text-center">La Ville de Montpellier</h4>
-			</div>
-			<div class="modal-body">
-				<p class="text-center">vous propose les parcours suivants : </p>
-				<div class="well well-small">
-					<a href="#parc" class="vers-aqueduc">
-						<h5>Aqueduc</h5>
-					</a>
-				</div>
-				<div class="well well-small">
-					<a href="#" class="muted">
-						<h5>Lez</h5>
-					</a>
-				</div>
-			</div>
-			<div class="modal-footer"></div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="parc-aqueduc">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-				<h4 class="text-center">Aqueduc</h4>
-			</div>
-			<div class="modal-body">
-				<div class="tab-content">
-					<div class="tab-pane active" id="descr">
-						<img src="img/plan.png" class="row" />
-						<p>Bla Bla [Description]</p>
-					</div>
-					
-					<div class="tab-pane row-fluid" id="liste">
-						<div class="well well pull-left muted btn-primary">
-							<div class="span8">
-								<strong>Ciste de Montpellier</strong> <br />
-								<i>Cistus monspeliensis L.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left centranthe-rge">
-							<div class="span8">
-								<strong>Centranthe rouge</strong> <br />
-								<i>Centranthus ruber</i> (L.) DC.
-							</div>
-							<img src="img/img_centranthe.jpg" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left muted">
-							<div class="span8">
-								<strong>Tournikoti Tournikota</strong> <br />
-								<i>Lapinus cretinus Z.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li class="active"><a href="#descr">Parcours</a></li>
-						<li><a href="#liste">Liste</a></li>
-						<li><a href="#clef" data-toggle="modal">Recherche...</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div id="clef" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			</div>
-			<div class="modal-body">
-				<img src="img/s_deter.png" class="span8"/>
-				<div class="text-center">
-					<button class="btn" data-dismiss="modal" aria-hidden="true">Annuler</button>
-					<button class="btn btn-primary">Afficher les résultats</button>
-				</div>
-			</div>
-			<div class="modal-footer">
-			</div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="fiche">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-				<div class="text-center">
-					<h4>Aqueduc</h4>
-					<em>Centranthe rouge</em> <br />
-					<i>Centranthus ruber</i> (L.) DC. <br />
-					<button class="btn btn-info vue">Je l'ai vue !</button>
-				</div>
-			</div>
-			<div class="modal-body">
-				<div class="text-center">
-					Utilisée comme plante ornementale dans nos jardins, elle devient très vite envahissante 
-					et ne tarde pas à s'en échapper.
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c3"> 
-						<h5>
-							<i class="icon-eye-open pull-left"></i>
-							Comment la reconnaître ?
-						</h5>
-					</div>
-					<div id="c3" class="collapse">
-						<div>																			
-							Plante vivace de 30 à 80 cm formant des touffes ramifiées. <br />
-							<ul>
-								<li> Ses feuilles sont vert-grisâtre, ovales, parfois pointues et opposée sur la tige.</li>
-								<li> Ses fleurs (mai-septembre) sont rouge vif, quelquefois blanches ou rose vif et regroupées en grappes de forme conique, dressées aux extrémités des tiges</li>
-								<li> Ses fruits sont secs et ne s'ouvrent pas à maturité pour libérer des graines (akènes)</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c5"> 
-						<h5>
-							<i class="icon-book pull-left"></i>
-							Son histoire							
-						</h5>
-					</div>
-					<div id="c5" class="collapse">
-						<div>																			
-							D'origine méditerranéenne, elle est cultivée comme ornementale en climat tempéré; ayant essaimé ses graines, elle s'est naturalisée sur des sites offrant des conditions proches de ses exigences d'origines.<br>
-						</div>
-					</div>	
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c7"> 
-						<h5>
-							<i class="icon-certificate pull-left"></i>
-							Ses usages							
-						</h5>
-					</div>
-					<div id="c7" class="collapse">
-						<div>				
-							Les feuilles fraîches sont consommable en salade ou cuites et les racines une foi bouillies. Des extraits entrent dans la composition de traitement efficace contre les problèmes gastriques.<br>
-							A haute dose, la Valériane (racines) peut provoquer des troubles digestifs, nerveux et cardiaques. Son emploi répété durant une longue période peut également s'avérer dangereux. <br>
-						</div>
-					</div>	
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block couleur1-bg" data-toggle="collapse" data-target="#c9"> 
-						<h5>
-							<i class="icon-home pull-left"></i>
-							Son écologie							
-						</h5>
-					</div>
-					<div id="c9" class="collapse">
-						<div>
-							<div class="span6">
-								Carte de répartition <br />
-								<img src="img/carte.png" class="" title="Carte de répartition" alt="Carte de répartition">
-							</div>
-							<div>
-								Cette plante pousse naturellement dans les régions méditerranéennes. Elle se trouve dans les rocailles, les murets ou les bordures de chemins et les haies. Peu exigeantes, elle s'accommode de tous types de sol.<br />
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c11"> 
-						<h5>
-							<i class="icon-flag pull-left"></i>
-							Ce qu'il faut savoir...							
-						</h5>
-					</div>
-					<div id="c11" class="collapse">
-						<div>
-							Les papillons et certaines abeilles sauvages apprécient particulièrement ses fleurs.																	
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li><a href="#" class="depuis-fiche">Retour...</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		
-		<script>
-			$('.vers-choix').on('click', function(e) {
-				e.preventDefault();
-				$('#chargement').hide();
-				$('#accueil').show();
-			});
-			$('.vers-parcours').on('click', function(e) {
-				e.preventDefault();
-				$('#accueil').hide();
-				$('#choix-parcours').show();
-			});
-			$('.vers-aqueduc').on('click', function(e) {
-				e.preventDefault();
-				$('#parc-aqueduc').show();
-				$('#choix-parcours').hide();
-			});
-			$('.centranthe-rge').on('click', function(e) {
-				e.preventDefault();
-				$('#parc-aqueduc').hide();
-				$('#fiche').show();
-			});
-			$('.depuis-fiche').on('click', function(e) {
-				e.preventDefault();
-				$('#fiche').hide();
-				$('#parc-aqueduc').show();
-			});
-			$('.vue').on('click', function(e) {
-				e.preventDefault();
-				alert('Bien joué !');
-				$('#fiche').hide();
-				$('#parc-aqueduc').show();
-			});
-		</script>
-		
-		
-		<div class="container row-fluid hide" id="parcours-libre">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-			</div>
-			<div class="modal-body">
-				<div class="tab-content">
-					<div class="tab-pane row-fluid active" id="carte">
-						<iframe 
-							width="280" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
-							src="http://www.tela-botanica.org/widget:cel:cartoPoint?commune=montpellier&nbjours=1" 
-							style="border: 1px solid black"></iframe>
-					</div>
-					
-					<div class="tab-pane row-fluid" id="liste-all">
-						<div class="well well pull-left">
-							<div class="span8 muted">
-								<strong>Centranthe rouge</strong> <br />
-								<i>Centranthus ruber</i> (L.) DC.
-							</div>
-							<img src="img/img_centranthe.jpg" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left muted btn-primary">
-							<div class="span8">
-								<strong>Ciste de Montpellier</strong> <br />
-								<i>Cistus monspeliensis L.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-						<div class="well well centranthe-rge-libre pull-left">
-							<div class="span8">
-								<strong>Euphorbe réveil-matin</strong> <br />
-								<i>Euphorbia helioscopia L.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left muted btn-primary">
-							<div class="span8">
-								<strong>Renouée des oiseaux</strong> <br />
-								<i>Polygonum aviculare L.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left muted">
-							<div class="span8">
-								<strong>Tournikoti Tournikota</strong> <br />
-								<i>Lapinus cretinus Z.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-						<div class="well well pull-left muted">
-							<div class="span8">
-								<strong>Vergerette de Buenos Aires</strong> <br />
-								<i>Erigeron bonariensis L.</i>
-							</div>
-							<img src="img/_logo_tela_qr.png" class="span3 pull-right" />
-						</div>
-					</div>
-					
-					<div class="tab-pane row-fluid" id="clef-all">
-						<img src="img/s_deter.png" class="span12"/>
-						<div class="text-center clearfix">
-							<button class="btn btn-primary">Afficher les résultats</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li class="active"><a href="#carte">Carte</a></li>
-						<li><a href="#liste-all">Liste</a></li>
-						<li><a href="#clef-all">Recherche...</a></li>
-						<li>
-							<a href="#profil" class="vers-profil">
-								-_-
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="profil">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-			</div>
-			<div class="modal-body">
-				<div class="tab-content">
-					<div class="tab-pane active" id="obs">
-						<img src="img/liste.png" />
-						<button id="transmission" class="btn btn-success btn-block">Transmettre au CEL</button>
-					</div>
-					
-					<div class="tab-pane row-fluid" id="compte">			
-						<h4 class="text-center">Compte Tela Botanica</h4>
-						<form id="form-transmission" method="post" action="#">
-							<div id="identification-infos"></div>
-							<div> 
-								<label for="courriel">Courriel * :</label>
-								<input id="courriel" type="email" name="courriel"/>
-								<input id="id-utilisateur" name="id-utilisateur" type="hidden"/>
-								<button id="valider-courriel" class="btn btn-warning btn-block">
-									Vérifier ce compte Tela
-								</button>
-							</div>
-							<div id="zone-courriel-confirmation" class="hide">
-								<label for="courriel-confirmation">
-									<strong class="obligatoire">*</strong> Courriel (confirmation) : 
-								</label>
-								<input id="courriel-confirmation" name="courriel-confirmation" type="text"/>
-							</div>
-							<div id="zone-prenom-nom" class="hide">
-								<div>
-									<label for="nom">Nom :</label>
-									<input id="nom-utilisateur" name="nom" type="text"/>
-								</div>
-								
-								<div>
-									<label for="prenom">Prénom :</label>
-									<input id="prenom-utilisateur" name="prenom" type="text"/>
-								</div>
-							</div>
-							<label for="courriel-memoire">
-								<input type="checkbox" name="courriel-memoire" id="courriel-memoire" checked="checked">
-								Se souvenir de moi
-							</label>
-						</form>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li class="active"><a href="#obs">Mes obs.</a></li>
-						<li><a href="#compte">Mon compte</a></li>
-						<li><a href="#" class="vers-libre">Retour...</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="fiche-libre">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-				<div class="text-center">
-					<strong>Euphorbe réveil-matin</strong> <br />
-					<i>Euphorbia helioscopia</i> L. <br />
-					<button class="btn btn-info vue" id="vue-obs">Je l'ai vue ici ! <br /> Sauvegarder mon observation.</button>
-				</div>
-			</div>
-			<div class="modal-body">
-				<div class="text-center">
-					Très commune en France, elle fleurit d'avril à novembre.
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c3-libre"> 
-						<h5>
-							<i class="icon-eye-open pull-left"></i>
-							Comment la reconnaître ?
-						</h5>
-					</div>
-					<div id="c3-libre" class="collapse">
-						<div>																			
-							Plante herbacée de 10 à 30 cm de hauteur avec une tige vert clair souvent teintée de rouge. <br />
-							<ul>
-								<li> Ses feuilles sont entières avec de petites dents sur les bords et aplaties.</li>
-								<li> Ses fleurs sont vertes ou jaunes, discrètes et réunies sur une "coupelle" on parle alors de cyathe, nom correspondant à ce type d'inflorescence présent chez les euphorbes et d'autres genres voisins. Ce que l'on croit être des pétales sont en fait de petites feuilles modifiées (bractéoles) souvent colorées.</li>
-								<li> Ses fruits sont petits, secs et s'ouvrent à maturité en différents points pour libérer les graines (Capsules).</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c5-libre"> 
-						<h5>
-							<i class="icon-book pull-left"></i>
-							Son histoire							
-						</h5>
-					</div>
-					<div id="c5-libre" class="collapse">
-						<div>																			
-							Le nom helioscopia « qui regarde le soleil », dérivé du grec, fait allusion à l’ombelle qui se déploie tôt le matin, face au soleil d'où le nom de "réveille-matin".
-						</div>
-					</div>	
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c7-libre"> 
-						<h5>
-							<i class="icon-certificate pull-left"></i>
-							Ses usages							
-						</h5>
-					</div>
-					<div id="c7-libre" class="collapse">
-						<div>				
-							Comme la plupart des euphorbes, elle produit un latex toxique pouvant provoquer des allergies et des brûlures si on y touche. Le latex se trouvant généralement à l'intérieur de la plante, il ne faut pas couper ces plantes afin d'éviter d'être en contact avec le latex.
-						</div>
-					</div>	
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block couleur1-bg" data-toggle="collapse" data-target="#c9-libre"> 
-						<h5>
-							<i class="icon-home pull-left"></i>
-							Son écologie							
-						</h5>
-					</div>
-					<div id="c9-libre" class="collapse">
-						<div>
-							<div class="span6">
-								Carte de répartition <br />
-								<img src="img/carte.png" class="" title="Carte de répartition" alt="Carte de répartition">
-							</div>
-							<div>
-								Plante très cosmopolite, l'euphorbe réveille-matin se rencontre à basse altitude dans les champs, sur les bords des chemins et dans les terrains vagues.
-							</div>
-							<div class="clearfix"></div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row-fluid infos">
-					<div class="btn btn-block" data-toggle="collapse" data-target="#c11-libre"> 
-						<h5>
-							<i class="icon-flag pull-left"></i>
-							Ce qu'il faut savoir...							
-						</h5>
-					</div>
-					<div id="c11-libre" class="collapse">
-						<div>
-							C'est une plante mellifère (produisant du nectar) très attractive pour les insectes pollinisateurs. Le latex est un moyen de défense contre beaucoup de chenilles qui se risquent à les manger.															
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li><a href="#" class="depuis-fiche-libre">Retour...</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		
-		
-		<div class="container row-fluid hide" id="saisie-obs">
-			<div class="modal-header">
-				<a href="index.html" class="accueil clearfix">
-					<img src="img/_logo.jpg" />
-				</a>
-			</div>
-			<div class="modal-body">
-				<div>
-					<label for="nom">Espèce : </label>
-					<span id="nom">Euphorbia helioscopia L.</span>
-					<hr />
 
-					<label for="date">
-						Date :
-						<span id="date"></span>
+			<div class="pull-left titre span7">
+				Ajout observations <br /> Carnet en ligne
+			</div>
+			
+			<div class="margin-top-1em">
+				<img src="img/s_info_alpha.png" class="pull-left span1 logo " />
+			</div>
+		</header>
+		
+		
+		
+		<div>
+			<form id="form-obs" action="#" autocomplete="on">
+				<div class="row">
+					<div>
+						<label for="referentiel" title="Réferentiel">
+							Référentiel
+						</label>
+						<span class="input-prepend">
+							<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
+							<select id="referentiel" autocomplete="off">
+								<option value="bdtfx" selected="selected" title="Trachéophytes de France métropolitaine">Métropole (BDTFX)</option>
+								<option value="bdtxa" title="Trachéophytes des Antilles">Antilles françaises (BDTXA)</option>
+							</select>
+						</span>
+					</div>
+				</div>
+								
+				
+				<div id="taxon-input-groupe" class="row" >
+					<label for="taxon" title="Choisissez une espèce">
+						<strong class="obligatoire">*</strong> 
+						Espèce  <em>(ou indication sur la plante)</em>
 					</label>
-					<hr />
-					
-					<button id="geolocaliser" class="btn btn-inverse btn-block">
-						Recalculer ma position
+					<div class="input-prepend">
+						<span class="add-on">
+							<i class="icon-leaf"></i>
+						</span>
+						<input type="text" id="taxon" name="taxon" value="" />
+					</div>
+				</div>
+				
+								
+				<div class="row">
+					<label for="referentiel" title="Réferentiel">
+						Certitude
+					</label>
+					<span class="input-prepend">
+						<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
+						<select id="referentiel" autocomplete="off">
+							<option value="100" selected="selected" >Certain(e)</option>
+							<option value="0" >Hasard</option>
+						</select>
+					</span>
+				</div>
+			</form>
+			
+			
+			<ul class="nav nav-tabs" id="myTab">						
+				<li class="active"><a href="#precisions-lieu">Précisions lieu</a></li>
+				<li><a href="#precisions-plante">Précisions plante</a></li>
+				<li><a href="#localisation">Z</a></li>
+			</ul>
+ 
+			<div id="precisions-txt">
+				<div class="tab-content">
+					<div class="tab-pane active" id="precisions-lieu">
+						<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+							<div rel="tooltip" 
+								title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+								<label for="lieudit">Lieu-dit</label>
+								<div>
+									<input type="text" id="lieudit" name="lieudit"/>
+								</div>
+							</div>
+							<div rel="tooltip" 
+								title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+								<label for="station">Station</label>
+								<div>
+									<input type="text" id="station" name="station"/>
+								</div>
+							</div>
+							<div rel="tooltip" 
+								title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+								<label for="milieux">Habitat</label>
+								<div>
+									<input type="text" id="milieu" name="milieu" />
+								</div>
+							</div>
+						</form>	
+					</div>
+		
+		
+					<div class="tab-pane" id="precisions-plante">
+						<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+								<div>
+									<label for="abondance">Abondance</label>
+									<div>
+										<input type="text" id="abondance" name="abondance"/>
+									</div>
+								</div>
+								<div>
+									<label for="stade_ph">Stade phénologique</label>
+									<div>
+										<input type="text" id="stade_ph" name="stade_ph"/>
+									</div>
+								</div>
+						</form>	
+					</div>
+		
+		
+					<div class="tab-pane" id="localisation">
+						<form id="form-gps" class="control-group" action="#" enctype="multipart/form-data" autocomplete="off">											
+							<div class="margin-top-1em gris-bg span10">
+								<label>
+									Localisation de l'appareil
+								</label>
+								<input type="text" class="btn disabled" id="lat_field" name="latitude" />
+								<input type="text" class="btn disabled" id="long_field" name="longitude" />
+								<input type="text" class="btn disabled" id="date" name="date" value="" />
+							 
+								<script>
+									navigator.geolocation.getCurrentPosition(
+										function(pos) {
+											$("#lat_field").val(pos.coords.latitude);
+											$("#long_field").val(pos.coords.longitude);
+										}, 
+										function(error) {
+											alert('code: '    + error.code    + '\n' +
+												  'message: ' + error.message + '\n');
+										},
+										{ enableHighAccuracy: true }
+									);
+									
+									
+									$('#myTab a').click(function (e) {
+										e.preventDefault();
+										$(this).tab('show');
+									});
+									
+									
+									var d = new Date();
+									var month = d.getMonth()+1;
+									var day = d.getDate();
+									
+									$("#date").val(
+										((''+day).length<2 ? '0' : '') + day + '/' +
+										((''+month).length<2 ? '0' : '') + month + '/' +
+										d.getFullYear()
+									);
+								</script>
+							</div>
+						</form>	
+					</div>
+				</div> <!-- #tab-content -->
+			</div> <!-- #precisions-txt -->
+			
+						
+			<div class="row">
+				<h4>Photo : 
+					<button type="button" onclick="capturePhoto();" class="btn btn-large">
+						<i class="icon-camera"></i>
 					</button>
-					
-					<label for="lat">
-						Latitude :
-						<span id="lat"></span>
-					</label>
-					
-					<label for="lng">
-						Longitude :
-						<span id="lng"></span>
-					</label>
-					
-					<label for="location">
-						Commune :
-						<span id="location"></span>
-						<input id="code-insee" type="hidden" name="code-insee" />
-					</label>
-					
-					<hr />
-					<p class="text-center">Ajouter des photos</p>
-					<div id="photo-suppression-infos"></div>
-					<input type="file" id="ajout-photo"/>
-					
-					<hr />
-					<button id="sauver-obs" class="btn btn-success btn-block">Sauver l'observation</button>
-					<input id="photo" type="hidden" name="photo" />
-					
-					<input id="referentiel" type="hidden" name="referentiel" />
-					<input id="nom-sci-select" type="hidden" name="nom-sci-select" />
-					<input id="num-nom-select" type="hidden" name="num-nom-select" />
+				</h4>
+			</div>
+
+			<img id="myImage" src="" width="50%" style="display:none"/>
+			<input type="button" onclick="deletePhoto();" value="Supprimer la photo" />
+			
+			
+			
+			<div class="row">
+				<div class="span12 align-center">
+					<button id="ajouter-obs" class="btn btn-primary btn-large" type="button">
+						Ajouter Obs
+					</button>
 				</div>
 			</div>
-			<div class="modal-footer">
-				<div class="navbar navbar-fixed-bottom">
-					<ul class="nav parc-nav">
-						<li><a href="#" class="depuis-fiche-libre">Annuler...</a></li>
-					</ul>
-				</div>
-			</div>
+			
+			
+			<a onclick="OnLoad();">Test Connexion</a>
+			<div id="liste-obs" ></div>
 		</div>
-		
-		
-		<script>
-			$('#vue-obs').on('click', function(e) {
-				e.preventDefault();
-				$('#fiche-libre').hide();
-				obtenirPosition(e);
-				$('#saisie-obs').show();
-			});
-			$('.vers-libre').on('click', function(e) {
-				e.preventDefault();
-				$('#accueil').hide();
-				$('#profil').hide();
-				$('#parcours-libre').show();
-			});
-			$('.vers-profil').on('click', function(e) {
-				e.preventDefault();
-				$('#parcours-libre').hide();
-				$('#profil').show();
-			});
-			$('.centranthe-rge-libre').on('click', function(e) {
-				e.preventDefault();
-				$('#parcours-libre').hide();
-				$('#fiche-libre').show();
-			});
-			$('.depuis-fiche-libre').on('click', function(e) {
-				e.preventDefault();
-				$('#saisie-obs').hide();
-				$('#fiche-libre').hide();
-				$('#parcours-libre').show();
-			});
+		<script type="text/javascript">
+			var watchID;
+			
+			function OnLoad () {
+				if ('onLine' in navigator) {
+					if (navigator.onLine) {
+						alert ("Your browser is working online.");
+					}
+					else {
+						alert ("Your browser is working offline.");
+					}
+				}
+				else {
+					alert ("Your browser does not support the onLine property.");
+				}
+				
+				watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
+			}
+			
+			
+			function onSuccess(position) {
+				var div = document.getElementById('myDiv');
+				
+				div.innerHTML = 'Watch ID: '             + watchID  + '<br/>' +
+								'Latitude: '             + position.coords.latitude  + '<br/>' +
+								'Longitude: '            + position.coords.longitude + '<br/>' +
+								'Altitude: '             + position.coords.altitude  + '<br/>' +
+								'Accuracy: '             + position.coords.accuracy  + '<br/>' +
+								'Altitude Accuracy: '    + position.coords.altitudeAccuracy  + '<br/>' +
+								'Heading: '              + position.coords.heading   + '<br/>' +
+								'Speed: '                + position.coords.speed     + '<br/>';
+								
+				navigator.geolocation.clearWatch(watchID);
+				alert("End Watch");
+			}
+			
+			function onError(error) {
+				alert('code : '    + error.code    + '\n' +
+					  'message : ' + error.message + '\n');
+			}
 		</script>
 		
 		
+		<div id="myDiv"></div>		
 		
-		<footer>
-			<script>
-				$('.parc-nav a').on('click', function(e) {
-					e.preventDefault();
-					$(this).tab('show');
-				});
-				
-				$('#sauver-obs').on('click', function(e) {
-					e.preventDefault();
-					var txt = 
-						'Espèce : ' + $('#nom').html() + '\n' + 
-						'Date : ' + $('#date').html() + '\n' + 
-						$('#lat').html() + ' ; ' +  $('#lng').html() + '\n' + 
-						'Lieu :  ' + $('#location').html() + '\n' + 
-						'Photo : ' + $('#photo').val();
-					alert(txt);
-					$('#saisie-obs').hide();
-					$('#profil').show();
-				});
-				
-				$('#ajout-photo').on('change', function(e) {
-					e.preventDefault();
-					$.each($('#ajout-photo').get(0).files, function(index, valeur) {
-						var reader = new FileReader();
-						reader.addEventListener('loadend', function () {
-							var photo_nom = valeur.name,
-								arr_nom = photo_nom.split("."),
-								dernier = arr_nom.length - 1;
-							if (arr_nom[dernier].toUpperCase() != "JPG" && arr_nom[dernier].toUpperCase() != "JPEG") {
-								$('#pic').val('');
-								var txt = 'Seuls les fichiers .JPG ou .JPEG sont acceptés.';
-								$('#photo-suppression-infos').html('<p class="reponse ui-btn-inner ui-btn-corner-all">' + txt + '</p>')
-									.fadeIn(0)
-									.delay(1600)
-									.fadeOut('slow');
-							} else {
-								var photo = {
-									num: TEXTE_PHOTO, 
-									nom: '',
-									parent: '',
-									base64: 0,
-									miniature: ''
-								};
-								photo.nom = photo_nom;
-								photo.base64 = reader.result;
-								$('#photo').val(photo.nom);
-							}
-						}, false);
-						reader.readAsDataURL(valeur);
-					});
-				});
-				
-				$('#transmission').on('click', function(e) {
-					e.preventDefault();
-					requeterIdentite(e);
-					var txt = ( ('onLine' in navigator) && (navigator.onLine)) ? 
-					((statutIdentite) ? 'Connexion mobile accessible. Transmission en cours...' : 'Merci de confirmer votre adresse e-mail.') : 'Aucune connexion. Transmission impossible.';
-					alert(txt);
-				});
-			</script>
+		
+		<footer id="footer" class="vert-fonce-bg white">
+			<div class="row margin-ud-1em">
+				<div class="span2 margin-left-05em">
+					<a href="index.html">
+						Ajout
+					</a>
+				</div>
+				<div class="span2 margin-right-05em">
+					<a href="http://google.com">
+						Accueil
+					</a>
+				</div>
+				<div class="span3 margin-right-05em">
+					<a href="http://tela-botanica.org">
+						Espèces
+					</a>
+				</div>
+				<div class="span3 margin-right-05em">
+					<a href="http://france-antilles.fr">
+						Mon profil
+					</a>
+				</div>
+			</div>
 		</footer>
-		<script src="js/bootstrap.min.js"></script>
+		
+		
+		<script type="text/javascript" src="js/less-1.3.3.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	</body>
 	
 </html>
