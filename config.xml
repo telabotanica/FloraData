@@ -3,7 +3,7 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "org.tela-botanica.cel_mobile"
+        id        = "org.tela-botanica.cel_mobile_pro"
         version   = "2.0.0">
 
     <name>CeL Mobile</name>
@@ -37,7 +37,7 @@
     -->
 
     <!-- Customize your app and platform with the preference element. -->
-    <preference name="phonegap-version"           value="2.3.0" />          <!-- all: current version of PhoneGap -->
+    <preference name="phonegap-version"           value="2.9.0" />          <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="default" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="true" />           <!-- all: hides the status bar at the top of the screen -->
