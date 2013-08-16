@@ -1,10 +1,12 @@
 //+---------------------------------------------------------------------------------------------------------+
 // GÉNÉRAL
+/*
 $(document).ready(function() {
 	$(window).on('beforeunload', function(event) {
 		return 'Êtes vous sûr de vouloir quiter la page?\nLes observations saisies mais non transmises seront perdues.';
 	});
 });
+*/
 //+----------------------------------------------------------------------------------------------------------+
 // FONCTIONS GÉNÉRIQUES
 /**
@@ -432,12 +434,15 @@ function basculerAffichageCoord() {
 
 function ajouterObs() {
 	$("#liste-obs").prepend(
-		$("#myImage").attr('src') +
-		'<br /> Qui voilà ?! <br /> '+
-		$('#referentiel').val() + ' (ref)<br />' +
-		$('#taxon').val() + ' (taxon)<br />' +
-		$('#lieudit').val() + ' (lieudit)<br />' +
-		$('#abondance').val() + ' (abondance)<br />'
+		'<h5> Nouvelle obs. </h5> '
+		+ 'Ref : ' + $('#referentiel').val() + '<br />'
+		+ 'Taxon : ' + $('#taxon').val() + '<br />'
+		+ 'Certitude : ' + $('#certitude').val() + '<br />'
+		+ 'Lieu-dit : ' + $('#lieudit').val() + '<br />' 
+		+ 'Station : ' + $('#station').val() + '<br />' 
+		+ 'Habitat : ' + $('#milieu').val() + '<br />' 
+		+ 'Abondance : ' + $('#abondance').val() + '<br />' 
+		+ 'Stade phénologique : ' + $('#stade_ph').val() + '<br />'
 	);
 }
 

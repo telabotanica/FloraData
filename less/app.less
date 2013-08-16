@@ -13,6 +13,7 @@
 
 body {
 	background: white;
+	margin-bottom: 60px;
 }
 
 header {
@@ -34,22 +35,50 @@ header {
 	.shadow(@orange);
 }
 
-footer {
-	height: 60px;
-	width: 100%;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	position: fixed;
-	z-index: 1000;
-	
-	a, a:visited {
-		color: white;
-	}
+.navbar .nav > li > a, .navbar .nav > li > a:hover, .navbar .nav > li > a:focus {
+	.white;
+	text-shadow: none;
 }
 
-.align-center 		{	text-align: center;	}
-.align-left 		{	text-align: left;	}
+form {
+	margin-bottom: 0px;
+}
+
+.btn {
+	.border-radius;
+}
+
+[class*="span"] {
+	margin-left: 0px;
+}
+
+
+.icon-info-sign {
+	width: 20px;
+	height: 20px;
+	background: url("img/s_info.png");
+}
+.icon-ajout {
+	width: 20px;
+	height: 20px;
+	background: url("img/s_ajout.png");
+}
+
+.container, .modal, 
+.navbar-static-top .container,
+.navbar-fixed-top .container,
+.navbar-fixed-bottom .container {
+  width: 100%;
+}
+.container {
+	margin-bottom: 60px;
+}
+
+.modal {
+	margin-left: -160px;
+}
+
+
 .bold				{	.bold; 			}
 .border-radius 		{	.border-radius;		}
 .clear 				{	clear: both;	}
