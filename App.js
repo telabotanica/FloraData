@@ -198,8 +198,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
-			console.log('Dropping OBS table');
-			tx.executeSql('DROP TABLE IF EXISTS obs');
+			//console.log('Dropping OBS table');
+			//tx.executeSql('DROP TABLE IF EXISTS obs');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS obs (" +
 					"id_obs INT NOT NULL, "+
@@ -463,25 +463,10 @@ ___CEL.models.UtilisateurCollection = Backbone.Collection.extend({
 // -------------------------------------------------- The Views ---------------------------------------------------- //
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Vue Page Accueil
-___CEL.views.Accueil = Backbone.View.extend({
-	templateLoader: ___CEL.utils.templateLoader,
-	
-	initialize: function(data) {
-		//console.log(data);
-		this.template = _.template(this.templateLoader.get('accueil'));
-	},
-
-	render: function(eventName) {
-		$(this.el).html(this.template());
-		return this;
-	}
-});
-
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Vue Page Saisie OBS
 ___CEL.views.saisieObs = Backbone.View.extend({
 	initialize: function(data) {
+		geolocaliser();
 		var date = new Date(),
 			jour = date.getDate(),
 			mois = date.getMonth() + 1,
@@ -609,10 +594,7 @@ ___CEL.parcours = new Array();
 // ----------------------------------------------- The Application Router ------------------------------------------ //
 ___CEL.Router = Backbone.Router.extend({
 	routes: {
-		'' : 'accueil',
-		'parcours' : 'list',
-		'obs/:id_espece/:nom_sci' : 'nouvelleObs',
-		'observation/:id_obs' : 'detailsObs',
+		'' : 'saisie',
 		'transmission' : 'transmissionObs',
 		'compte' : 'compteUtilisateur'
 	},
@@ -822,7 +804,7 @@ ___CEL.Router = Backbone.Router.extend({
 		$(this.searchPage.el).attr('id', 'searchPage');
 	},
 	
-	accueil: function() {
+	saisie: function() {
 		var self = this;
 		self.slidePage(new ___CEL.views.saisieObs().render());
 	},
@@ -833,31 +815,6 @@ ___CEL.Router = Backbone.Router.extend({
 	
 	deselectItem: function(event) {
 		$(event.target).removeClass('tappable-active');
-	},
-
-	list: function() {
-		var self = this;
-		this.slidePage(this.searchPage);
-	},
-	
-	nouvelleObs: function(num_nom, nom_sci) {
-		var obs = new ___CEL.models.Obs({ id: num_nom, nom_sci: nom_sci }),
-			self = this;
-		obs.fetch({
-			success: function(data) {
-				self.slidePage(new ___CEL.views.saisieObs({model: data}).render());
-			}
-		});
-	},
-	
-	detailsObs: function(id_obs) {
-		var obs = new ___CEL.models.Obs({ id: id_obs }),
-			self = this;
-		obs.fetch({
-			success: function(data) {
-				self.slidePage(new ___CEL.views.ObsPage({model: data}).render());
-			}
-		});
 	},
 
 	transmissionObs: function(data) {
@@ -1008,7 +965,7 @@ function miseAJourTransmission(id) {
 
 
 function onPhotoSuccess(imageData){
-	fileSystem.root.getDirectory('org.tela-botanica.cel_mobile', { create: true, exclusive: false }, function(dossier) {
+	fileSystem.root.getDirectory('CEL_Apps', { create: true, exclusive: false }, function(dossier) {
 		var fichier = new FileEntry();
 		fichier.fullPath = imageData;
 		fichier.copyTo(dossier, (new Date()).getTime()+'.jpg', surPhotoSuccesCopie, surPhotoErreurAjout);
@@ -1039,7 +996,7 @@ function surPhotoErreurAjout(error) {
 	$('#obs-photos-info').addClass('text-error');
 	$('#obs-photos-info').removeClass('text-info');
 	$('#obs-photos-info').html('Erreur de traitement. Ajout impossible.');
-	console.log('PHOTO | Error: ' + error.code, error);
+	alert('PHOTO | Error: ' + error.code, error);
 }
 function surPhotoErreurSuppression(error) {
 	var texte = 'Erreur de traitement. Le fichier n\'a pas été supprimé de la mémoire.';
@@ -1068,8 +1025,25 @@ function surSuccesGeoloc(position) {
 			alt = position.coords.altitude;
 		$('#lat_field').html(lat);
 		$('#lng_field').html(lng);
-		$("#altitude_field").html(alt);
-
+		$('#altitude_field').html(alt);
+		
+		var url_service = SERVICE_NOM_COMMUNE_URL;
+		var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
+		$.ajax({
+			url : urlNomCommuneFormatee,
+			type : 'GET',
+			dataType : 'jsonp',
+			success : function(data) {
+				console.log('NOM_COMMUNE found.');
+				$('#location').html(data['nom']);
+				$('#code-insee').val(data['codeINSEE']);
+			},
+			complete : function() { 
+				var texte = ($('#location').html() == '') ? TEXTE_HORS_LIGNE : $('#location').html();
+				$('#location').html(texte);
+			}
+		});
+		
 		$('#geo-infos').html(''); 
 		$('#sauver-obs').removeClass('hide');
 		console.log('Geolocation SUCCESS');

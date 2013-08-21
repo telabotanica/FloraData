@@ -15,10 +15,7 @@
 		<title>Carnet en ligne mobile</title> 
 		
 		<!-- CSS -->
-		<link href="css/normalize.css" rel="stylesheet" type="text/css" />
 		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-			
-		<!-- my CSS -->
 		<link href="less/app.less" rel="stylesheet/less" type="text/css" />
 			
 		<!-- Javascript -->
@@ -57,8 +54,14 @@
 			var DUREE_MESSAGE = 15000;
 			// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
 			var SERVICE_NOM_COMMUNE_URL = "http://www.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";
-			// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
-			var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
+		// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
+		var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
+			// Texte en absence de connexion
+			var TEXTE_HORS_LIGNE = 'Aucune connexion.';
+			// Texte en absence de compte
+			var TEXTE_NON_COMPTE = 'Aucun compte enregistré.';
+			// Texte en presence de compte
+			var TEXTE_OUI_COMPTE = 'Ajouter au compte ';
 			
 			var fileSystem,
 				pictureSource,
@@ -87,6 +90,7 @@
 		<script src="js/underscore-min.js" type="text/javascript" ></script>	
 		<script src="js/backbone-min.js" type="text/javascript" ></script>	
 		<script src="App.js" type="text/javascript" ></script>
+		<script src="phonegap.js" type="text/javascript" ></script>
 	</head>
 	
 	
@@ -131,9 +135,9 @@
 				<h4 id="sauvegarde-obs-modal-label">Observation enregistrée ! <br /> Bravo !</h4>
 			</div>
 			<div class="modal-body">
-				<a href="#" class="btn btn-primary btn-block fermer-obs-modal">
+				<button onclick="location.reload();" class="btn btn-primary btn-block fermer-obs-modal">
 					Continuer les observations
-				</a>
+				</button>
 				<hr />
 				<a href="#transmission" class="btn btn-warning btn-block fermer-obs-modal">
 					Transmettre mes observations

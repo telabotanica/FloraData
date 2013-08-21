@@ -93,7 +93,7 @@
 		Latitude : <span id="lat_field"></span>
 	</label>
 	<label for="lng">
-		Longitude : <span id="long_field"></span>
+		Longitude : <span id="lng_field"></span>
 	</label>
 	<label for="alt">
 		Altitude : <span id="altitude_field"></span>
@@ -137,12 +137,12 @@
 			<div rel="tooltip" 
 				title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
 				<label for="lieudit">Lieu-dit</label>
-				<input type="text" id="lieudit" name="lieudit"/>
+				<input type="text" id="lieudit" name="lieudit" />
 			</div>
 			<div rel="tooltip" 
 				title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
 				<label for="station">Station</label>
-				<input type="text" id="station" name="station"/>
+				<input type="text" id="station" name="station" />
 			</div>
 			<div rel="tooltip" 
 				title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
@@ -165,7 +165,7 @@
 		<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
 			<label for="abondance">Abondance</label>
 			<select id="abondance" name="abondance" autocomplete="off">
-				<option value="" selected="selected"> </option>
+				<option value="NULL" selected="selected"> </option>
 				<option value="5">5 : recouvrement R > 75%</option>
 				<option value="4">4 : 50% &lt; R &lt; 75%</option>
 				<option value="3">3 : 25% &lt; R &lt; 50%</option>
@@ -191,7 +191,7 @@
 			
 			<label for="stade_ph">Stade phénologique</label>
 			<select id="stade_ph" name="stade_ph" autocomplete="off">
-				<option value="" selected="selected"> </option>
+				<option value="NULL" selected="selected"> </option>
 				<option value="00-09">00-09 : germination, développement des bourgeons</option>
 				<option value="10-19">10-19 : développement des feuilles</option>
 				<option value="11">11 : par ex, environ 10% des feuilles épanouies</option>
