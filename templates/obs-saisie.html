@@ -1,0 +1,238 @@
+<header class="row-fluid clearfix margin-bottom-1em white-bg black">
+	<a href="#">
+		<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
+	</a>
+
+	<div class="pull-left titre span7">
+		Ajout observations <br /> Flora Data
+	</div>
+	
+	<div class="margin-top-1em">
+		<a href="#informations-modal" data-toggle="modal">
+			<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
+		</a>
+	</div>
+</header>
+
+
+<div class="tableview tableview-links row-fluid">
+	<form id="form-obs" action="#" autocomplete="on">
+		<div class="row-fluid">
+			<label for="referentiel" title="Réferentiel">
+				Référentiel
+			</label>
+			<span class="input-prepend">
+				<span id="referentiel-icone" class="add-on"><i class="icon-book"></i></span>
+				<select id="referentiel" autocomplete="off">
+					<option value="bdtfx:v1.01" title="Trachéophytes de France métropolitaine" selected="selected">Métropole (BDTFX)</option>
+					<option value="bdtxa:v1.00" title="Trachéophytes des Antilles">Antilles françaises (BDTXA)</option>
+					<option value="isfan:v1.00" title="Afrique du Nord">Afrique du Nord (ISFAN)</option>
+					<option value="NULL" title="Autre/Inconnu">Autre/Inconnu</option>
+				</select>
+			</span>
+		</div>
+						
+		<div id="taxon-input-groupe" class="row-fluid" >
+			<label for="taxon" title="Choisissez une espèce">
+				<strong class="obligatoire">*</strong> 
+				Espèce  <em>(ou indication sur la plante)</em>
+			</label>
+			<div class="input-prepend">
+				<span class="add-on">
+					<i class="icon-leaf"></i>
+				</span>
+				<input type="text" id="taxon" name="taxon" value="" />
+			</div>
+		</div>
+						
+		<div class="row-fluid">
+			<label for="certitude" title="certitude">
+				Identification
+			</label>
+			<span class="input-prepend">
+				<span id="certitude-icone" class="add-on"><i class="icon-book"></i></span>
+				<select id="certitude" name="certitude" autocomplete="off">
+					<option value="NULL" selected="selected"> </option>
+					<option value="certain">Certaine</option>
+					<option value="douteux">Douteuse</option>
+					<option value="aDeterminer">A déterminer</option>
+				</select>
+			</span>
+		</div>
+	</form>
+	
+	<div class="row-fluid">
+		<a href="#precisions-lieu-modal" role="button" class="btn btn-info span6" data-toggle="modal">
+			<i class="icon-plus-sign"></i>
+			Précisions lieu
+		</a>
+		<a href="#precisions-plante-modal" role="button" class="btn btn-success span6" data-toggle="modal">
+			<i class="icon-plus-sign"></i>
+			Précisions plante
+		</a>
+	</div>
+	
+	<hr class="fine"/>
+	<div class="text-center">
+		<div id="geo-infos" class="text-info infos">
+			Calcul en cours...
+		</div>
+		<div id="obs-attente-icone"> 
+			<img src="img/ajax-loader.gif" /> 
+		</div>
+		<button id="geolocaliser" class="btn btn-danger" >
+			Recalculer ma position
+			<i class="icon-search"></i>
+		</button>
+	</div>
+	
+	<label for="date">
+		Date : <span id="date"><%= date %></span>
+	</label>
+	<label for="lat">
+		Latitude : <span id="lat_field"></span>
+	</label>
+	<label for="lng">
+		Longitude : <span id="long_field"></span>
+	</label>
+	<label for="alt">
+		Altitude : <span id="altitude_field"></span>
+	</label>
+	<label for="location">
+		Commune : <span id="location"></span>
+		<input id="code_insee" type="hidden" name="code_insee" value="0" />
+	</label>
+	
+	<hr class="fine"/>
+	<div id="obs-photos-info" class="text-center"></div>
+	<div class="text-center">
+		<button class="ajouter-photos btn-large btn btn-inverse" id="prendre-photos">
+			<i class="icon-picture icon-white"></i> <br />
+			<span id="prendre-photos-texte">Ajouter une photo...</span> 
+		</button>
+		<br /> <br />
+		 Nombre de photos : <span id="nbre-photos">0</span> / <%= LIMITE_NBRE_PHOTOS %>.
+	</div>
+	<div id="obs-photos"></div>
+	<div class="clearfix"></div>
+	
+	<hr class="fine"/>
+	<div class="text-center">
+		<a href="#sauvegarde-obs-modal" role="button" id="sauver-obs" class=" btn btn-warning btn-large margin-navbar" 
+			data-toggle="modal" >
+			<i class="icon-ok"></i> <br />
+			Enregistrer l'observation
+		</a>
+	</div>
+	<input id="num_nom_select" type="hidden" name="num_nom_select" value="0" />
+</div>
+
+
+<div id="precisions-lieu-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="precisions-lieu-label" aria-hidden="true" data-backdrop="static">
+	<div class="modal-header">
+		<h4 id="precisions-lieu-label">Précisions Lieu</h4>
+	</div>
+	<div class="modal-body text-center">
+		<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+			<div rel="tooltip" 
+				title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+				<label for="lieudit">Lieu-dit</label>
+				<input type="text" id="lieudit" name="lieudit"/>
+			</div>
+			<div rel="tooltip" 
+				title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+				<label for="station">Station</label>
+				<input type="text" id="station" name="station"/>
+			</div>
+			<div rel="tooltip" 
+				title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+				<label for="milieux">Habitat</label>
+				<input type="text" id="milieu" name="milieu" />
+			</div>
+		</form>	
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-info" data-dismiss="modal" > 
+			Continuer
+		</button>
+	</div>
+</div>
+<div id="precisions-plante-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="precisions-plante-label" aria-hidden="true" data-backdrop="static">
+	<div class="modal-header">
+		<h4 id="precisions-plante-label">Précisions Plante</h4>
+	</div>
+	<div class="modal-body text-center">
+		<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
+			<label for="abondance">Abondance</label>
+			<select id="abondance" name="abondance" autocomplete="off">
+				<option value="" selected="selected"> </option>
+				<option value="5">5 : recouvrement R > 75%</option>
+				<option value="4">4 : 50% &lt; R &lt; 75%</option>
+				<option value="3">3 : 25% &lt; R &lt; 50%</option>
+				<option value="2">2 : 5% &lt; R &lt; 25%</option>
+				<option value="1">1 : 1% &lt; R &lt; 5%</option>
+				<option value="+">+ : recouvrement R &lt; 1%</option>
+				<option value="r">r : rare (quelques pieds)</option>
+				<option value="i">i : un seul individu</option>
+				<option value="1-5">1-5 individus</option>
+				<option value="5-10">5-10 individus</option>
+				<option value="10-50">10-50 individus</option>
+				<option value="50-100">50-100 individus</option>
+				<option value="100-500">100-500 individus</option>
+				<option value=">500">&gt;500 individus</option>
+				<option value="E">E : exceptionnel</option>
+				<option value="RR">RR : très rare</option>
+				<option value="R">R : rare</option>
+				<option value="AR">AR : assez rare</option>
+				<option value="AC">AC : assez commun</option>
+				<option value="C">C : commun</option>
+				<option value="CC">CC : très commun</option>
+			</select>
+			
+			<label for="stade_ph">Stade phénologique</label>
+			<select id="stade_ph" name="stade_ph" autocomplete="off">
+				<option value="" selected="selected"> </option>
+				<option value="00-09">00-09 : germination, développement des bourgeons</option>
+				<option value="10-19">10-19 : développement des feuilles</option>
+				<option value="11">11 : par ex, environ 10% des feuilles épanouies</option>
+				<option value="15">15 : par ex, environ 50% des feuilles épanouies</option>
+				<option value="20-29">20-29 : formation de pousses latérales, tallage</option>
+				<option value="30-39">30-39 : développement des tiges, croissance des rosettes</option>
+				<option value="40-49">40-49 : développement des organes de propagation végétative</option>
+				<option value="50-59">50-59 : apparition de l'inflorescence, épiaison</option>
+				<option value="60-69">60-69 : floraison</option>
+				<option value="61">61 : par ex, environ 10% des fleurs épanouies</option>
+				<option value="65">65 : par ex, environ 50% des fleurs épanouies</option>
+				<option value="70-79">70-79 : fructification</option>
+				<option value="80-89">80-89 : maturité des fruits et des graines</option>
+				<option value="85">85 : par ex, 50% des fruits matures</option>
+				<option value="90-99">90-99 : sénescence et dormance</option>
+				<option value="91">91 : par ex, environ 10% des feuilles jaunes</option>
+				<option value="95">95 : par ex, environ 50% des feuilles jaunes</option>
+			</select>
+		</form>	
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success" data-dismiss="modal" > 
+			Continuer
+		</button>
+	</div>
+</div>
+		
+		
+<div class="navbar navbar-fixed-bottom vert-fonce-bg">
+	<ul class="nav parc-nav row-fluid">
+		<li class="span6 active">
+			<a href="#">
+				<i class="icon-pencil icon"></i>
+				Nouvelle obs.
+			</a>
+		</li>
+		<li class="span5">
+			<a href="#transmission">
+				Mes obs.
+				<i class="icon-share icon-white"></i>
+			</a>
+		</li>
+	</ul>
+</div>	

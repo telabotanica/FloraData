@@ -1,0 +1,58 @@
+<div class="header">
+	<a href="#" class="header-button header-button-left header-back-button">
+		<button>Retour</button>
+	</a>
+	<h1>Mon compte</h1>
+	<a href="#" class="header-button header-button-icon header-button-right" >
+		<button>Accueil</button>
+	</a>
+</div>
+
+<div class="scroll" style="top:44px;">
+	<div class="tableview tableview-links" style="margin-bottom:40px;">
+		<div class="row-fluid">
+			<div> 
+				<label for="courriel">Courriel * :</label> 
+				<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
+				<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
+				
+				<label for="courriel_memoire">
+					Se souvenir de moi :
+					<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
+				</label>
+				
+				<button id="valider_courriel" class="btn btn-info btn-block">
+					<i class="icon-repeat"></i>
+					Valider ce compte Tela
+				</button>
+				<div id="utilisateur-infos" class="text-center text-info infos"></div>
+			</div>
+			<div id="zone_prenom_nom" class="hide">
+				<hr />
+				<div>
+					<label for="prenom">Prénom :</label>
+					<input id="prenom_utilisateur" name="prenom" type="text" value="<%= prenom %>"/>
+				</div>
+				
+				<div>
+					<label for="nom">Nom :</label>
+					<input id="nom_utilisateur" name="nom" type="text" value="<%= nom %>"/>
+				</div>
+			</div>
+			<div id="zone_courriel_confirmation" class="hide">
+				<label for="courriel_confirmation">
+					Courriel (confirmation) <strong class="obligatoire">*</strong>  : <br />
+				</label>
+				<input id="courriel_confirmation" name="courriel_confirmation" type="text"/>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="navbar navbar-fixed-bottom">
+	<ul class="nav parc-nav row-fluid">
+		<li class="span4"><a href="#transmission">Mes obs.</a></li>
+		<li class="active span4"><a href="#compte"><i class="offset1 icon-envelope"></i></a></li>
+		<li class="span4"><a href="#liste/0/Balade/0" >Liste</a></li>
+	</ul>
+</div>

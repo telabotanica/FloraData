@@ -1,0 +1,38 @@
+<div class="header">
+	<a href="#" class="header-button header-button-left header-back-button">
+		<button>Retour</button>
+	</a>
+	<h1>Observation n°<%= obs.id_obs %></h1>
+</div>
+
+<div class="tableview tableview-links" style="top:44px;">
+	<div class="row-fluid margin-navbar">
+		<%= obs.nom_vernaculaire %> <i>(<%= obs.nom_sci %>)</i>
+		<br />
+		Vue le <%= obs.date %> 
+		<% if (obs.commune != "") { %>
+			à <%= obs.commune %>
+		<% } %>
+		
+		<hr class="fine" />
+		<div id="obs-photos-info" class="text-center"></div>
+		<div class="text-center"> Nombre de photos : <span id="nbre-photos"><%= photos.length %></span>.</div>
+		
+		<hr class="fine" />
+		<% _.each(photos, function(photo) { %>
+			<div class="pull-left miniature text-center" id="elt_<%= photo.id_photo %>">
+				<img src="<%= photo.chemin %>" alt="<%= photo.id_photo %>" id="img_<%= photo.id_photo %>" /> 
+				<a href="#observation/<%= obs.id_obs %>" id="<%= photo.id_photo %>" class="suppression-element supprimer-photos"><span></span></a>
+			</div>
+		<% }); %>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
+<div class="navbar navbar-fixed-bottom">
+	<ul class="nav parc-nav row-fluid">
+		<li class="active span4"><a href="#transmission">Mes obs.</a></li>
+		<li class="span4"><a href="#compte"><i class="icon-user icon-white"></i></a></li>
+		<li class="span4"><a href="#" >Accueil</a></li>
+	</ul>
+</div>

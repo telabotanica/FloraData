@@ -1,0 +1,120 @@
+<header class="row-fluid clearfix margin-bottom-1em white-bg black">
+	<a href="#">
+		<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
+	</a>
+
+	<div class="pull-left titre span7">
+		Mes observations
+	</div>
+	
+	<div class="margin-top-1em">
+		<a href="#informations-modal" data-toggle="modal">
+			<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
+		</a>
+	</div>
+</header>
+
+<div id="details-obs" class="text-center alert alert-block hide"></div>
+<div id="obs-suppression-infos" class="text-center alert alert-success alert-block hide"></div>
+<div class="row-fluid">
+	<div class="tableview tableview-links margin-navbar">
+		<h4 class="text-center"> 
+			Observations à transmettre : <span id="nbre-a-transmettre"> <%= obs.length %> </span>
+		</h4>	
+		<% if (obs.length == 0) { %>
+		<% } else { 	
+				var texte = 'Transmettre';
+				if (user != null) { 
+					texte += ' sur <span id="transmission-courriel">' + user + '</span>';
+				}
+		%>
+		
+			<% if (obs.length >= 3) { %>
+				<hr class="fine-ultra"/>
+				<div id="obs-a-transmettre-btn" class="text-center">
+					<button class="btn btn-warning transmettre-obs">
+						<%= texte %>
+					</button>
+				</div>
+			<% } %>
+				<ul>
+				<%	_.each(obs, function(observation) {
+						var attributs = observation.attributes;
+				%>
+				<li style="margin:0px;" id="li_<%= attributs.id_obs %>">
+					<a href="#transmission" id="<%= attributs.id_obs %>" class="a-transmettre suppression-element suppression-obs"><span></span></a>
+					
+					<a href='#observation/<%= attributs.id_obs %>'>
+						<%= attributs.nom_vernaculaire %> <i>(<%= attributs.nom_sci %>)</i> 
+						<br />
+						Vue le <%= attributs.date %> 
+						<% if (attributs.commune != '') { %>
+							à <%= attributs.commune %>
+						<% } %>
+					</a>
+					
+					<a href="#observation/<%= attributs.id_obs %>" class="detail-disclosure"><span></span></a>
+				</li>
+			<%	}, this); %>
+			</ul>
+			<div class="text-center">
+				<button class="transmettre-obs btn btn-warning">
+					<%= texte %>
+				</button>
+			</div>
+		<% } %>
+		
+		
+		<hr class="fine"/>
+		<h4 class="text-center" > 
+			Observations déjà transmises : <span id="nbre-transmises"> <%= transmises.length %> </span>
+		</h4>
+		<% if (transmises.length > 0) { %>
+			<div id="obs-transmises-infos">
+				<button class="btn btn-danger supprimer-obs-transmises pull-right">
+					Supprimer tout
+				</button>
+			</div>
+			<ul>
+				<%	_.each(transmises, function(obs_transmise) {
+						var arr_attributs = obs_transmise.attributes;
+				%>
+					<li style="margin:0px;" id="li_<%= arr_attributs.id_obs %>">
+						<a href="#transmission" id="<%= arr_attributs.id_obs %>" class="transmises suppression-element suppression-obs"><span></span></a>
+						
+						<a href='#observation/<%= arr_attributs.id_obs %>'>
+							<span class="muted">
+								<%= arr_attributs.nom_vernaculaire %> <i>(<%= arr_attributs.nom_sci %>)</i> 
+								<br />
+								Vue le <%= arr_attributs.date %> 
+								<% if (arr_attributs.commune != '') { %>
+									à <%= arr_attributs.commune %>
+								<% } %>
+							</span>
+						</a>
+						
+						<a href="#observation/<%= arr_attributs.id_obs %>" class="detail-disclosure"><span></span></a>
+					</li>
+				<%	}, this); %>
+			</ul>
+		<% } %>
+	</div>
+</div>
+
+
+<div class="navbar navbar-fixed-bottom vert-fonce-bg">
+	<ul class="nav parc-nav row-fluid">
+		<li class="span6">
+			<a href="#">
+				<i class="icon-pencil icon-white"></i>
+				Nouvelle obs.
+			</a>
+		</li>
+		<li class="span5 active">
+			<a href="#transmission">
+				Mes obs.
+				<i class="icon-share icon"></i>
+			</a>
+		</li>
+	</ul>
+</div>	
