@@ -33,7 +33,6 @@ ___CEL.utils.templateLoader = {
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DAO ESPECE
-/*
 ___CEL.dao.EspeceDAO = function(db) {
 	this.db = db;
 };
@@ -41,11 +40,11 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 	findByName: function(key, callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, famille, nom_vernaculaire,  photos " +
+				"SELECT num_nom, nom_sci " +
 				"FROM espece " + 
-				"WHERE nom_sci || ' ' || nom_vernaculaire || ' ' || famille LIKE ? " +
-				"ORDER BY nom_vernaculaire";
-			tx.executeSql(sql, ['%' + key + '%'], function(tx, results) {
+				"WHERE nom_sci LIKE ? " +
+				"ORDER BY nom_sci";
+			tx.executeSql(sql, [key + '%'], function(tx, results) {
 				var len = results.rows.length,
 					especes = [],
 					i = 0;
@@ -56,7 +55,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 			});
 		},
 		function(tx, error) {
-			alert('Transaction Error: ' + error);
+			console.log('DB | Error processing SQL: ' + error.code, error);
 		});
 	},
 	
@@ -64,7 +63,6 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 		___CEL.db.transaction(function(tx) {
 			console.log('Dropping ESPECE table');
 			tx.executeSql('DROP TABLE IF EXISTS espece');
-			
 			var sql =
 				"CREATE TABLE IF NOT EXISTS espece (" +
 					"num_nom INT NOT NULL ," +
@@ -74,7 +72,6 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					"num_taxon INT NULL ," +
 					"famille VARCHAR(255) NULL ," +
 					"referentiel VARCHAR(45) NOT NULL ," +
-					"nom_vernaculaire VARCHAR(255) NULL ," +
 				"PRIMARY KEY (num_nom) )";
 			console.log('Creating ESPECE table');
 			tx.executeSql(sql);
@@ -87,7 +84,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 		console.log('Inserting espece');
 		$.ajax({
 			type: 'GET',
-			url: './espece.csv',
+			url: './cel_apps.csv',
 			dataType: 'text',
 			success: function(fichier) { 
 				var arr_lignes = fichier.split(/\r\n|\r|\n/),
@@ -104,7 +101,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 					arr_sql.push(
 						"INSERT INTO espece "
-						+ "(nom_sci, num_nom, famille, num_taxon, nom_vernaculaire, description, photos, referentiel) "
+						+ "(num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
 						+ "VALUES (" + sql + ")"
 					);
 				}
@@ -126,7 +123,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 	}
 });
 _.extend(___CEL.dao.EspeceDAO.prototype, ___CEL.dao.baseDAOBD);
-*/
+
 
 
 
@@ -382,7 +379,7 @@ ___CEL.models.EspeceCollection = Backbone.Collection.extend({
 		var especeDAO = new ___CEL.dao.EspeceDAO(___CEL.db),
 			self = this;
 		especeDAO.findByName(key, function(data) {
-			//console.log('EspeceCollection | findByName ', data);
+			console.log('EspeceCollection | findByName ', data);
 			self.reset(data);
 		});
 	}
@@ -608,6 +605,45 @@ ___CEL.Router = Backbone.Router.extend({
 		$('#content').on('click', '.header-back-button', function(event) {
 			window.history.back();
 			return false;
+		});
+		
+		
+		$('#content').on('keyup', '#taxon', function(event) {
+			var recherche = $('#taxon').val(),
+				arr_recherche = recherche.split(' ');
+			if (recherche.length > 2) {	
+				___CEL.db.transaction(function(tx) {
+					var arr_parametres = new Array(),
+						clause_where = '';
+					if (arr_recherche.length > 1) {
+						clause_where += "OR nom_sci LIKE ? ";
+						arr_parametres.push(arr_recherche[0] + '% ' + arr_recherche[1] + '%');
+						arr_parametres.push(arr_recherche[0] + '% x ' + arr_recherche[1] + '%');
+					} else {
+						arr_parametres.push(recherche + '%');
+					}
+					arr_parametres.push($('#referentiel').val());
+					
+					var sql = 
+						"SELECT num_nom, nom_sci " +
+						"FROM espece " + 
+						"WHERE nom_sci LIKE ? " + clause_where + 
+						"AND referentiel LIKE ? " + 
+						"ORDER BY nom_sci";
+					tx.executeSql(sql, arr_parametres, function(tx, results) {
+						var len = results.rows.length,
+							especes = [],
+							i = 0;
+						for (; i < len; i = i + 1) {
+							especes[i] = results.rows.item(i);
+						}
+						console.log(especes);
+					});
+				},
+				function(tx, error) {
+					console.log('DB | Error processing SQL: ' + error.code, error);
+				});
+			}
 		});
 		
 		
@@ -878,7 +914,7 @@ ___CEL.db = window.openDatabase('CELApps', '1.0', 'Data Base CEL Mobile', 1024*1
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
-	//(new ___CEL.dao.EspeceDAO(___CEL.db)).populate();
+	(new ___CEL.dao.EspeceDAO(___CEL.db)).populate();
 	(new ___CEL.dao.ObsDAO(___CEL.db)).populate();
 	(new ___CEL.dao.PhotoDAO(___CEL.db)).populate();
 	(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
