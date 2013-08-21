@@ -45,6 +45,65 @@ header {
 	.white-bg;
 }
 
+.miniature img {
+	height: 80px;
+}
+.miniature {
+	width: 80px;
+	margin: 0px 2px 10px;
+	border: solid 2px #CCC;
+}
+
+.tableview-links li>a.detail-disclosure, .tableview-links li>a.suppression-element, 
+.tableview-links li>span.suppression-element {
+	-webkit-touch-callout: none;
+	padding: 0;
+	width: 44px;
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	box-align: center;
+	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	box-pack: center;
+	-webkit-box-flex: 0;
+	-moz-box-flex: 0;
+	box-flex: 0;
+}
+.tableview-links li>a.detail-disclosure.tappable-active, .tableview-links li>a.suppression-element.tappable-active, 
+.tableview-links li>span.suppression-element.tappable-active {
+	background: transparent none;
+}
+.tableview-links li>a.detail-disclosure span, .tableview-links li>a.suppression-element span, a.suppression-element span,
+.tableview-links li>span.suppression-element span, span.suppression-element span {
+	display: inline-block;
+	width: 29px;
+	height: 31px;
+}
+.tableview-links li>a.detail-disclosure span {
+	background: transparent url(img/detail-disclosure-button.png);
+	-webkit-background-size: 58px 31px;
+	-moz-background-size: 58px 31px;
+	-ms-background-size: 58px 31px;
+	-o-background-size: 58px 31px;
+	background-size: 58px 31px;
+}
+.tableview-links li>a.suppression-element, .tableview-links li>span.suppression-element {
+	border-right: 2px solid #CCC;
+}
+.tableview-links li>a.suppression-element span, a.suppression-element span,
+.tableview-links li>span.suppression-element span, span.suppression-element span {
+	background: transparent url(img/detail-suppression-button.png);
+	-webkit-background-size: 58px 31px;
+	-moz-background-size: 58px 31px;
+	-ms-background-size: 58px 31px;
+	-o-background-size: 58px 31px;
+	background-size: 58px 31px;
+}
+.tableview-links li>a.detail-disclosure.tappable-active span, .tableview-links li>a.suppression-element.tappable-active span,
+.tableview-links li>span.suppression-element.tappable-active span {
+	background-position: top right;
+}
+
 .fine {
 	margin: 10px 0px;
 }

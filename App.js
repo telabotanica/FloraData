@@ -206,7 +206,6 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 					"date DATE NOT NULL, " +
 					"latitude DECIMAL NULL, " +
 					"longitude DECIMAL NULL, " +
-					"altitude DECIMAL NULL, " +
 					"referentiel VARCHAR(255) NULL, " +
 					"commune VARCHAR(255) NULL, " +
 					"code_insee INT NULL, " +
@@ -625,21 +624,20 @@ ___CEL.Router = Backbone.Router.extend({
 						sql =
 							"INSERT INTO obs " +
 							"(id_obs, " + 
-							" date, latitude, longitude, altitude, commune, code_insee, " + 
+							" date, latitude, longitude, commune, code_insee, " + 
 							" lieu_dit, station, milieu, " +
 							" certitude, abondance, phenologie, " +
 							" referentiel, mise_a_jour, ce_espece) VALUES " + 
 							"(?, " + 
+							" ?, ?, ?, ?, ?, " +
 							" ?, ?, ?, " +
 							" ?, ?, ?, " +
-							" ?, ?, ?, ?, ?, ?, " +
 							" ?, ?, ?) ";
 						
 					obs.push(id);
 					obs.push($('#date').html());
 					obs.push($('#lat_field').html());
 					obs.push($('#lng_field').html());
-					obs.push($('#altitude_field').html());
 					obs.push($('#location').html());
 					obs.push($('#code_insee').val());
 					obs.push($('#lieudit').val());
@@ -996,7 +994,7 @@ function surPhotoErreurAjout(error) {
 	$('#obs-photos-info').addClass('text-error');
 	$('#obs-photos-info').removeClass('text-info');
 	$('#obs-photos-info').html('Erreur de traitement. Ajout impossible.');
-	alert('PHOTO | Error: ' + error.code, error);
+	console.log('PHOTO | Error: ' + error.code, error);
 }
 function surPhotoErreurSuppression(error) {
 	var texte = 'Erreur de traitement. Le fichier n\'a pas été supprimé de la mémoire.';
@@ -1021,11 +1019,9 @@ function geolocaliser() {
 function surSuccesGeoloc(position) {
 	if (position) {
 		var lat = position.coords.latitude,
-			lng = position.coords.longitude,
-			alt = position.coords.altitude;
+			lng = position.coords.longitude;
 		$('#lat_field').html(lat);
 		$('#lng_field').html(lng);
-		$('#altitude_field').html(alt);
 		
 		var url_service = SERVICE_NOM_COMMUNE_URL;
 		var urlNomCommuneFormatee = url_service.replace('{lat}', lat).replace('{lon}', lng);
