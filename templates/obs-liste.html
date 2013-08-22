@@ -123,61 +123,58 @@
 
 <div id="compte-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="compte-label" aria-hidden="true" data-backdrop="static">
 	<div class="modal-header">
-		<h4 id="compte-label">Compte Tela</h4>
+		<h4 id="compte-label">
+			Compte Tela
+			<button class="pull-right btn btn-info" data-dismiss="modal" > 
+				Fermer
+			</button>
+		</h4>
 	</div>
 	<div class="modal-body">
-		<div class="tableview tableview-links" style="margin-bottom:40px;">
-			<div class="row-fluid">
-				<div> 
-					<label for="courriel">Courriel * :</label> 
-					<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
-					<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
-					
-					<% var flag = '';
-					if  (email != null) {
-						flag = 'hide';
-					%>
-					<button id="transmettre_courriel" class="btn btn-success btn-block">
-						<i class="icon-envelope"></i>
-						Transmettre avec ce compte
-					</button>
-					<% } %>
-					<label for="courriel_memoire" id="zone_memoire" class="<%= flag %>">
-						Se souvenir de moi :
-						<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
-					</label>
-					
-					<button id="valider_courriel" class="btn btn-info btn-block <%= flag %>">
-						<i class="icon-repeat"></i>
-						Valider ce compte Tela
-					</button>
-					<div id="utilisateur-infos" class="text-center text-info infos"></div>
-				</div>
-				<div id="zone_prenom_nom" class="hide">
-					<hr />
-					<div>
-						<label for="prenom">Prénom :</label>
-						<input id="prenom_utilisateur" name="prenom" type="text" value="<%= prenom %>"/>
-					</div>
-					
-					<div>
-						<label for="nom">Nom :</label>
-						<input id="nom_utilisateur" name="nom" type="text" value="<%= nom %>"/>
-					</div>
-				</div>
-				<div id="zone_courriel_confirmation" class="hide">
-					<label for="courriel_confirmation">
-						Courriel (confirmation) <strong class="obligatoire">*</strong>  : <br />
-					</label>
-					<input id="courriel_confirmation" name="courriel_confirmation" type="text"/>
-				</div>
+		<div> 
+			<label for="courriel">Courriel * :</label> 
+			<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
+			<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
+			
+			<% var flag = '';
+			if  (email != null) {
+				flag = 'hide';
+			%>
+			<button id="transmettre_courriel" class="btn btn-success btn-block">
+				Transmettre avec ce compte
+			</button>
+			<% } %>
+			<label for="courriel_memoire" id="zone_memoire" class="<%= flag %>">
+				Se souvenir de moi :
+				<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
+			</label>
+			
+			<button id="valider_courriel" class="btn btn-info btn-block <%= flag %>">
+				<i class="icon-repeat"></i>
+				Valider ce compte Tela
+			</button>
+			<div id="utilisateur-infos" class="text-center text-info infos"></div>
+		</div>
+		<div id="zone_prenom_nom" class="hide">
+			<hr />
+			<div>
+				<label for="prenom">Prénom :</label>
+				<input id="prenom_utilisateur" name="prenom" type="text" value="<%= prenom %>"/>
 			</div>
+			
+			<div>
+				<label for="nom">Nom :</label>
+				<input id="nom_utilisateur" name="nom" type="text" value="<%= nom %>"/>
+			</div>
+		</div>
+		<div id="zone_courriel_confirmation" class="hide">
+			<label for="courriel_confirmation">
+				Courriel (confirmation) <strong class="obligatoire">*</strong>  : <br />
+			</label>
+			<input id="courriel_confirmation" name="courriel_confirmation" type="text"/>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button class="btn btn-info" data-dismiss="modal" > 
-			Fermer
-		</button>
 	</div>
 </div>
 

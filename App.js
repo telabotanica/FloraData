@@ -1223,6 +1223,7 @@ function transmettreObs() {
 		___CEL.db.transaction(function(tx) {
 			var sql = 
 				"SELECT num_nom, nom_sci, num_taxon, famille, referentiel, " + 
+					"lieu_dit, station, milieu, certitude, abondance, phenologie, " +
 					"id_obs, latitude, longitude, date, commune, code_insee, mise_a_jour " +
 				"FROM espece " +
 				"JOIN obs ON num_nom = ce_espece " +
