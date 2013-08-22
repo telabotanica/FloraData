@@ -34,41 +34,39 @@
 			// Mots-clés à ajouter aux observations
 			var TAG_OBS = "";
 			// URL du web service réalisant l'insertion des données dans la base du CEL.
-			var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/eflore/cel/jrest/CelWidgetSaisie";
+			//var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/eflore/cel/jrest/CelWidgetSaisie";
+			var	SERVICE_SAISIE_URL = 'http://www.tela-botanica.org/eflore-test/cel/jrest/CelWidgetSaisie';
+			var SERVICE_ANNUAIRE = 'http://www.tela-botanica.org/client/annuaire_nouveau/actuelle/jrest/utilisateur/identite-par-courriel/';
+				
 		var NOM_SCI_REFERENTIEL = "bdtfx:1.01";
 		var NOM_SCI_PROJET = "bdtfx";
 		var NOM_SCI_VERSION = "1.01";
 			// Indication de la présence d'une espèce imposée
-			var ESPECE_IMPOSEE = "";
+		var ESPECE_IMPOSEE = "";
 			// Tableau d'informations sur l'espèce imposée
-			var INFOS_ESPECE_IMPOSEE = Array;
+		var INFOS_ESPECE_IMPOSEE = Array;
 			// Nombre d'élément dans les listes d'auto-complétion
 			var AUTOCOMPLETION_ELEMENTS_NBRE = 20;
 			// Indication de la présence d'un référentiel imposé
-			var REFERENTIEL_IMPOSE = "";
+		var REFERENTIEL_IMPOSE = "";
 			// Indication des version utilisées de chaque référentiel
 			var PROJETS_VERSIONS = {"bdtfx":"1.01","bdtxa":"1.00","isfan":"1.00","_none":"0.00"};
 			// Nombre d'observations max autorisé avant transmission
-			var OBS_MAX_NBRE = 10;
+			var LIMITE_NBRE_TRANSMISSION = 2;
+			// Nombre de photos max autorisées avant sauvegarde
+			var LIMITE_NBRE_PHOTOS = 3;
 			// Durée d'affichage en milliseconde des messages d'informations
-			var DUREE_MESSAGE = 15000;
+		var DUREE_MESSAGE = 15000;
 			// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
 			var SERVICE_NOM_COMMUNE_URL = "http://www.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";
 		// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
 		var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
 			// Texte en absence de connexion
 			var TEXTE_HORS_LIGNE = 'Aucune connexion.';
-			// Texte en absence de compte
-			var TEXTE_NON_COMPTE = 'Aucun compte enregistré.';
-			// Texte en presence de compte
-			var TEXTE_OUI_COMPTE = 'Ajouter au compte ';
 			
 			var fileSystem,
 				pictureSource,
-				destinationType; // sets the format of returned value 
-				
-			var LIMITE_NBRE_PHOTOS = 3,
-				LIMITE_NBRE_TRANSMISSION = 2;		
+				destinationType; // sets the format of returned value 		
 				
 			document.addEventListener('deviceready', onDeviceReady, false);
 			function onDeviceReady() {

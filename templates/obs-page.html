@@ -1,17 +1,50 @@
-<div class="header">
-	<a href="#" class="header-button header-button-left header-back-button">
-		<button>Retour</button>
+<header class="row-fluid clearfix margin-bottom-1em white-bg black">
+	<a href="#">
+		<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
 	</a>
-	<h1>Observation n°<%= obs.id_obs %></h1>
-</div>
+
+	<div class="pull-left titre span7">
+		Observation n°<%= obs.id_obs %>
+	</div>
+	
+	<div class="margin-top-1em">
+		<a href="#informations-modal" data-toggle="modal">
+			<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
+		</a>
+	</div>
+</header>
+
 
 <div class="tableview tableview-links" style="top:44px;">
 	<div class="row-fluid margin-navbar">
-		<%= obs.nom_vernaculaire %> <i>(<%= obs.nom_sci %>)</i>
-		<br />
+		<div class="text-center">
+			<strong><%= obs.nom_sci %></strong>
+		</div>
 		Vue le <%= obs.date %> 
-		<% if (obs.commune != "") { %>
-			à <%= obs.commune %>
+		<% if (obs.commune != '' && obs.commune != TEXTE_HORS_LIGNE) { %>
+			à <%= obs.commune %> (<%= obs.code_insee %>)
+		<% } %>
+		
+		<hr class="fine" />
+		Famille : <%= obs.famille %>
+		<br /> Référentiel : <%= obs.referentiel %>
+		<% if (obs.lieu_dit != '') { %>
+			<br /> Lieu-dit : <%= obs.lieu_dit %>
+		<% } %>
+		<% if (obs.station != '') { %>
+			<br /> Station : <%= obs.station %>
+		<% } %>
+		<% if (obs.milieu != '') { %>
+			<br /> Milieu : <%= obs.milieu %>
+		<% } %>
+		<% if (obs.certitude != 'NULL') { %>
+			<br /> Certitude : <%= obs.certitude %>
+		<% } %>
+		<% if (obs.abondance != 'NULL') { %>
+			<br /> Abondance : <%= obs.abondance %>
+		<% } %>
+		<% if (obs.phenologie != 'NULL') { %>
+			<br /> Stade phénologique : <%= obs.phenologie %>
 		<% } %>
 		
 		<hr class="fine" />
@@ -29,10 +62,20 @@
 	</div>
 </div>
 
-<div class="navbar navbar-fixed-bottom">
+
+<div class="navbar navbar-fixed-bottom vert-fonce-bg">
 	<ul class="nav parc-nav row-fluid">
-		<li class="active span4"><a href="#transmission">Mes obs.</a></li>
-		<li class="span4"><a href="#compte"><i class="icon-user icon-white"></i></a></li>
-		<li class="span4"><a href="#" >Accueil</a></li>
+		<li class="span6">
+			<a href="#">
+				<i class="icon-pencil icon-white"></i>
+				Nouvelle obs.
+			</a>
+		</li>
+		<li class="span5">
+			<a href="#transmission">
+				Mes obs.
+				<i class="icon-share icon-white"></i>
+			</a>
+		</li>
 	</ul>
-</div>
+</div>	

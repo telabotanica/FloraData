@@ -135,7 +135,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	findById: function(id, callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee " +
+				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, " +
+				"famille, referentiel, lieu_dit, station, milieu, certitude, abondance, phenologie " +  
 				"FROM espece e " +
 				"JOIN obs o ON e.num_nom = o.ce_espece " +
 				"WHERE id_obs = :id_obs";
@@ -203,7 +204,6 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 					"date DATE NOT NULL, " +
 					"latitude DECIMAL NULL, " +
 					"longitude DECIMAL NULL, " +
-					"referentiel VARCHAR(255) NULL, " +
 					"commune VARCHAR(255) NULL, " +
 					"code_insee INT NULL, " +
 					"lieu_dit VARCHAR(255) NULL DEFAULT NULL, " +
@@ -540,7 +540,9 @@ ___CEL.views.transmissionObs = Backbone.View.extend({
 		var json = {
 			'obs' : arr_obs,
 			'transmises' : arr_transmises,
-			'user' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email
+			'email' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email,
+			'prenom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.prenom,
+			'nom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.nom
 		}
 		
 		$(this.el).html(this.template(json));
@@ -572,25 +574,12 @@ ___CEL.views.comptePage = Backbone.View.extend({
 });
 
 
-// ------------------------------------------------------ Globals ------------------------------------------------- //
-___CEL.liste = new Array();
-___CEL.criteria = new Array();
-___CEL.pheno = new Object();
-___CEL.pheno['floraison'] = new Array();
-___CEL.pheno['feuillaison'] = new Array();
-___CEL.pheno['fructification'] = new Array();
-___CEL.pheno.liste = new Array();
-___CEL.nbre_criteres = new Array();
-___CEL.nbre_especes = null;
-___CEL.nbre_choix = null;
-___CEL.parcours = new Array();
-
-
 
 // ----------------------------------------------- The Application Router ------------------------------------------ //
 ___CEL.Router = Backbone.Router.extend({
 	routes: {
 		'' : 'saisie',
+		'observation/:id_obs' : 'detailsObs',
 		'transmission' : 'transmissionObs',
 		'compte' : 'compteUtilisateur'
 	},
@@ -655,76 +644,83 @@ ___CEL.Router = Backbone.Router.extend({
 		
 		$('#content').on('click', '#geolocaliser', geolocaliser);
 		$('#content').on('click', '#sauver-obs', function(event) {
-			___CEL.db.transaction(function(tx) {
-				var sql =
-					"SELECT id_obs " +
-					"FROM obs " + 
-					"ORDER BY id_obs DESC";
-				tx.executeSql(sql, [], function(tx, results) {
-					var obs = new Array(),
-						id = (results.rows.length == 0) ? 1 : results.rows.item(0).id_obs+1;
-						sql =
-							"INSERT INTO obs " +
-							"(id_obs, " + 
-							" date, latitude, longitude, commune, code_insee, " + 
-							" lieu_dit, station, milieu, " +
-							" certitude, abondance, phenologie, " +
-							" referentiel, mise_a_jour, ce_espece) VALUES " + 
-							"(?, " + 
-							" ?, ?, ?, ?, ?, " +
-							" ?, ?, ?, " +
-							" ?, ?, ?, " +
-							" ?, ?, ?) ";
-						
-					obs.push(id);
-					obs.push($('#date').html());
-					obs.push($('#lat_field').html());
-					obs.push($('#lng_field').html());
-					obs.push($('#location').html());
-					obs.push($('#code_insee').val());
-					obs.push($('#lieudit').val());
-					obs.push($('#station').val());
-					obs.push($('#milieu').val());
-					obs.push($('#certitude').val());
-					obs.push($('#abondance').val());
-					obs.push($('#stade_ph').val());
-					obs.push($('#referentiel').val());
-					obs.push(($('#code_insee').val() > 0) ? 1 : 0);
-					obs.push($('#num_nom_select').val());
-					tx.executeSql(sql, obs);
-					
-					
-					var i = 0,
-						parent = document.getElementById('obs-photos'),
-						imgs = parent.getElementsByTagName('img');
-					
-					sql =
-						"SELECT id_photo " +
-						"FROM photo " + 
-						"ORDER BY id_photo DESC";
+			if ($('#num_nom_select').val() != 0) {
+				___CEL.db.transaction(function(tx) {
+					var sql =
+						"SELECT id_obs " +
+						"FROM obs " + 
+						"ORDER BY id_obs DESC";
 					tx.executeSql(sql, [], function(tx, results) {
-						var sql_photo =
-								"INSERT INTO photo " +
-								"(id_photo, chemin, ce_obs) VALUES " + 
-								"(?, ?, ?)",
-							id_photo = (results.rows.length == 0) ? 1 : results.rows.item(0).id_photo + 1;
+						var obs = new Array(),
+							id = (results.rows.length == 0) ? 1 : results.rows.item(0).id_obs+1;
+							sql =
+								"INSERT INTO obs " +
+								"(id_obs, " + 
+								" date, latitude, longitude, commune, code_insee, " + 
+								" lieu_dit, station, milieu, " +
+								" certitude, abondance, phenologie, " +
+								" mise_a_jour, ce_espece) VALUES " + 
+								"(?, " + 
+								" ?, ?, ?, ?, ?, " +
+								" ?, ?, ?, " +
+								" ?, ?, ?, " +
+								" ?, ?) ";
+							
+						obs.push(id);
+						obs.push($('#date').html());
+						obs.push($('#lat_field').html());
+						obs.push($('#lng_field').html());
+						obs.push($('#location').html());
+						obs.push($('#code_insee').val());
+						obs.push($('#lieudit').val());
+						obs.push($('#station').val());
+						obs.push($('#milieu').val());
+						obs.push($('#certitude').val());
+						obs.push($('#abondance').val());
+						obs.push($('#stade_ph').val());
+						obs.push(($('#code_insee').val() > 0) ? 1 : 0);
+						obs.push($('#num_nom_select').val());
+						tx.executeSql(sql, obs);
+						$('#sauvegarde-obs-modal').modal('show');
+						
+						
+						var i = 0,
+							parent = document.getElementById('obs-photos'),
+							imgs = parent.getElementsByTagName('img');
+						
+						sql =
+							"SELECT id_photo " +
+							"FROM photo " + 
+							"ORDER BY id_photo DESC";
+						tx.executeSql(sql, [], function(tx, results) {
+							var sql_photo =
+									"INSERT INTO photo " +
+									"(id_photo, chemin, ce_obs) VALUES " + 
+									"(?, ?, ?)",
+								id_photo = (results.rows.length == 0) ? 1 : results.rows.item(0).id_photo + 1;
 
-						for (; i < imgs.length; i++) {
-							var photo = new Array();
-								photo.push(id_photo++);
-								photo.push(imgs[i].src);
-								photo.push(id);
-							tx.executeSql(sql_photo, photo);
-						}
-					},
-					function(error) {
-						alert('DB | Error processing SQL: ' + error);
+							for (; i < imgs.length; i++) {
+								var photo = new Array();
+									photo.push(id_photo++);
+									photo.push(imgs[i].src);
+									photo.push(id);
+								tx.executeSql(sql_photo, photo);
+							}
+						},
+						function(error) {
+							alert('DB | Error processing SQL: ' + error);
+						});
 					});
+				},
+				function(error) {
+					console.log('DB | Error processing SQL: ' + error.code, error);
 				});
-			},
-			function(error) {
-				console.log('DB | Error processing SQL: ' + error.code, error);
-			});
+			} else {
+				$('#sauvegarde-obs-info').removeClass('hide')
+					.fadeIn(0)
+					.delay(1600)
+					.fadeOut('slow');	
+			}
 		});
 		$('#content').on('click', '.suppression-obs', function() {
 			supprimerObs(this.id, true);
@@ -804,14 +800,19 @@ ___CEL.Router = Backbone.Router.extend({
 		});
 		$('#content').on('click', '#valider_courriel', requeterIdentite);
 		$('#content').on('click', '.transmettre-obs', function(event) {
-			if (typeof $('#transmission-courriel').html() === 'undefined') {
-				window.location = '#compte';
-			} else {
+			$('#compte-modal').modal('show');
+		});
+		$('#content').on('click', '#transmettre_courriel', function(event) {
 				$('#nbre_obs').html('0');
 				$('#obs-transmission-infos').html('');
+				$('#compte-modal').modal('hide');
 				$('#transmission-modal').modal('show');
 				transmettreObs();
-			}
+		});
+		$('#content').on('keyup', '#courriel', function(event) {
+			$('#zone_memoire').removeClass('hide');
+			$('#valider_courriel').removeClass('hide');
+			$('#transmettre_courriel').addClass('hide');
 		});
 		
 		
@@ -855,6 +856,16 @@ ___CEL.Router = Backbone.Router.extend({
 	
 	deselectItem: function(event) {
 		$(event.target).removeClass('tappable-active');
+	},
+	
+	detailsObs: function(id_obs) {
+		var obs = new ___CEL.models.Obs({ id: id_obs }),
+			self = this;
+		obs.fetch({
+			success: function(data) {
+				self.slidePage(new ___CEL.views.ObsPage({model: data}).render());
+			}
+		});
 	},
 
 	transmissionObs: function(data) {
@@ -1307,9 +1318,9 @@ function construireObs(id, img_codes, img_noms) {
 			'longitude' : obs.longitude,
 			'commune_nom' : obs.commune,
 			'commune_code_insee' : obs.code_insee,
-			'lieudit' : '',
-			'station' : '',
-			'milieu' : '',
+			'lieudit' : obs.lieu_dit,
+			'station' : obs.station,
+			'milieu' : obs.milieu,
 			
 			//Ajout des champs images
 			'image_nom' : img_noms,
@@ -1323,8 +1334,8 @@ function construireObs(id, img_codes, img_noms) {
 	} else {
 		msg = 'Transmission en cours...';
 		observations['projet'] = TAG_PROJET;
-		observations['tag-obs'] = '';
-		observations['tag-img'] = '';
+		observations['tag-obs'] = TAG_OBS;
+		observations['tag-img'] = TAG_IMG;
 		
 		var utilisateur = new Object();
 		utilisateur.id_utilisateur = null;

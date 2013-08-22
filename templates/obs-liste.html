@@ -23,10 +23,7 @@
 		</h4>	
 		<% if (obs.length == 0) { %>
 		<% } else { 	
-				var texte = 'Transmettre';
-				if (user != null) { 
-					texte += ' sur <span id="transmission-courriel">' + user + '</span>';
-				}
+				var texte = 'Partager au CEL';
 		%>
 		
 			<% if (obs.length >= 3) { %>
@@ -45,10 +42,10 @@
 					<a href="#transmission" id="<%= attributs.id_obs %>" class="a-transmettre suppression-element suppression-obs"><span></span></a>
 					
 					<a href='#observation/<%= attributs.id_obs %>'>
-						<%= attributs.nom_vernaculaire %> <i>(<%= attributs.nom_sci %>)</i> 
+						<%= attributs.nom_sci %>
 						<br />
 						Vue le <%= attributs.date %> 
-						<% if (attributs.commune != '') { %>
+						<% if (attributs.commune != '' && attributs.commune != TEXTE_HORS_LIGNE) { %>
 							à <%= attributs.commune %>
 						<% } %>
 					</a>
@@ -84,11 +81,11 @@
 						
 						<a href='#observation/<%= arr_attributs.id_obs %>'>
 							<span class="muted">
-								<%= arr_attributs.nom_vernaculaire %> <i>(<%= arr_attributs.nom_sci %>)</i> 
+								<%= attributs.nom_sci %>
 								<br />
-								Vue le <%= arr_attributs.date %> 
-								<% if (arr_attributs.commune != '') { %>
-									à <%= arr_attributs.commune %>
+								Vue le <%= attributs.date %> 
+								<% if (attributs.commune != '' && attributs.commune != TEXTE_HORS_LIGNE) { %>
+									à <%= attributs.commune %>
 								<% } %>
 							</span>
 						</a>
@@ -98,6 +95,89 @@
 				<%	}, this); %>
 			</ul>
 		<% } %>
+	</div>
+</div>
+		
+		
+<div id="transmission-modal" class="modal hide fade text-center" tabindex="-1" role="dialog" aria-labelledby="transmission-modal-label" aria-hidden="true" data-backdrop="static">
+	<div class="modal-header">
+		<h4 id="transmission-modal-label">Transmission au CEL</h4>
+	</div>
+	<div class="modal-body">
+		<div id="obs-transmission-texte">
+			<p> Merci de patienter... </p>
+			<div id="obs-transmission-icone"> 
+				<img src="img/ajax-loader.gif" /> 
+			</div>
+			Observation transmise : <span id="nbre_obs">0</span> / <span id="total_obs"></span>
+		</div>
+		<div id="obs-transmission-infos"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary hide" id="obs-transmission-btn" onclick="location.reload();" >
+			Continuer
+		</button>
+	</div>
+</div>
+
+
+<div id="compte-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="compte-label" aria-hidden="true" data-backdrop="static">
+	<div class="modal-header">
+		<h4 id="compte-label">Compte Tela</h4>
+	</div>
+	<div class="modal-body">
+		<div class="tableview tableview-links" style="margin-bottom:40px;">
+			<div class="row-fluid">
+				<div> 
+					<label for="courriel">Courriel * :</label> 
+					<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
+					<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
+					
+					<% var flag = '';
+					if  (email != null) {
+						flag = 'hide';
+					%>
+					<button id="transmettre_courriel" class="btn btn-success btn-block">
+						<i class="icon-envelope"></i>
+						Transmettre avec ce compte
+					</button>
+					<% } %>
+					<label for="courriel_memoire" id="zone_memoire" class="<%= flag %>">
+						Se souvenir de moi :
+						<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
+					</label>
+					
+					<button id="valider_courriel" class="btn btn-info btn-block <%= flag %>">
+						<i class="icon-repeat"></i>
+						Valider ce compte Tela
+					</button>
+					<div id="utilisateur-infos" class="text-center text-info infos"></div>
+				</div>
+				<div id="zone_prenom_nom" class="hide">
+					<hr />
+					<div>
+						<label for="prenom">Prénom :</label>
+						<input id="prenom_utilisateur" name="prenom" type="text" value="<%= prenom %>"/>
+					</div>
+					
+					<div>
+						<label for="nom">Nom :</label>
+						<input id="nom_utilisateur" name="nom" type="text" value="<%= nom %>"/>
+					</div>
+				</div>
+				<div id="zone_courriel_confirmation" class="hide">
+					<label for="courriel_confirmation">
+						Courriel (confirmation) <strong class="obligatoire">*</strong>  : <br />
+					</label>
+					<input id="courriel_confirmation" name="courriel_confirmation" type="text"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-info" data-dismiss="modal" > 
+			Fermer
+		</button>
 	</div>
 </div>
 
