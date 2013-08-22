@@ -81,11 +81,11 @@
 						
 						<a href='#observation/<%= arr_attributs.id_obs %>'>
 							<span class="muted">
-								<%= attributs.nom_sci %>
+								<%= arr_attributs.nom_sci %>
 								<br />
-								Vue le <%= attributs.date %> 
-								<% if (attributs.commune != '' && attributs.commune != TEXTE_HORS_LIGNE) { %>
-									à <%= attributs.commune %>
+								Vue le <%= arr_attributs.date %> 
+								<% if (arr_attributs.commune != '' && arr_attributs.commune != TEXTE_HORS_LIGNE) { %>
+									à <%= arr_attributs.commune %>
 								<% } %>
 							</span>
 						</a>
@@ -136,14 +136,16 @@
 			<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
 			<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
 			
-			<% var flag = '';
+			<% 
+			var flag = '',
+				inverse = 'hide';
 			if  (email != null) {
 				flag = 'hide';
-			%>
-			<button id="transmettre_courriel" class="btn btn-success btn-block">
+				inverse = '';
+			} %>
+			<button id="transmettre_courriel" class="btn btn-success btn-block <%= inverse %>">
 				Transmettre avec ce compte
 			</button>
-			<% } %>
 			<label for="courriel_memoire" id="zone_memoire" class="<%= flag %>">
 				Se souvenir de moi :
 				<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
@@ -156,7 +158,7 @@
 			<div id="utilisateur-infos" class="text-center text-info infos"></div>
 		</div>
 		<div id="zone_prenom_nom" class="hide">
-			<hr />
+			<hr class="fine-ultra"/>
 			<div>
 				<label for="prenom">Prénom :</label>
 				<input id="prenom_utilisateur" name="prenom" type="text" value="<%= prenom %>"/>

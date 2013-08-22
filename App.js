@@ -610,6 +610,10 @@ ___CEL.Router = Backbone.Router.extend({
 					console.log('DB | Error processing SQL: ' + error.code, error);
 				});
 			}
+			
+			if ($.trim(recherche) != '') {
+				$('#sauver-obs').removeClass('hide');
+			}
 		});
 		$('#content').on('click', '.choix-taxons', function(event) {
 			$('#taxon').val($('#'+this.id).html());
@@ -1066,7 +1070,6 @@ function surSuccesGeoloc(position) {
 		});
 		
 		$('#geo-infos').html(''); 
-		$('#sauver-obs').removeClass('hide');
 		console.log('Geolocation SUCCESS');
 	} else {
 		$('#geo-infos').addClass('text-error');
@@ -1101,23 +1104,27 @@ function requeterIdentite() {
 				if (data != undefined && data[courriel] != undefined) {
 					var infos = data[courriel];
 					$('#id_utilisateur').val(infos.id);
+					$('#transmettre_courriel').removeClass('hide');
+					$('#zone_memoire').addClass('hide');
+					$('#valider_courriel').addClass('hide');
+					$('#zone_prenom_nom').addClass('hide');
+					$('#zone_courriel_confirmation').addClass('hide');
 					$('#prenom_utilisateur').val(infos.prenom);
 					$('#nom_utilisateur').val(infos.nom);
 					$('#courriel_confirmation').val(courriel);
-					$('#prenom_utilisateur, #nom_utilisateur, #courriel_confirmation').attr('disabled', 'disabled');
 				} else {
-					surErreurCompletionCourriel();
+					surErreurCompletionCourriel('Compte inexistant.');
 				}
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				console.log('Annuaire ERROR: ' + textStatus);
-				surErreurCompletionCourriel();
+				surErreurCompletionCourriel('Echec de la vérification.');
 			},
 			complete : function(jqXHR, textStatus) {
-				miseAJourCourriel(courriel);
+				if ($('#courriel_memoire').attr('checked') == 'checked')  {
+					miseAJourCourriel(courriel);
+				}
 				console.log('Annuaire COMPLETE: ' + textStatus);
-				$('#zone_prenom_nom').removeClass('hide');
-				$('#zone_courriel_confirmation').removeClass('hide');
 			}
 		});
 	} else {
@@ -1178,10 +1185,12 @@ function miseAJourCourriel(courriel) {
 		console.log('DB | Error processing SQL: ' + error.code, error);
 	});
 }
-function surErreurCompletionCourriel() {
+function surErreurCompletionCourriel(texte) {
 	$('#utilisateur-infos').addClass('text-error');
 	$('#utilisateur-infos').removeClass('text-info');
-	$('#utilisateur-infos').html('Echec de la vérification.');
+	$('#utilisateur-infos').html(texte);
+	$('#zone_prenom_nom').removeClass('hide');
+	$('#zone_courriel_confirmation').removeClass('hide');
 	$('#prenom_utilisateur, #nom_utilisateur, #courriel_confirmation').val('');
 	$('#prenom_utilisateur, #nom_utilisateur, #courriel_confirmation').removeAttr('disabled');
 }
@@ -1194,7 +1203,7 @@ function transmettreObs() {
 	if (verifierConnexion()) {	
 		___CEL.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, num_taxon, famille, referentiel, " + 
+				"SELECT num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, num_taxon, famille, referentiel, " + 
 					"lieu_dit, station, milieu, certitude, abondance, phenologie, " +
 					"id_obs, latitude, longitude, date, commune, code_insee, mise_a_jour " +
 				"FROM espece " +
@@ -1281,8 +1290,8 @@ function construireObs(id, img_codes, img_noms) {
 			
 			'nom_sel' : obs.nom_sci,
 			'num_nom_sel' : obs.num_nom,
-			'nom_ret' : obs.nom_sci,
-			'num_nom_ret' : obs.num_nom,
+			'nom_ret' : obs.nom_sci_retenu,
+			'num_nom_ret' : obs.num_nom_retenu,
 			'num_taxon' : obs.num_taxon,
 			'famille' : obs.famille,
 			'referentiel' : obs.referentiel,
@@ -1294,6 +1303,9 @@ function construireObs(id, img_codes, img_noms) {
 			'lieudit' : obs.lieu_dit,
 			'station' : obs.station,
 			'milieu' : obs.milieu,
+			'abondance' : obs.abondance,
+			'phenologie' : obs.phenologie,
+			'certitude' : obs.certitude,
 			
 			//Ajout des champs images
 			'image_nom' : img_noms,
@@ -1314,7 +1326,7 @@ function construireObs(id, img_codes, img_noms) {
 		utilisateur.id_utilisateur = null;
 		utilisateur.prenom = null;
 		utilisateur.nom = null;
-		utilisateur.courriel = $('#transmission-courriel').html();
+		utilisateur.courriel = $('#courriel').val();
 		observations['utilisateur'] = utilisateur;
 		
 		envoyerObsAuCel(observations, obs.id_obs);	
