@@ -298,10 +298,10 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 	findOne: function(callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT id_user, nom, prenom, email, compte_verifie " +
+				"SELECT id_user,email, compte_verifie " +
 				"FROM utilisateur " + 
 				"WHERE compte_verifie LIKE 'true' "
-				"ORDER BY id_user DESC";
+				"ORDER BY email ASC";
 			tx.executeSql(sql, [], function(tx, results) {
 				callback(results.rows.length >= 1 ? results.rows.item(0) : null);
 			});
@@ -318,8 +318,6 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 			var sql =
 				"CREATE TABLE IF NOT EXISTS utilisateur (" +
 					"id_user INT NOT NULL, " +
-					"nom VARCHAR(255) NULL, " +
-					"prenom VARCHAR(255) NULL, " +
 					"email VARCHAR(255) NOT NULL, " +
 					"compte_verifie BOOLEAN NOT NULL, " +
 					"PRIMARY KEY (id_user) " +
@@ -540,9 +538,7 @@ ___CEL.views.transmissionObs = Backbone.View.extend({
 		var json = {
 			'obs' : arr_obs,
 			'transmises' : arr_transmises,
-			'email' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email,
-			'prenom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.prenom,
-			'nom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.nom
+			'email' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email
 		}
 		
 		$(this.el).html(this.template(json));
@@ -565,12 +561,6 @@ ___CEL.Router = Backbone.Router.extend({
 		// Keep track of the history of pages (we only store the page URL). Used to identify the direction
 		// (left or right) of the sliding transition between pages.
 		this.pageHistory = [];
-		
-		// Register event listener for back button troughout the app
-		$('#content').on('click', '.header-back-button', function(event) {
-			window.history.back();
-			return false;
-		});
 		
 		
 		$('#content').on('keyup', '#taxon', function(event) {
@@ -597,7 +587,6 @@ ___CEL.Router = Backbone.Router.extend({
 						"AND referentiel = ? " + 
 						"ORDER BY nom_sci";
 					tx.executeSql(sql, arr_parametres, function(tx, results) {
-						console.log(results.rows);
 						for (var i = 0; i < results.rows.length; i = i + 1) {
 							var id = results.rows.item(i).num_nom,
 								nom_sci = results.rows.item(i).nom_sci,
@@ -616,9 +605,30 @@ ___CEL.Router = Backbone.Router.extend({
 			}
 		});
 		$('#content').on('click', '.choix-taxons', function(event) {
-			$('#taxon').val($('#'+this.id).html());
+			var taxon = $('#'+this.id).html();
 			$('#num_nom_select').val(this.id);
 			$('#liste-taxons').html('');
+			$('#taxon').val(taxon);
+			$('#taxon-choisi').html(taxon);
+			$('#taxon-modal').modal('hide');
+		});
+		
+		
+		$('#content').on('click', '#btn-plante', function(event) {
+			if ($('#form-plante').hasClass('hide')) {
+				$('#form-plante').removeClass('hide');
+			} else {
+				$('#form-plante').addClass('hide');
+			}
+			$('#form-lieu').addClass('hide');
+		});
+		$('#content').on('click', '#btn-lieu', function(event) {
+			if ($('#form-lieu').hasClass('hide')) {
+				$('#form-lieu').removeClass('hide');
+			} else {
+				$('#form-lieu').addClass('hide');
+			}
+			$('#form-plante').addClass('hide');
 		});
 		
 		
@@ -1104,16 +1114,17 @@ function requeterIdentite() {
 				if (data != undefined && data[courriel] != undefined) {
 					var infos = data[courriel];
 					$('#id_utilisateur').val(infos.id);
-					$('#transmettre_courriel').removeClass('hide');
-					$('#zone_memoire').addClass('hide');
-					$('#valider_courriel').addClass('hide');
-					$('#zone_prenom_nom').addClass('hide');
-					$('#zone_courriel_confirmation').addClass('hide');
 					$('#prenom_utilisateur').val(infos.prenom);
 					$('#nom_utilisateur').val(infos.nom);
 					$('#courriel_confirmation').val(courriel);
+					
+					surSuccesCompletionCourriel();
 				} else {
-					surErreurCompletionCourriel('Compte inexistant.');
+					if ($('#courriel_confirmation').val() != courriel) {
+						surErreurCompletionCourriel('Compte inexistant.');
+					} else {
+						surSuccesCompletionCourriel();
+					}
 				}
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -1142,57 +1153,34 @@ function validerCourriel(email) {
 } 
 function miseAJourCourriel(courriel) {
 	___CEL.db.transaction(function(tx) {
-		var sql =
-			"SELECT id_user, email, compte_verifie " +
-			"FROM utilisateur " +
-			"ORDER BY id_user DESC";
-		tx.executeSql(sql, [], function(tx, results) {
-			var id = (results.rows.length == 0) ? 1 : results.rows.item(0).id_user+1,
-				sql = '',
-				parametres = new Array(),
-				utilisateurs = [];
-			for (var i = 0; i < results.rows.length; i = i + 1) {
-				utilisateurs[results.rows.item(i).id_user] = results.rows.item(i).email;
-			}
-			
-			var index = $.inArray(courriel, utilisateurs);
-			parametres.push($('#nom_utilisateur').val());
-			parametres.push($('#prenom_utilisateur').val());
-			parametres.push($('#courriel_confirmation').val() == courriel);
-			if (index == -1) {
-				sql = 
-					"INSERT INTO utilisateur " +
-					"(nom, prenom, compte_verifie, id_user, email) VALUES " + 
-					"(?, ?, ?, ?, ?) ";
-				parametres.push(id);
-				parametres.push(courriel);
-			} else {
-				if (!utilisateurs[index].compte_verifie) {
-					sql = 
-						"UPDATE utilisateur " +
-						"SET nom = ?, prenom = ?, compte_verifie = ? " +
-						"WHERE id_user = ?";
-					parametres.push(index);
-				}
-			}
-			
-			if (sql != '') {
-				tx.executeSql(sql, parametres);
-			}
-		});
+		var parametres = new Array(),
+			sql = 
+				"INSERT INTO utilisateur " +
+				"(compte_verifie, id_user, email) VALUES " + 
+				"(?, ?, ?)";
+		parametres.push($('#courriel_confirmation').val() == courriel);
+		parametres.push(1);
+		parametres.push(courriel);
+	
+		tx.executeSql('DELETE FROM utilisateur');
+		tx.executeSql(sql, parametres);
 	},
 	function(error) {
 		console.log('DB | Error processing SQL: ' + error.code, error);
 	});
 }
+function surSuccesCompletionCourriel() {
+	$('#transmettre_courriel').removeClass('hide');
+	$('#zone_memoire').addClass('hide');
+	$('#valider_courriel').addClass('hide');
+	$('#zone_courriel_confirmation').addClass('hide');
+}
 function surErreurCompletionCourriel(texte) {
 	$('#utilisateur-infos').addClass('text-error');
 	$('#utilisateur-infos').removeClass('text-info');
 	$('#utilisateur-infos').html(texte);
-	$('#zone_prenom_nom').removeClass('hide');
 	$('#zone_courriel_confirmation').removeClass('hide');
-	$('#prenom_utilisateur, #nom_utilisateur, #courriel_confirmation').val('');
-	$('#prenom_utilisateur, #nom_utilisateur, #courriel_confirmation').removeAttr('disabled');
+	//$('#courriel_confirmation').val('');
 }
 
 

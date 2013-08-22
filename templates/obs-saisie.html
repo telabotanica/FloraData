@@ -37,13 +37,13 @@
 				<strong class="obligatoire">*</strong> 
 				Espèce  <em>(ou indication sur la plante)</em>
 			</label>
-			<div class="input-prepend">
-				<span class="add-on">
-					<i class="icon-leaf"></i>
-				</span>
-				<input type="text" id="taxon" name="taxon" value="" />
+			<div class="text-center">
+				<span id="taxon-choisi" class="bold"></span>
+				<a href="#taxon-modal" role="button" class="btn btn-success" data-toggle="modal">
+					<i class="icon-search"></i>
+					Choisir une espèce...
+				</a>
 			</div>
-			<ul id="liste-taxons" class="tableview tableview-links"></ul>
 		</div>
 						
 		<div class="row-fluid">
@@ -63,14 +63,85 @@
 	</form>
 	
 	<div class="row-fluid">
-		<a href="#precisions-lieu-modal" role="button" class="btn btn-info span6" data-toggle="modal">
+		<button id="btn-lieu" class="btn btn-info span6">
 			<i class="icon-plus-sign"></i>
 			Précisions lieu
-		</a>
-		<a href="#precisions-plante-modal" role="button" class="btn btn-success span6" data-toggle="modal">
+		</button>
+		<button id="btn-plante" class="btn btn-info span6">
 			<i class="icon-plus-sign"></i>
 			Précisions plante
-		</a>
+		</button>
+	</div>
+	
+	<div class="row-fluid text-center">
+		<form id="form-lieu" class="control-group hide" action="#" enctype="multipart/form-data" autocomplete="on">
+			<div rel="tooltip" 
+				title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
+				<label for="lieudit">Lieu-dit</label>
+				<input type="text" id="lieudit" name="lieudit" />
+			</div>
+			<div rel="tooltip" 
+				title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
+				<label for="station">Station</label>
+				<input type="text" id="station" name="station" />
+			</div>
+			<div rel="tooltip" 
+				title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
+				<label for="milieux">Habitat</label>
+				<input type="text" id="milieu" name="milieu" />
+			</div>
+		</form>	
+		
+		
+		<form id="form-plante" class="control-group hide" action="#" enctype="multipart/form-data" autocomplete="off">
+			<label for="abondance">Abondance</label>
+			<select id="abondance" name="abondance" autocomplete="off">
+				<option value="NULL" selected="selected"> </option>
+				<option value="5">5 : recouvrement R > 75%</option>
+				<option value="4">4 : 50% &lt; R &lt; 75%</option>
+				<option value="3">3 : 25% &lt; R &lt; 50%</option>
+				<option value="2">2 : 5% &lt; R &lt; 25%</option>
+				<option value="1">1 : 1% &lt; R &lt; 5%</option>
+				<option value="+">+ : recouvrement R &lt; 1%</option>
+				<option value="r">r : rare (quelques pieds)</option>
+				<option value="i">i : un seul individu</option>
+				<option value="1-5">1-5 individus</option>
+				<option value="5-10">5-10 individus</option>
+				<option value="10-50">10-50 individus</option>
+				<option value="50-100">50-100 individus</option>
+				<option value="100-500">100-500 individus</option>
+				<option value=">500">&gt;500 individus</option>
+				<option value="E">E : exceptionnel</option>
+				<option value="RR">RR : très rare</option>
+				<option value="R">R : rare</option>
+				<option value="AR">AR : assez rare</option>
+				<option value="AC">AC : assez commun</option>
+				<option value="C">C : commun</option>
+				<option value="CC">CC : très commun</option>
+			</select>
+			
+			<label for="stade_ph">Stade phénologique</label>
+			<select id="stade_ph" name="stade_ph" autocomplete="off">
+				<option value="NULL" selected="selected"> </option>
+				<option value="00-09">00-09 : germination, développement des bourgeons</option>
+				<option value="10-19">10-19 : développement des feuilles</option>
+				<option value="11">11 : par ex, environ 10% des feuilles épanouies</option>
+				<option value="15">15 : par ex, environ 50% des feuilles épanouies</option>
+				<option value="20-29">20-29 : formation de pousses latérales, tallage</option>
+				<option value="30-39">30-39 : développement des tiges, croissance des rosettes</option>
+				<option value="40-49">40-49 : développement des organes de propagation végétative</option>
+				<option value="50-59">50-59 : apparition de l'inflorescence, épiaison</option>
+				<option value="60-69">60-69 : floraison</option>
+				<option value="61">61 : par ex, environ 10% des fleurs épanouies</option>
+				<option value="65">65 : par ex, environ 50% des fleurs épanouies</option>
+				<option value="70-79">70-79 : fructification</option>
+				<option value="80-89">80-89 : maturité des fruits et des graines</option>
+				<option value="85">85 : par ex, 50% des fruits matures</option>
+				<option value="90-99">90-99 : sénescence et dormance</option>
+				<option value="91">91 : par ex, environ 10% des feuilles jaunes</option>
+				<option value="95">95 : par ex, environ 50% des feuilles jaunes</option>
+			</select>
+		</form>	
 	</div>
 	
 	<hr class="fine"/>
@@ -129,94 +200,25 @@
 </div>
 
 
-<div id="precisions-lieu-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="precisions-lieu-label" aria-hidden="true" data-backdrop="static">
+<div id="taxon-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="taxon-label" aria-hidden="true" data-backdrop="static">
 	<div class="modal-header">
-		<h4 id="precisions-lieu-label">Précisions Lieu</h4>
+		<h4 id="taxon-label">
+			Choix espèce
+			<button class="pull-right btn btn-info" data-dismiss="modal" > 
+				Fermer
+			</button>
+		</h4>
 	</div>
 	<div class="modal-body text-center">
-		<form id="form-lieu" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
-			<div rel="tooltip" 
-				title="Toponyme plus précis que la commune, utilisé localement et se trouvant souvent sur les cartes au 1/25 000." >
-				<label for="lieudit">Lieu-dit</label>
-				<input type="text" id="lieudit" name="lieudit" />
-			</div>
-			<div rel="tooltip" 
-				title="Lieu précis de l'observation définissant une unité écologique homogène (ex: le pré derrière la maison)." >
-				<label for="station">Station</label>
-				<input type="text" id="station" name="station" />
-			</div>
-			<div rel="tooltip" 
-				title="Type d'habitat plus ou moins standardisé dans les codes Corine ou Catminat (ex: prairie humide).">
-				<label for="milieux">Habitat</label>
-				<input type="text" id="milieu" name="milieu" />
-			</div>
-		</form>	
+		<div class="input-prepend">
+			<span class="add-on">
+				<i class="icon-leaf"></i>
+			</span>
+			<input type="text" id="taxon" name="taxon" value="" />
+		</div>
+		<ul id="liste-taxons" class="tableview tableview-links"></ul>
 	</div>
-	<div class="modal-footer">
-		<button class="btn btn-info" data-dismiss="modal" > 
-			Continuer
-		</button>
-	</div>
-</div>
-<div id="precisions-plante-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="precisions-plante-label" aria-hidden="true" data-backdrop="static">
-	<div class="modal-header">
-		<h4 id="precisions-plante-label">Précisions Plante</h4>
-	</div>
-	<div class="modal-body text-center">
-		<form id="form-plante" class="control-group" action="#" enctype="multipart/form-data" autocomplete="on">
-			<label for="abondance">Abondance</label>
-			<select id="abondance" name="abondance" autocomplete="off">
-				<option value="NULL" selected="selected"> </option>
-				<option value="5">5 : recouvrement R > 75%</option>
-				<option value="4">4 : 50% &lt; R &lt; 75%</option>
-				<option value="3">3 : 25% &lt; R &lt; 50%</option>
-				<option value="2">2 : 5% &lt; R &lt; 25%</option>
-				<option value="1">1 : 1% &lt; R &lt; 5%</option>
-				<option value="+">+ : recouvrement R &lt; 1%</option>
-				<option value="r">r : rare (quelques pieds)</option>
-				<option value="i">i : un seul individu</option>
-				<option value="1-5">1-5 individus</option>
-				<option value="5-10">5-10 individus</option>
-				<option value="10-50">10-50 individus</option>
-				<option value="50-100">50-100 individus</option>
-				<option value="100-500">100-500 individus</option>
-				<option value=">500">&gt;500 individus</option>
-				<option value="E">E : exceptionnel</option>
-				<option value="RR">RR : très rare</option>
-				<option value="R">R : rare</option>
-				<option value="AR">AR : assez rare</option>
-				<option value="AC">AC : assez commun</option>
-				<option value="C">C : commun</option>
-				<option value="CC">CC : très commun</option>
-			</select>
-			
-			<label for="stade_ph">Stade phénologique</label>
-			<select id="stade_ph" name="stade_ph" autocomplete="off">
-				<option value="NULL" selected="selected"> </option>
-				<option value="00-09">00-09 : germination, développement des bourgeons</option>
-				<option value="10-19">10-19 : développement des feuilles</option>
-				<option value="11">11 : par ex, environ 10% des feuilles épanouies</option>
-				<option value="15">15 : par ex, environ 50% des feuilles épanouies</option>
-				<option value="20-29">20-29 : formation de pousses latérales, tallage</option>
-				<option value="30-39">30-39 : développement des tiges, croissance des rosettes</option>
-				<option value="40-49">40-49 : développement des organes de propagation végétative</option>
-				<option value="50-59">50-59 : apparition de l'inflorescence, épiaison</option>
-				<option value="60-69">60-69 : floraison</option>
-				<option value="61">61 : par ex, environ 10% des fleurs épanouies</option>
-				<option value="65">65 : par ex, environ 50% des fleurs épanouies</option>
-				<option value="70-79">70-79 : fructification</option>
-				<option value="80-89">80-89 : maturité des fruits et des graines</option>
-				<option value="85">85 : par ex, 50% des fruits matures</option>
-				<option value="90-99">90-99 : sénescence et dormance</option>
-				<option value="91">91 : par ex, environ 10% des feuilles jaunes</option>
-				<option value="95">95 : par ex, environ 50% des feuilles jaunes</option>
-			</select>
-		</form>	
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-success" data-dismiss="modal" > 
-			Continuer
-		</button>
+	<div class="modal-footer"></button>
 	</div>
 </div>
 		
