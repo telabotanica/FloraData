@@ -551,37 +551,13 @@ ___CEL.views.transmissionObs = Backbone.View.extend({
 });
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Vue Page Compte
-___CEL.views.comptePage = Backbone.View.extend({
-	initialize: function() {
-		this.utilisateur = new ___CEL.models.UtilisateurCollection();
-		this.utilisateur.findOne();
-		this.utilisateur.bind('reset', this.render, this);
-		this.template = _.template(___CEL.utils.templateLoader.get('compte'));
-	},
-	
-	render: function(eventName) {
-		//console.log(this.model);
-		var json = {
-			'email' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email,
-			'prenom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.prenom,
-			'nom' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.nom
-		}
-		
-		$(this.el).html(this.template(json));
-		return this;
-	}
-});
-
-
 
 // ----------------------------------------------- The Application Router ------------------------------------------ //
 ___CEL.Router = Backbone.Router.extend({
 	routes: {
 		'' : 'saisie',
 		'observation/:id_obs' : 'detailsObs',
-		'transmission' : 'transmissionObs',
-		'compte' : 'compteUtilisateur'
+		'transmission' : 'transmissionObs'
 	},
 	
 	initialize: function() {
@@ -872,10 +848,6 @@ ___CEL.Router = Backbone.Router.extend({
 		this.slidePage(new ___CEL.views.transmissionObs().render());
 	},
 	
-	compteUtilisateur: function(data) {
-		this.slidePage(new ___CEL.views.comptePage().render());
-	},
-	
 
 	slidePage: function(page) {
 		var slideFrom,
@@ -937,7 +909,7 @@ $().ready(function() {
 	(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
 	
 	___CEL.utils.templateLoader.load(
-		['obs-liste', 'obs-page', 'obs-saisie', 'compte'],
+		['obs-liste', 'obs-page', 'obs-saisie'],
 		function() {
 			___CEL.app = new ___CEL.Router();
 			Backbone.history.start();
