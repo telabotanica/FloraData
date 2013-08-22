@@ -135,7 +135,7 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	findById: function(id, callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, nom_vernaculaire, id_obs, date, commune, code_insee " +
+				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee " +
 				"FROM espece e " +
 				"JOIN obs o ON e.num_nom = o.ce_espece " +
 				"WHERE id_obs = :id_obs";
@@ -151,7 +151,7 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	findAll: function(callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, nom_vernaculaire, id_obs, date, commune, code_insee, a_ete_transmise " +
+				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, a_ete_transmise " +
 				"FROM espece " +
 				"JOIN obs ON num_nom = ce_espece " +
 				"ORDER BY a_ete_transmise ASC, id_obs DESC";
@@ -609,14 +609,15 @@ ___CEL.Router = Backbone.Router.extend({
 		
 		
 		$('#content').on('keyup', '#taxon', function(event) {
+			$('#liste-taxons').html('');
 			var recherche = $('#taxon').val(),
 				arr_recherche = recherche.split(' ');
 			if (recherche.length > 2) {	
 				___CEL.db.transaction(function(tx) {
 					var arr_parametres = new Array(),
-						clause_where = '';
+						clause_where = "WHERE nom_sci LIKE ? ";
 					if (arr_recherche.length > 1) {
-						clause_where += "OR nom_sci LIKE ? ";
+						clause_where = "WHERE (nom_sci LIKE ? OR nom_sci LIKE ?) ";
 						arr_parametres.push(arr_recherche[0] + '% ' + arr_recherche[1] + '%');
 						arr_parametres.push(arr_recherche[0] + '% x ' + arr_recherche[1] + '%');
 					} else {
@@ -627,23 +628,28 @@ ___CEL.Router = Backbone.Router.extend({
 					var sql = 
 						"SELECT num_nom, nom_sci " +
 						"FROM espece " + 
-						"WHERE nom_sci LIKE ? " + clause_where + 
-						"AND referentiel LIKE ? " + 
+						clause_where + 
+						"AND referentiel = ? " + 
 						"ORDER BY nom_sci";
 					tx.executeSql(sql, arr_parametres, function(tx, results) {
-						var len = results.rows.length,
-							especes = [],
-							i = 0;
-						for (; i < len; i = i + 1) {
-							especes[i] = results.rows.item(i);
+						console.log(results.rows);
+						for (var i = 0; i < results.rows.length; i = i + 1) {
+							var id = results.rows.item(i).num_nom,
+								nom_sci = results.rows.item(i).nom_sci,
+								elt = '<li id="' + id + '" class="choix-taxons">' + nom_sci + '</li>';
+							$('#liste-taxons').append(elt);
 						}
-						console.log(especes);
 					});
 				},
 				function(tx, error) {
 					console.log('DB | Error processing SQL: ' + error.code, error);
 				});
 			}
+		});
+		$('#content').on('click', '.choix-taxons', function(event) {
+			$('#taxon').val($('#'+this.id).html());
+			$('#num_nom_select').val(this.id);
+			$('#liste-taxons').html('');
 		});
 		
 		

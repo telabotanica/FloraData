@@ -15,7 +15,7 @@
 </header>
 
 
-<div class="tableview tableview-links row-fluid">
+<div class="row-fluid">
 	<form id="form-obs" action="#" autocomplete="on">
 		<div class="row-fluid">
 			<label for="referentiel" title="Réferentiel">
@@ -32,7 +32,7 @@
 			</span>
 		</div>
 						
-		<div id="taxon-input-groupe" class="row-fluid" >
+		<div id="taxon-input-groupe" class="row-fluid tableview tableview-links" >
 			<label for="taxon" title="Choisissez une espèce">
 				<strong class="obligatoire">*</strong> 
 				Espèce  <em>(ou indication sur la plante)</em>
@@ -43,6 +43,7 @@
 				</span>
 				<input type="text" id="taxon" name="taxon" value="" />
 			</div>
+			<ul id="liste-taxons"></ul>
 		</div>
 						
 		<div class="row-fluid">
