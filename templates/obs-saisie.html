@@ -10,40 +10,39 @@
 
 
 <div class="row-fluid">
-	<form id="form-obs" action="#" autocomplete="on">
+	<div class="row-fluid">
+		<label for="date">
+			Date : <span id="date"><%= date %></span>
+		</label>
+		<hr class="fine"/>
+
 		<div class="row-fluid">
-			<label for="date">
-				Date : <span id="date"><%= date %></span>
-			</label>
-			<span class="input-prepend span11">
-				<span id="referentiel-icone" class="add-on">Référentiel</span>
-				<select id="referentiel" autocomplete="off">
-					<option value="bdtfx:v1.01" title="Trachéophytes de France métropolitaine" selected="selected">Métropole (BDTFX)</option>
-					<option value="bdtxa:v1.00" title="Trachéophytes des Antilles">Antilles françaises (BDTXA)</option>
-					<option value="isfan:v1.00" title="Afrique du Nord">Afrique du Nord (ISFAN)</option>
-					<option value="NULL" title="Autre/Inconnu">Autre/Inconnu</option>
-				</select>
-			</span>
-		</div>
-						
-		<div id="taxon-input-groupe" class="row-fluid" >
-			<div class="text-center">
-				<a href="#taxon-modal" role="button" class="btn btn-large btn-success" data-toggle="modal">
-					<span id="taxon-choisi" class=""></span>
-					* Espèce <i class="icon-search"></i>
-				</a>
-			</div>
-		</div>
-						
-		<div class="row-fluid">
-			<select id="certitude" class="span12" name="certitude" autocomplete="off">
-				<option value="NULL" selected="selected">Identification</option>
-				<option value="certain">Certaine</option>
-				<option value="douteux">Douteuse</option>
-				<option value="aDeterminer">A déterminer</option>
+			<select id="referentiel" class="span12" autocomplete="off">
+				<option value="bdtfx:v1.01" title="Trachéophytes de France métropolitaine" selected="selected">Référentiel : Métropole (BDTFX)</option>
+				<option value="bdtxa:v1.00" title="Trachéophytes des Antilles">Référentiel : Antilles françaises (BDTXA)</option>
+				<option value="isfan:v1.00" title="Afrique du Nord">Référentiel : Afrique du Nord (ISFAN)</option>
+				<option value="NULL" title="Autre/Inconnu">Référentiel : Autre/Inconnu</option>
 			</select>
 		</div>
-	</form>
+	</div>
+					
+	<div id="taxon-input-groupe" class="row-fluid" >
+		<div class="text-center">
+			<a href="#taxon-modal" role="button" id="btn-taxon" class="btn btn-large btn-block btn-success" data-toggle="modal">	
+				* Espèce : <span id="taxon-choisi" class=""><i class="icon-search"></i></span>
+			</a>
+		</div>
+	</div>
+					
+	<div class="row-fluid">
+		<select id="certitude" class="span12" name="certitude" autocomplete="off">
+			<option value="NULL" selected="selected">Identification</option>
+			<option value="certain">Certaine</option>
+			<option value="douteux">Douteuse</option>
+			<option value="aDeterminer">A déterminer</option>
+		</select>
+	</div>
+	<hr class="fine-ultra"/>
 	
 	<div class="row-fluid">
 		<button id="btn-lieu" class="btn btn-gris span6">
@@ -151,7 +150,7 @@
 	<hr class="fine"/>
 	<div id="obs-photos-info" class="text-center"></div>
 	<div class="text-center">
-		<button class="ajouter-photos btn-large btn btn-gris" id="prendre-photos">
+		<button class="ajouter-photos btn-large btn-block btn btn-gris" id="prendre-photos">
 			<i class="icon-picture"></i> <br />
 			<span id="prendre-photos-texte">Ajouter une photo...</span> 
 		</button>
@@ -167,7 +166,7 @@
 		Merci de spécifier une espèce. 
 	</div>
 	<div class="text-center">
-		<button id="sauver-obs" class="hide btn btn-success btn-large">
+		<button id="sauver-obs" class="btn btn-success btn-block btn-large">
 			<i class="icon-ok"></i> <br />
 			Enregistrer
 		</button>

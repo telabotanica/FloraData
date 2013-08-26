@@ -65,7 +65,6 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 			tx.executeSql('DROP TABLE IF EXISTS espece');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS espece (" +
-					"num INT, " +
 					"num_nom INT NOT NULL ," +
 					"nom_sci VARCHAR(500) NOT NULL ," +
 					"num_nom_retenu INT NOT NULL ," +
@@ -94,7 +93,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 				for (var i = 1; i < max; i++) {
 					var sql = '',
 						arr_valeurs = arr_lignes[i].split(';');
-						sql += i + ',';
+						//sql += i + ',';
 					for (var j = 0; j < arr_valeurs.length; j++) {
 						sql += arr_valeurs[j];
 						if (j < (arr_valeurs.length - 1)) {
@@ -103,13 +102,13 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 					arr_sql.push(
 						"INSERT INTO espece "
-						+ "(num, num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
+						+ "(num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
 						+ "VALUES (" + sql + ")"
 					);
 				}
 				//console.log(arr_sql);
 				___CEL.db.transaction(function (tx) {
-					for (var c = 0; c < 211; c++) {
+					for (var c = 0; c < 100; c++) {
 						tx.executeSql(arr_sql[c]);
 					}
 				}, 
@@ -173,33 +172,10 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 		});
 	},
 	
-	findForTransmission: function(callback) {
-		this.db.transaction(function(tx) {
-			var sql = 
-				"SELECT num_nom, nom_sci, num_taxon, famille, referentiel, " + 
-						"id_obs, latitude, longitude, date, commune, code_insee, mise_a_jour " +
-				"FROM espece " +
-				"JOIN obs ON num_nom = ce_espece " +
-				"ORDER BY id_obs DESC";
-			tx.executeSql(sql, [], function(tx, results) {
-				 var nbre = results.rows.length,
-					obs = [],
-					i = 0;
-				for (; i < nbre; i = i + 1) {
-					obs[i] = results.rows.item(i);
-				}
-				callback(obs);
-			});
-		},
-		function(error) {
-			console.log('DB | Error processing SQL: ' + error.code, error);
-		});
-	},
-	
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping OBS table');
-			//tx.executeSql('DROP TABLE IF EXISTS obs');
+			tx.executeSql('DROP TABLE IF EXISTS obs');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS obs (" +
 					"id_obs INT NOT NULL, "+
@@ -266,7 +242,7 @@ _.extend(___CEL.dao.PhotoDAO.prototype, {
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping PHOTO table');
-			//tx.executeSql('DROP TABLE IF EXISTS photo');
+			tx.executeSql('DROP TABLE IF EXISTS photo');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS photo (" +
 					"id_photo INT NOT NULL ," +
@@ -316,7 +292,7 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping UTILISATEUR table');
-			//tx.executeSql('DROP TABLE IF EXISTS utilisateur');
+			tx.executeSql('DROP TABLE IF EXISTS utilisateur');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS utilisateur (" +
 					"id_user INT NOT NULL, " +
