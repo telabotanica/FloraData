@@ -25,8 +25,6 @@
 		<!-- Javascript : appli saisie -->
 		<script type="text/javascript">
 		//<![CDATA[
-		var DEBUG = false;
-		var HTML5 = false;
 			// Mot-clé du widget/projet
 			var TAG_PROJET = "WidgetSaisie";
 			// Mots-clés à ajouter aux images
@@ -36,31 +34,16 @@
 			// URL du web service réalisant l'insertion des données dans la base du CEL.
 			//var SERVICE_SAISIE_URL = "http://www.tela-botanica.org/eflore/cel/jrest/CelWidgetSaisie";
 			var	SERVICE_SAISIE_URL = 'http://www.tela-botanica.org/eflore-test/cel/jrest/CelWidgetSaisie';
+			// URL du web service vérifiant les comptes de transmission au CEL.
 			var SERVICE_ANNUAIRE = 'http://www.tela-botanica.org/client/annuaire_nouveau/actuelle/jrest/utilisateur/identite-par-courriel/';
-				
-		var NOM_SCI_REFERENTIEL = "bdtfx:1.01";
-		var NOM_SCI_PROJET = "bdtfx";
-		var NOM_SCI_VERSION = "1.01";
-			// Indication de la présence d'une espèce imposée
-		var ESPECE_IMPOSEE = "";
-			// Tableau d'informations sur l'espèce imposée
-		var INFOS_ESPECE_IMPOSEE = Array;
-			// Nombre d'élément dans les listes d'auto-complétion
-			var AUTOCOMPLETION_ELEMENTS_NBRE = 20;
-			// Indication de la présence d'un référentiel imposé
-		var REFERENTIEL_IMPOSE = "";
 			// Indication des version utilisées de chaque référentiel
 			var PROJETS_VERSIONS = {"bdtfx":"1.01","bdtxa":"1.00","isfan":"1.00","_none":"0.00"};
 			// Nombre d'observations max autorisé avant transmission
-			var LIMITE_NBRE_TRANSMISSION = 2;
+			var LIMITE_NBRE_TRANSMISSION = 10;
 			// Nombre de photos max autorisées avant sauvegarde
 			var LIMITE_NBRE_PHOTOS = 3;
-			// Durée d'affichage en milliseconde des messages d'informations
-		var DUREE_MESSAGE = 15000;
 			// Squelette d'URL du web service d'eFlore fournissant les noms de communes.
 			var SERVICE_NOM_COMMUNE_URL = "http://www.tela-botanica.org/service:eflore:0.1/osm/nom-commune?lon={lon}&lat={lat}";
-		// Squelette d'URL du web service d'eFlore fournissant les noms de communes hors de France (localisation approximative).
-		var SERVICE_NOM_COMMUNE_URL_ALT = "http://www.tela-botanica.org/service:eflore:0.1/wikipedia/nom-commune?lon={lon}&lat={lat}&nbre=1";
 			// Texte en absence de connexion
 			var TEXTE_HORS_LIGNE = 'Aucune connexion.';
 			
@@ -83,7 +66,6 @@
 			}
 		//]]>
 		</script>
-		<script type="text/javascript" src="js/defaut.js"></script>
 		<script src="js/underscore-min.js" type="text/javascript" ></script>	
 		<script src="js/backbone-min.js" type="text/javascript" ></script>	
 		<script src="App.js" type="text/javascript" ></script>
@@ -99,14 +81,14 @@
 		
 		<div id="sauvegarde-obs-modal" class="hide modal fade" tabindex="-1" role="dialog" aria-labelledby="sauvegarde-obs-modal-label" aria-hidden="true" data-backdrop="static">
 			<div class="modal-header text-center">
-				<h4 id="sauvegarde-obs-modal-label">Observation enregistrée ! <br /> Bravo !</h4>
+				<h4 id="sauvegarde-obs-modal-label">Observation enregistrée dans la liste ! Bravo !</h4>
 			</div>
 			<div class="modal-body">
-				<button onclick="location.reload();" class="btn btn-primary btn-block fermer-obs-modal">
-					Continuer les observations
+				<button onclick="location.reload();" class="btn btn-gris btn-block fermer-obs-modal">
+					Continuer la saisie
 				</button>
 				<hr />
-				<a href="#transmission" class="btn btn-warning btn-block fermer-obs-modal">
+				<a href="#transmission" class="btn btn-block btn-gris fermer-obs-modal">
 					Transmettre mes observations
 				</a>
 			</div>
@@ -119,10 +101,12 @@
 				<h4 id="informations-label">Informations</h4>
 			</div>
 			<div class="modal-body text-center">
-				BlaBla. <br />
-				Licence. <br />
-				Tela-Botanica. <br />
-				Développement. <br />
+				Cette application a été développée par Tela Botanica pour participer sur le terrain au programme d'étude de la flore Flora Data .
+				<br /> Elle vous permet d'enregistrer toutes vos observations de plantes au cours de vos promenades ou de vos relevés, puis de les envoyer dans votre carnet en ligne dès que vous disposez d'une connexion.
+				<br /><br /> Pour toute question, contactez <br /> <strong>cel-remarques@tela-botanica.org</strong>.
+				<br />
+				<br /> Licence CC-by-SA.
+				<br /> Développement : Isabelle NEMBROT.
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-inverse" data-dismiss="modal" > 

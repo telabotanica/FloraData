@@ -6,7 +6,7 @@
         id        = "org.tela-botanica.cel_mobile_pro"
         version   = "2.0.0">
 
-    <name>CEL Mobile</name>
+    <name>Saisie Flora Data</name>
 
     <description>
         Le Carnet en ligne (CEL) est l'équivalent numérique de votre carnet de terrain. Il permet de saisir vos observations, de les vérifier, de les illustrer avec vos propres images, puis de les partager avec le réseau.

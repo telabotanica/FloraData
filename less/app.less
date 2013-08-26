@@ -6,7 +6,7 @@
 @orange: #ED7826;
 @orange-moyen: #F3B88F;
 @rouge: rgb(225, 96, 57);
-@vert-fonce: #256226;
+@vert-fonce: #51a351;
 @vert-moyen: #88AB1C;
 @violet: rgb(176, 77, 255);
 
@@ -30,6 +30,31 @@ header {
 
 #content {
 	margin-left: 6px;
+}
+
+#taxon-choisi {
+	display: block;
+}
+
+#liste-taxons {
+	max-height: 180px;
+	margin-left: 4px;
+	overflow: scroll;
+}
+#liste-taxons li {
+	margin: 0px;
+	padding: 15px 0px;
+}
+
+.btn-gris {
+  text-shadow: 0 -1px 0 rgba(1, 1, 1, 0.25);
+  background-color: #EEE;
+  background-image: -moz-linear-gradient(top, #EEE, #CCC);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EEE), to(#CCC));
+  background-image: -webkit-linear-gradient(top, #EEE, #CCC);
+  background-image: -o-linear-gradient(top, #EEE, #CCC);
+  background-image: linear-gradient(to bottom, #EEE, #CCC);
+  background-repeat: repeat-x;
 }
 
 .titre {
@@ -162,15 +187,6 @@ header {
 .tableview-links li>span.suppression-element.tappable-active span {
 	background-position: top right;
 }
-#liste-taxons {
-	max-height: 180px;
-	margin-left: 4px;
-	overflow: scroll;
-}
-#liste-taxons li {
-	margin: 0px;
-	padding: 15px 0px;
-}
 
 .fine {
 	margin: 10px 0px;
@@ -190,6 +206,10 @@ form {
 
 [class*="span"] {
 	margin-left: 0px;
+}
+
+label {
+	margin-bottom: 0px;
 }
 
 
@@ -216,6 +236,10 @@ form {
 
 .modal {
 	margin-left: -160px;
+}
+
+.control-group {
+	margin-top: 10px;
 }
 
 

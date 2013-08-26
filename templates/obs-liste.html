@@ -1,17 +1,11 @@
-<header class="row-fluid clearfix margin-bottom-1em white-bg black">
-	<a href="#">
-		<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
-	</a>
-
+<header class="row-fluid clearfix white-bg black">
+	<img src="img/_logo_tela_qr.png" class="pull-left span3 logo" />
 	<div class="pull-left titre span7">
 		Mes observations
 	</div>
-	
-	<div class="margin-top-1em">
-		<a href="#informations-modal" data-toggle="modal">
-			<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
-		</a>
-	</div>
+	<a href="#informations-modal" data-toggle="modal">
+		<img src="img/s_info_alpha.png" class="pull-left span2 logo" />
+	</a>
 </header>
 
 <div id="details-obs" class="text-center alert alert-block hide"></div>
@@ -23,18 +17,18 @@
 		</h4>	
 		<% if (obs.length == 0) { %>
 		<% } else { 	
-				var texte = 'Partager au CEL';
+				var texte = 'Transmettre';
 		%>
 		
 			<% if (obs.length >= 3) { %>
 				<hr class="fine-ultra"/>
 				<div id="obs-a-transmettre-btn" class="text-center">
-					<button class="btn btn-warning transmettre-obs">
+					<button class="btn btn-success transmettre-obs">
 						<%= texte %>
 					</button>
 				</div>
 			<% } %>
-				<ul>
+				<ul style="margin:0px;">
 				<%	_.each(obs, function(observation) {
 						var attributs = observation.attributes;
 				%>
@@ -55,7 +49,7 @@
 			<%	}, this); %>
 			</ul>
 			<div class="text-center">
-				<button class="transmettre-obs btn btn-warning">
+				<button class="transmettre-obs btn btn-success">
 					<%= texte %>
 				</button>
 			</div>
@@ -68,8 +62,8 @@
 		</h4>
 		<% if (transmises.length > 0) { %>
 			<div id="obs-transmises-infos">
-				<button class="btn btn-danger supprimer-obs-transmises pull-right">
-					Supprimer tout
+				<button class="btn btn-gris supprimer-obs-transmises pull-right">
+					Supprimer tout l'historique des observations
 				</button>
 			</div>
 			<ul>
@@ -125,38 +119,36 @@
 	<div class="modal-header">
 		<h4 id="compte-label">
 			Compte Tela
-			<button class="pull-right btn btn-info" data-dismiss="modal" > 
+			<button class="pull-right btn btn-gris" data-dismiss="modal" > 
 				Fermer
 			</button>
 		</h4>
 	</div>
 	<div class="modal-body">
-		<div> 
-			<label for="courriel">Courriel * :</label> 
-			<input id="courriel" type="email" name="courriel" value="<%= email %>"/>
-			<input id="id_utilisateur" name="id_utilisateur" type="hidden"/>
-			
-			<% 
-			var flag = '',
-				inverse = 'hide';
-			if  (email != null) {
-				flag = 'hide';
-				inverse = '';
-			} %>
-			<button id="transmettre_courriel" class="btn btn-success btn-block <%= inverse %>">
-				Transmettre avec ce compte
-			</button>
-			<label for="courriel_memoire" id="zone_memoire" class="<%= flag %>">
-				Se souvenir de moi :
-				<input type="checkbox" name="courriel_memoire" id="courriel_memoire" checked="checked">
-			</label>
-			
-			<button id="valider_courriel" class="btn btn-info btn-block <%= flag %>">
-				<i class="icon-repeat"></i>
-				Valider ce compte Tela
-			</button>
-			<div id="utilisateur-infos" class="text-center text-info infos"></div>
-		</div>
+		Vous allez rendre publiques les observations sous licence libre CC-by-SA.
+		Vous en êtes l'auteur et pour les modifier ou les supprimer, vous les retrouverez stockées dans votre Carnet en Ligne associées au courriel suivant (non diffusé) :
+		<label for="courriel">Courriel * :
+			<input id="courriel" type="email" name="courriel" value="<%= email %>" />
+		</label> 
+		NB: Seules les 10 premières observations sont transmises à chaque fois.
+		<input id="id_utilisateur" name="id_utilisateur" type="hidden" />
+		
+		<% 
+		var flag = '',
+			inverse = 'hide';
+		if  (email != null) {
+			flag = 'hide';
+			inverse = '';
+		} %>
+		<button id="transmettre_courriel" class="btn btn-success btn-block <%= inverse %>">
+			Transmettre avec ce compte
+		</button>
+		
+		<button id="valider_courriel" class="btn btn-info btn-block <%= flag %>">
+			<i class="icon-repeat"></i>
+			Valider ce compte Tela
+		</button>
+		<div id="utilisateur-infos" class="text-center text-info infos"></div>
 		<div id="zone_courriel_confirmation" class="hide">
 			<label for="courriel_confirmation">
 				Courriel (confirmation) <strong class="obligatoire">*</strong>  : <br />
@@ -164,8 +156,7 @@
 			<input id="courriel_confirmation" name="courriel_confirmation" type="text"/>
 		</div>
 	</div>
-	<div class="modal-footer">
-	</div>
+	<div class="modal-footer"></div>
 </div>
 
 
@@ -174,12 +165,12 @@
 		<li class="span6">
 			<a href="#">
 				<i class="icon-pencil icon-white"></i>
-				Nouvelle obs.
+				Saisie
 			</a>
 		</li>
-		<li class="span5 active">
+		<li class="span6 active">
 			<a href="#transmission">
-				Mes obs.
+				Observations
 				<i class="icon-share icon"></i>
 			</a>
 		</li>

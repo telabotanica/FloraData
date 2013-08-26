@@ -567,7 +567,7 @@ ___CEL.Router = Backbone.Router.extend({
 			$('#liste-taxons').html('');
 			var recherche = $('#taxon').val(),
 				arr_recherche = recherche.split(' ');
-			if (recherche.length > 2) {	
+			if (recherche.length > 1) {	
 				___CEL.db.transaction(function(tx) {
 					var arr_parametres = new Array(),
 						clause_where = "WHERE nom_sci LIKE ? ";
@@ -605,10 +605,17 @@ ___CEL.Router = Backbone.Router.extend({
 			}
 		});
 		$('#content').on('click', '.choix-taxons', function(event) {
-			var taxon = $('#'+this.id).html();
-			$('#num_nom_select').val(this.id);
+			var id = this.id,
+				taxon = '';
+				
+			if (id != -1) {
+				taxon = $('#'+id).html();
+			} else {
+				taxon = $('#taxon').val();
+			}
+			$('#num_nom_select').val(id);
 			$('#liste-taxons').html('');
-			$('#taxon').val(taxon);
+			$('#taxon').val('');
 			$('#taxon-choisi').html(taxon);
 			$('#taxon-modal').modal('hide');
 		});
@@ -800,7 +807,6 @@ ___CEL.Router = Backbone.Router.extend({
 				transmettreObs();
 		});
 		$('#content').on('keyup', '#courriel', function(event) {
-			$('#zone_memoire').removeClass('hide');
 			$('#valider_courriel').removeClass('hide');
 			$('#transmettre_courriel').addClass('hide');
 		});
@@ -1033,6 +1039,7 @@ function surPhotoErreurAjout(error) {
 	$('#obs-photos-info').addClass('text-error');
 	$('#obs-photos-info').removeClass('text-info');
 	$('#obs-photos-info').html('Erreur de traitement. Ajout impossible.');
+	alert('PHOTO | Error: ' + error.code, error);
 	console.log('PHOTO | Error: ' + error.code, error);
 }
 function surPhotoErreurSuppression(error) {
@@ -1132,9 +1139,7 @@ function requeterIdentite() {
 				surErreurCompletionCourriel('Echec de la vérification.');
 			},
 			complete : function(jqXHR, textStatus) {
-				if ($('#courriel_memoire').attr('checked') == 'checked')  {
-					miseAJourCourriel(courriel);
-				}
+				miseAJourCourriel(courriel);
 				console.log('Annuaire COMPLETE: ' + textStatus);
 			}
 		});
@@ -1171,7 +1176,6 @@ function miseAJourCourriel(courriel) {
 }
 function surSuccesCompletionCourriel() {
 	$('#transmettre_courriel').removeClass('hide');
-	$('#zone_memoire').addClass('hide');
 	$('#valider_courriel').addClass('hide');
 	$('#zone_courriel_confirmation').addClass('hide');
 }
@@ -1340,7 +1344,10 @@ function envoyerObsAuCel(obs, id_obs) {
 			console.log('Transmission SUCCESS.');
 			$('#nbre_obs').html(parseInt($('#nbre_obs').html()) + 1);
 			$('#details-obs').addClass('alert-success');
-			msg = 'Transmission réussie ! Vos observations sont désormais disponibles sur votre carnet en ligne. Bravo !';
+			
+			msg = 'Transmission réussie ! Merci ! <br /><br />'
+			+ 'Vos observations contribuent désormais au programme Flora Data et nous vous en remercions.'
+			+ 'Elles sont visibles sur le site de Tela Botanica, et vous pouvez les modifier ou les supprimer en vous rendant sur votre Carnet en Ligne.';
 			miseAJourTransmission(id_obs);
 		},
 		statusCode : {
