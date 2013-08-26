@@ -65,10 +65,11 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 			tx.executeSql('DROP TABLE IF EXISTS espece');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS espece (" +
+					"num INT, " +
 					"num_nom INT NOT NULL ," +
-					"nom_sci VARCHAR(255) NOT NULL ," +
+					"nom_sci VARCHAR(500) NOT NULL ," +
 					"num_nom_retenu INT NOT NULL ," +
-					"nom_sci_retenu VARCHAR(255) NOT NULL ," +
+					"nom_sci_retenu VARCHAR(500) NOT NULL ," +
 					"num_taxon INT NULL ," +
 					"famille VARCHAR(255) NULL ," +
 					"referentiel VARCHAR(45) NOT NULL ," +
@@ -93,6 +94,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 				for (var i = 1; i < max; i++) {
 					var sql = '',
 						arr_valeurs = arr_lignes[i].split(';');
+						sql += i + ',';
 					for (var j = 0; j < arr_valeurs.length; j++) {
 						sql += arr_valeurs[j];
 						if (j < (arr_valeurs.length - 1)) {
@@ -101,13 +103,13 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 					arr_sql.push(
 						"INSERT INTO espece "
-						+ "(num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
+						+ "(num, num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
 						+ "VALUES (" + sql + ")"
 					);
 				}
 				//console.log(arr_sql);
 				___CEL.db.transaction(function (tx) {
-					for (var c = 0; c < arr_sql.length; c++) {
+					for (var c = 0; c < 211; c++) {
 						tx.executeSql(arr_sql[c]);
 					}
 				}, 
@@ -637,6 +639,11 @@ ___CEL.Router = Backbone.Router.extend({
 			}
 			$('#form-plante').addClass('hide');
 		});
+		$('#content').on('change', '#referentiel', function(event) {
+			$('#taxon').val('');
+			$('#taxon-choisi').html('');
+			$('#num_nom_select').val(0);
+		});
 		
 		
 		$('#content').on('click', '#geolocaliser', geolocaliser);
@@ -919,7 +926,7 @@ ___CEL.Router = Backbone.Router.extend({
 });
 
 // Bootstrap the application
-___CEL.db = window.openDatabase('CELApps', '1.0', 'Data Base CEL Mobile', 1024*1024*20);
+___CEL.db = window.openDatabase('CELApps', '1.1', 'Data Base CEL Mobile', 1024*1024*100);
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
