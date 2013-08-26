@@ -926,7 +926,7 @@ ___CEL.Router = Backbone.Router.extend({
 });
 
 // Bootstrap the application
-___CEL.db = window.openDatabase('CELApps', '1.1', 'Data Base CEL Mobile', 1024*1024*100);
+___CEL.db = window.openDatabase('CELApps', '1.0', 'Data Base CEL Mobile', 1024*1024*100);
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
