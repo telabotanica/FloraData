@@ -910,7 +910,7 @@ ___CEL.Router = Backbone.Router.extend({
 });
 
 // Bootstrap the application
-___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora Data', 1024*1024*100);
+___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora Data', 1024*1024*20);
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
