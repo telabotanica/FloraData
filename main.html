@@ -53,7 +53,6 @@
 				
 			document.addEventListener('deviceready', onDeviceReady, false);
 			function onDeviceReady() {
-				alert('ready');
 				pictureSource = navigator.camera.PictureSourceType;
 				destinationType = navigator.camera.DestinationType;
 				window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,

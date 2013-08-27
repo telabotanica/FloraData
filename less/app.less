@@ -31,10 +31,18 @@ header {
 	margin-bottom: 10px;
 }
 
+#taxon-modal {
+	top: 0%;
+	
+	.modal-header, .modal-body  {
+		padding: 2px 10px;
+	}
+}
+
 #liste-taxons {
 	max-height: 180px;
 	margin-left: 4px;
-	overflow: scroll;
+	overflow: auto;
 }
 #liste-taxons li {
 	margin: 0px;
@@ -233,7 +241,7 @@ label {
 .modal {
 	top: 0%;
 	width: 320px;
-	overflow-x: scroll;
+	overflow: auto;
 	margin-left: -160px;
 }
 

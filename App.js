@@ -114,7 +114,6 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 				}, 
 				function(error) {
-					alert('DB | EspeceDAO csv');
 					console.log('DB | Error processing SQL: ' + error.code, error);
 				},
 				function(tx) {	});
@@ -206,7 +205,6 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
-			alert('DB | ObsDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -262,7 +260,6 @@ _.extend(___CEL.dao.PhotoDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
-			alert('DB | PhotoDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -308,7 +305,6 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
-			alert('DB | UtilisateurDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -460,7 +456,6 @@ ___CEL.views.saisieObs = Backbone.View.extend({
 		//this.model.attributes.position = this.position;
 		//console.log(this.model);
 		$(this.el).html(this.template({ date : this.date}));
-		alert('date ' + this.date);
 		return this;
 	}
 });
@@ -828,7 +823,6 @@ ___CEL.Router = Backbone.Router.extend({
 		this.searchPage = new ___CEL.views.saisieObs();
 		this.searchPage.render();
 		self.slidePage(this.searchPage);
-		alert('sliding');
 		$(this.searchPage.el).attr('id', 'searchPage');
 	},
 	
@@ -910,7 +904,7 @@ ___CEL.Router = Backbone.Router.extend({
 });
 
 // Bootstrap the application
-___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora Data', 1024*1024*20);
+___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora Data', 1024*1024*30);
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
@@ -918,13 +912,12 @@ $().ready(function() {
 	(new ___CEL.dao.ObsDAO(___CEL.db)).populate();
 	(new ___CEL.dao.PhotoDAO(___CEL.db)).populate();
 	(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
-	alert('population complete');
+	
 	___CEL.utils.templateLoader.load(
 		['obs-liste', 'obs-page', 'obs-saisie'],
 		function() {
 			___CEL.app = new ___CEL.Router();
 			Backbone.history.start();
-		alert('apps started');
 		}
 	);
 });
