@@ -65,19 +65,19 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 			tx.executeSql('DROP TABLE IF EXISTS espece');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS espece (" +
+					"id INT NOT NULL, " +
 					"num_nom INT NOT NULL ," +
 					"nom_sci VARCHAR(500) NOT NULL ," +
-					"num_nom_retenu INT NOT NULL ," +
-					"nom_sci_retenu VARCHAR(500) NOT NULL ," +
+					"num_nom_retenu INT NULL ," +
+					"nom_sci_retenu VARCHAR(500) NULL ," +
 					"num_taxon INT NULL ," +
 					"famille VARCHAR(255) NULL ," +
 					"referentiel VARCHAR(45) NOT NULL ," +
-				"PRIMARY KEY (num_nom) )";
+				"PRIMARY KEY (id) )";
 			console.log('Creating ESPECE table');
 			tx.executeSql(sql);
 		},
 		function(error) {
-			alert('DB | EspeceDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -91,10 +91,11 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 				var arr_lignes = fichier.split(/\r\n|\r|\n/),
 					arr_sql = new Array(),
 					max = arr_lignes.length - 1;
+					//max = 20000;
 				for (var i = 1; i < max; i++) {
 					var sql = '',
 						arr_valeurs = arr_lignes[i].split(';');
-						//sql += i + ',';
+						sql += i + ',';
 					for (var j = 0; j < arr_valeurs.length; j++) {
 						sql += arr_valeurs[j];
 						if (j < (arr_valeurs.length - 1)) {
@@ -103,13 +104,13 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 					arr_sql.push(
 						"INSERT INTO espece "
-						+ "(num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, famille, num_taxon, referentiel) "
+						+ "(id, num_nom, nom_sci, famille, num_taxon, referentiel) "
 						+ "VALUES (" + sql + ")"
 					);
 				}
 				//console.log(arr_sql);
 				___CEL.db.transaction(function (tx) {
-					for (var c = 0; c < 100; c++) {
+					for (var c = 0; c < arr_sql.length; c++) {
 						tx.executeSql(arr_sql[c]);
 					}
 				}, 
@@ -618,6 +619,7 @@ ___CEL.Router = Backbone.Router.extend({
 		});
 		$('#content').on('change', '#referentiel', function(event) {
 			$('#taxon').val('');
+			$('#liste-taxons').html('');
 			$('#taxon-choisi').html('');
 			$('#num_nom_select').val(0);
 		});
