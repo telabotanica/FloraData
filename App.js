@@ -77,6 +77,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
+			alert('DB | EspeceDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -113,6 +114,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 					}
 				}, 
 				function(error) {
+					alert('DB | EspeceDAO csv');
 					console.log('DB | Error processing SQL: ' + error.code, error);
 				},
 				function(tx) {	});
@@ -138,8 +140,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 			var sql = 
 				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, " +
 				"famille, referentiel, lieu_dit, station, milieu, certitude, abondance, phenologie " +  
-				"FROM espece e " +
-				"JOIN obs o ON e.num_nom = o.ce_espece " +
+				"FROM obs o " +
+				"LEFT JOIN espece e ON e.num_nom = o.ce_espece " +
 				"WHERE id_obs = :id_obs";
 			tx.executeSql(sql, [id], function(tx, results) {
 				callback(results.rows.length === 1 ? results.rows.item(0) : null);
@@ -154,8 +156,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 		this.db.transaction(function(tx) {
 			var sql = 
 				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, a_ete_transmise " +
-				"FROM espece " +
-				"JOIN obs ON num_nom = ce_espece " +
+				"FROM obs " +
+				"LEFT JOIN espece ON num_nom = ce_espece " +
 				"ORDER BY a_ete_transmise ASC, id_obs DESC";
 			tx.executeSql(sql, [], function(tx, results) {
 				 var nbre = results.rows.length,
@@ -175,7 +177,7 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping OBS table');
-			tx.executeSql('DROP TABLE IF EXISTS obs');
+			//tx.executeSql('DROP TABLE IF EXISTS obs');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS obs (" +
 					"id_obs INT NOT NULL, "+
@@ -204,6 +206,7 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
+			alert('DB | ObsDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -242,7 +245,7 @@ _.extend(___CEL.dao.PhotoDAO.prototype, {
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping PHOTO table');
-			tx.executeSql('DROP TABLE IF EXISTS photo');
+			//tx.executeSql('DROP TABLE IF EXISTS photo');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS photo (" +
 					"id_photo INT NOT NULL ," +
@@ -259,6 +262,7 @@ _.extend(___CEL.dao.PhotoDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
+			alert('DB | PhotoDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -292,7 +296,7 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 	populate: function(callback) {
 		___CEL.db.transaction(function(tx) {
 			//console.log('Dropping UTILISATEUR table');
-			tx.executeSql('DROP TABLE IF EXISTS utilisateur');
+			//tx.executeSql('DROP TABLE IF EXISTS utilisateur');
 			var sql =
 				"CREATE TABLE IF NOT EXISTS utilisateur (" +
 					"id_user INT NOT NULL, " +
@@ -304,6 +308,7 @@ _.extend(___CEL.dao.UtilisateurDAO.prototype, {
 			tx.executeSql(sql);
 		},
 		function(error) {
+			alert('DB | UtilisateurDAO populate');
 			console.log('DB | Error processing SQL: ' + error.code, error);
 		},
 		function(tx) {	});
@@ -355,7 +360,7 @@ ___CEL.models.EspeceCollection = Backbone.Collection.extend({
 		var especeDAO = new ___CEL.dao.EspeceDAO(___CEL.db),
 			self = this;
 		especeDAO.findByName(key, function(data) {
-			console.log('EspeceCollection | findByName ', data);
+			//console.log('EspeceCollection | findByName ', data);
 			self.reset(data);
 		});
 	}
@@ -455,6 +460,7 @@ ___CEL.views.saisieObs = Backbone.View.extend({
 		//this.model.attributes.position = this.position;
 		//console.log(this.model);
 		$(this.el).html(this.template({ date : this.date}));
+		alert('date ' + this.date);
 		return this;
 	}
 });
@@ -704,6 +710,7 @@ ___CEL.Router = Backbone.Router.extend({
 		});
 		$('#content').on('click', '.suppression-obs', function() {
 			supprimerObs(this.id, true);
+			window.location = '#transmission';
 		});
 		$('#content').on('click', '.supprimer-obs-transmises', function() {
 			___CEL.db.transaction(function(tx) {
@@ -821,6 +828,7 @@ ___CEL.Router = Backbone.Router.extend({
 		this.searchPage = new ___CEL.views.saisieObs();
 		this.searchPage.render();
 		self.slidePage(this.searchPage);
+		alert('sliding');
 		$(this.searchPage.el).attr('id', 'searchPage');
 	},
 	
@@ -910,12 +918,13 @@ $().ready(function() {
 	(new ___CEL.dao.ObsDAO(___CEL.db)).populate();
 	(new ___CEL.dao.PhotoDAO(___CEL.db)).populate();
 	(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
-	
+	alert('population complete');
 	___CEL.utils.templateLoader.load(
 		['obs-liste', 'obs-page', 'obs-saisie'],
 		function() {
 			___CEL.app = new ___CEL.Router();
 			Backbone.history.start();
+		alert('apps started');
 		}
 	);
 });

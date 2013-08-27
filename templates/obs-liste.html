@@ -32,9 +32,7 @@
 				<%	_.each(obs, function(observation) {
 						var attributs = observation.attributes;
 				%>
-				<li style="margin:0px;" id="li_<%= attributs.id_obs %>">
-					<a href="#transmission" id="<%= attributs.id_obs %>" class="a-transmettre suppression-element suppression-obs"><span></span></a>
-					
+				<li style="margin:0px;" id="li_<%= attributs.id_obs %>">					
 					<a href='#observation/<%= attributs.id_obs %>'>
 						<%= attributs.nom_sci %>
 						<br />
