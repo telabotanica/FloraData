@@ -910,9 +910,7 @@ ___CEL.Router = Backbone.Router.extend({
 });
 
 // Bootstrap the application
-alert('bdd');
-___CEL.db = window.openDatabase('CELApps', '1.0', 'Data Base CEL Mobile', 1024*1024*100);
-alert(window.openDatabase('CELApps', '1.0', 'Data Base CEL Mobile', 1024*1024*100));
+___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora Data', 1024*1024*100);
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
@@ -1002,7 +1000,7 @@ function miseAJourTransmission(id) {
 
 
 function onPhotoSuccess(imageData){
-	fileSystem.root.getDirectory('CEL_Apps', { create: true, exclusive: false }, function(dossier) {
+	fileSystem.root.getDirectory(REPERTOIRE, { create: true, exclusive: false }, function(dossier) {
 		var fichier = new FileEntry();
 		fichier.fullPath = imageData;
 		fichier.copyTo(dossier, (new Date()).getTime()+'.jpg', surPhotoSuccesCopie, surPhotoErreurAjout);
