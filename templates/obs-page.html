@@ -12,7 +12,13 @@
 <div class="tableview tableview-links" style="top:44px;">
 	<div class="row-fluid margin-navbar">
 		<div class="text-center">
-			<strong><%= obs.nom_sci %></strong>
+			<strong>								
+				<% if (obs.ce_espece == -1) { %>
+					<%= obs.texte_libre %>
+				<% } else { %>
+					<%= obs.nom_sci %>
+				<% } %>
+			</strong>
 		</div>
 		Vue le <%= obs.date %> 
 		<% if (obs.commune != '' && obs.commune != TEXTE_HORS_LIGNE) { %>
@@ -20,8 +26,15 @@
 		<% } %>
 		
 		<hr class="fine" />
-		Famille : <%= obs.famille %>
-		<br /> Référentiel : <%= obs.referentiel %>
+		<% if (obs.famille != null) { %>
+			Famille : <%= obs.famille %> <br />
+		<% } %>
+		Référentiel : 
+		<% if (obs.ce_espece == -1) { %>
+			<%= obs.ref_libre %>
+		<% } else { %>
+			<%= obs.referentiel %>
+		<% } %>
 		<% if (obs.lieu_dit != '') { %>
 			<br /> Lieu-dit : <%= obs.lieu_dit %>
 		<% } %>

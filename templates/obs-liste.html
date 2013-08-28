@@ -34,7 +34,11 @@
 				%>
 				<li style="margin:0px;" id="li_<%= attributs.id_obs %>">					
 					<a href='#observation/<%= attributs.id_obs %>'>
-						<%= attributs.nom_sci %>
+						<% if (attributs.ce_espece == -1) { %>
+							<%= attributs.texte_libre %>
+						<% } else { %>
+							<%= attributs.nom_sci %>
+						<% } %>
 						<br />
 						Vue le <%= attributs.date %> 
 						<% if (attributs.commune != '' && attributs.commune != TEXTE_HORS_LIGNE) { %>
@@ -73,7 +77,11 @@
 						
 						<a href='#observation/<%= arr_attributs.id_obs %>'>
 							<span class="muted">
-								<%= arr_attributs.nom_sci %>
+								<% if (attributs.ce_espece == -1) { %>
+									<%= attributs.texte_libre %>
+								<% } else { %>
+									<%= attributs.nom_sci %>
+								<% } %>
 								<br />
 								Vue le <%= arr_attributs.date %> 
 								<% if (arr_attributs.commune != '' && arr_attributs.commune != TEXTE_HORS_LIGNE) { %>

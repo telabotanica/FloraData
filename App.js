@@ -76,6 +76,7 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 				"PRIMARY KEY (id) )";
 			console.log('Creating ESPECE table');
 			tx.executeSql(sql);
+			tx.executeSql("INSERT INTO espece (id, num_nom, nom_sci, referentiel) VALUES(-1, -1, 'null', 'null')");
 		},
 		function(error) {
 			console.log('DB | Error processing SQL: ' + error.code, error);
@@ -97,7 +98,11 @@ _.extend(___CEL.dao.EspeceDAO.prototype, {
 						arr_valeurs = arr_lignes[i].split(';');
 						sql += i + ',';
 					for (var j = 0; j < arr_valeurs.length; j++) {
-						sql += arr_valeurs[j];
+						if (arr_valeurs[j] == '') {
+							sql +=  'null';
+						} else {
+							sql += arr_valeurs[j];
+						}
 						if (j < (arr_valeurs.length - 1)) {
 							sql += ',';
 						}
@@ -138,7 +143,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	findById: function(id, callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, " +
+				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, " + 
+					"ref_libre, texte_libre, ce_espece, " +
 				"famille, referentiel, lieu_dit, station, milieu, certitude, abondance, phenologie " +  
 				"FROM obs o " +
 				"LEFT JOIN espece e ON e.num_nom = o.ce_espece " +
@@ -155,7 +161,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 	findAll: function(callback) {
 		this.db.transaction(function(tx) {
 			var sql = 
-				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, a_ete_transmise " +
+				"SELECT num_nom, nom_sci, id_obs, date, commune, code_insee, a_ete_transmise, " +
+					"ce_espece, texte_libre, ref_libre " +
 				"FROM obs " +
 				"LEFT JOIN espece ON num_nom = ce_espece " +
 				"ORDER BY a_ete_transmise ASC, id_obs DESC";
@@ -195,6 +202,8 @@ _.extend(___CEL.dao.ObsDAO.prototype, {
 					"mise_a_jour TINYINT(1) NOT NULL DEFAULT 0, " +
 					"a_ete_transmise TINYINT(1) NOT NULL DEFAULT 0, " +
 					"ce_espece INT NOT NULL, " +
+					"texte_libre VARCHAR(500) NULL, " +
+					"ref_libre VARCHAR(45) NULL ," +
 					"PRIMARY KEY (id_obs), " +
 					"CONSTRAINT ce_espece " +
 						"FOREIGN KEY (ce_espece)" +
@@ -520,7 +529,7 @@ ___CEL.views.transmissionObs = Backbone.View.extend({
 			'transmises' : arr_transmises,
 			'email' : (this.utilisateur.models[0] == undefined) ? null : this.utilisateur.models[0].attributes.email
 		}
-		
+		//console.log(arr_obs);
 		$(this.el).html(this.template(json));
 		return this;
 	}
@@ -642,12 +651,12 @@ ___CEL.Router = Backbone.Router.extend({
 								" date, latitude, longitude, commune, code_insee, " + 
 								" lieu_dit, station, milieu, " +
 								" certitude, abondance, phenologie, " +
-								" mise_a_jour, ce_espece) VALUES " + 
+								" mise_a_jour, ce_espece, texte_libre, ref_libre) VALUES " + 
 								"(?, " + 
 								" ?, ?, ?, ?, ?, " +
 								" ?, ?, ?, " +
 								" ?, ?, ?, " +
-								" ?, ?) ";
+								" ?, ?, ?, ?) ";
 							
 						obs.push(id);
 						obs.push($('#date').html());
@@ -663,6 +672,8 @@ ___CEL.Router = Backbone.Router.extend({
 						obs.push($('#stade_ph').val());
 						obs.push(($('#code_insee').val() > 0) ? 1 : 0);
 						obs.push($('#num_nom_select').val());
+						obs.push(($('#num_nom_select').val() == -1) ? $('#taxon-choisi').html() : 'NULL');
+						obs.push(($('#num_nom_select').val() == -1) ? $('#referentiel').val() : 'NULL');
 						tx.executeSql(sql, obs);
 						$('#sauvegarde-obs-modal').modal('show');
 						
@@ -910,11 +921,14 @@ ___CEL.db = window.openDatabase('FloraDataApps', '1.0', 'Data Base Saisie Flora 
 ___CEL.storage = window.localStorage;
 
 $().ready(function() {
-	(new ___CEL.dao.EspeceDAO(___CEL.db)).populate();
-	(new ___CEL.dao.ObsDAO(___CEL.db)).populate();
-	(new ___CEL.dao.PhotoDAO(___CEL.db)).populate();
-	(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
-	
+	if (___CEL.storage.getItem('version') != VERSION_APP) {
+		(new ___CEL.dao.EspeceDAO(___CEL.db)).populate();
+		(new ___CEL.dao.ObsDAO(___CEL.db)).populate();
+		(new ___CEL.dao.PhotoDAO(___CEL.db)).populate();
+		(new ___CEL.dao.UtilisateurDAO(___CEL.db)).populate();
+		
+		___CEL.storage.setItem('version', VERSION_APP);
+	}
 	___CEL.utils.templateLoader.load(
 		['obs-liste', 'obs-page', 'obs-saisie'],
 		function() {
@@ -1184,7 +1198,8 @@ function transmettreObs() {
 			var sql = 
 				"SELECT num_nom, nom_sci, num_nom_retenu, nom_sci_retenu, num_taxon, famille, referentiel, " + 
 					"lieu_dit, station, milieu, certitude, abondance, phenologie, " +
-					"id_obs, latitude, longitude, date, commune, code_insee, mise_a_jour " +
+					"id_obs, latitude, longitude, date, commune, code_insee, mise_a_jour, " +
+					"texte_libre, ref_libre, ce_espece " +
 				"FROM espece " +
 				"JOIN obs ON num_nom = ce_espece " +
 				"WHERE a_ete_transmise = '0' " + 
@@ -1198,6 +1213,9 @@ function transmettreObs() {
 					arr_obs[id] = results.rows.item(i);
 					enregistrerPhotosObs(id);
 				}
+			},
+			function(error) {
+				console.log('DB | Error processing SQL: ' + error.code, error);
 			});
 		},
 		function(error) {
@@ -1267,13 +1285,15 @@ function construireObs(id, img_codes, img_noms) {
 			'date' : obs.date, 
 			'notes' : '',
 			
-			'nom_sel' : obs.nom_sci,
+			'nom_sel' : (obs.ce_espece == -1) ? obs.texte_libre : obs.nom_sci,
 			'num_nom_sel' : obs.num_nom,
-			'nom_ret' : obs.nom_sci_retenu,
-			'num_nom_ret' : obs.num_nom_retenu,
+			'nom_ret' : (obs.ce_espece == -1) ? obs.texte_libre : obs.nom_sci,
+			'num_nom_ret' : obs.num_nom,
+			//'nom_ret' : obs.nom_sci_retenu,
+			//'num_nom_ret' : obs.num_nom_retenu,
 			'num_taxon' : obs.num_taxon,
 			'famille' : obs.famille,
-			'referentiel' : obs.referentiel,
+			'referentiel' : (obs.ce_espece == -1) ? obs.ref_libre : obs.referentiel,
 			
 			'latitude' : obs.latitude,
 			'longitude' : obs.longitude,
