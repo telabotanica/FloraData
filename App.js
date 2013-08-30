@@ -745,13 +745,6 @@ ___CEL.Router = Backbone.Router.extend({
 		
 		
 		$('#content').on('click', '.ajouter-photos', function(event) {
-			var options = { 
-				destinationType: destinationType.FILE_URI,
-				encodingType: Camera.EncodingType.JPEG
-			};
-			if (this.id == 'chercher-photos') {
-				options.sourceType = pictureSource.PHOTOLIBRARY;
-			}
 			navigator.camera.getPicture(
 				onPhotoSuccess, 
 				function(message){
