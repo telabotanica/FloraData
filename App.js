@@ -655,7 +655,7 @@ ___CEL.Router = Backbone.Router.extend({
 			
 			$('#obs-photos').html('');
 			$('#nbre-photos').html(0);
-			$('#prendre-photos-texte').html('Ajouter une photo...');
+			$('#prendre-photos-texte').html('Prendre une photo...');
 			$('.ajouter-photos').removeClass('hide');
 		});
 		
@@ -800,7 +800,7 @@ ___CEL.Router = Backbone.Router.extend({
 				$('#nbre-photos').html($('#nbre-photos').html()-1);
 				$('.ajouter-photos').removeClass('hide');
 				if ($('#nbre-photos').html() == 0) {
-					$('#prendre-photos-texte').html('Ajouter une photo...');
+					$('#prendre-photos-texte').html('Prendre une photo...');
 				}
 			},
 			function(error) {
