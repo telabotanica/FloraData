@@ -631,6 +631,28 @@ ___CEL.Router = Backbone.Router.extend({
 			$('#liste-taxons').html('');
 			$('#taxon-choisi').html('');
 			$('#num_nom_select').val(0);
+			
+			$('#lieudit').val('');
+			$('#station').val('');
+			$('#milieu').val('');
+						
+			$('#certitude').val('NULL');
+			$('#abondance').val('NULL');
+			$('#stade_ph').val('NULL');
+		});
+		$('#garder-lieu').on('click', function(event) {
+			$('#referentiel').val('bdtfx:v1.01');
+			$('#taxon').val('');
+			$('#taxon-choisi').html('');
+			$('#num_nom_select').val(0);
+			$('#liste-taxons').html('');
+			
+			$('#certitude').val('NULL');
+			$('#abondance').val('NULL');
+			$('#stade_ph').val('NULL');
+			
+			$('#form-lieu').addClass('show');
+			$('#form-plante').addClass('hide');
 		});
 		
 		
@@ -745,12 +767,20 @@ ___CEL.Router = Backbone.Router.extend({
 		
 		
 		$('#content').on('click', '.ajouter-photos', function(event) {
+			var options = { 
+				destinationType: destinationType.FILE_URI,
+				encodingType: Camera.EncodingType.JPEG
+			};
+			if (this.id == 'chercher-photos') {
+				options.sourceType = pictureSource.PHOTOLIBRARY;
+			}
 			navigator.camera.getPicture(
 				onPhotoSuccess, 
 				function(message){
 					//alert('Erreur camera: ' + message);
 					console.log('CAMERA failed because: ' + message);
-				}
+				},
+				options
 			);
 		});
 		$('#content').on('click', '.supprimer-photos', function() {
