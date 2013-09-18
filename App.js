@@ -650,9 +650,13 @@ ___CEL.Router = Backbone.Router.extend({
 			$('#certitude').val('NULL');
 			$('#abondance').val('NULL');
 			$('#stade_ph').val('NULL');
-			
-			$('#form-lieu').removeClass('hide');
 			$('#form-plante').addClass('hide');
+			$('#form-lieu').removeClass('hide');
+			
+			$('#obs-photos').html('');
+			$('#nbre-photos').html(0);
+			$('#prendre-photos-texte').html('Ajouter une photo...');
+			$('.ajouter-photos').removeClass('hide');
 		});
 		
 		
@@ -1054,7 +1058,7 @@ function surPhotoSuccesCopie(entry) {
 		$('#nbre-photos').html(nbre_photos);
 		$('#prendre-photos-texte').html('Prendre une autre photo...');
 		if (nbre_photos == LIMITE_NBRE_PHOTOS) {
-			$('#prendre-photos').addClass('hide');
+			$('.ajouter-photos').addClass('hide');
 		}
 	},
 	surPhotoErreurAjout);
