@@ -651,7 +651,7 @@ ___CEL.Router = Backbone.Router.extend({
 			$('#abondance').val('NULL');
 			$('#stade_ph').val('NULL');
 			
-			$('#form-lieu').addClass('show');
+			$('#form-lieu').removeClass('hide');
 			$('#form-plante').addClass('hide');
 		});
 		
