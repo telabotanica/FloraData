@@ -798,7 +798,7 @@ ___CEL.Router = Backbone.Router.extend({
 				
 				$('#elt_'+id).remove();
 				$('#nbre-photos').html($('#nbre-photos').html()-1);
-				$('#prendre-photos').removeClass('hide');
+				$('.ajouter-photos').removeClass('hide');
 				if ($('#nbre-photos').html() == 0) {
 					$('#prendre-photos-texte').html('Ajouter une photo...');
 				}
@@ -1106,7 +1106,7 @@ function surSuccesGeoloc(position) {
 			success : function(data) {
 				console.log('NOM_COMMUNE found.');
 				$('#location').html(data['nom']);
-				$('#code-insee').val(data['codeINSEE']);
+				$('#code_insee').val(data['codeINSEE']);
 			},
 			complete : function() { 
 				var texte = ($('#location').html() == '') ? TEXTE_HORS_LIGNE : $('#location').html();
