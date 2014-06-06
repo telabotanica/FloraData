@@ -19,6 +19,7 @@
 		<link href="css/app.css" rel="stylesheet" type="text/css"/>
 			
 		<!-- Javascript -->
+		<script src="cordova.js" type="text/javascript" ></script>
 		<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
 		<!-- Javascript : appli saisie -->
 		<script type="text/javascript">
@@ -32,10 +33,10 @@
 			// Répertoire d'enregistrements des photos
 			var REPERTOIRE = "Flora_Data";
 			// URL du web service réalisant l'insertion des données dans la base du CEL.
-			var SERVICE_SAISIE_URL = "http://api.tela-botanica.org/service:cel/CelWidgetSaisie";
+			var SERVICE_SAISIE_URL = "http://api-test.tela-botanica.org/service:cel/CelWidgetSaisie";
 			//var	SERVICE_SAISIE_URL = 'http://www.tela-botanica.org/eflore-test/cel/jrest/CelWidgetSaisie';
 			// URL du web service vérifiant les comptes de transmission au CEL.
-			var SERVICE_ANNUAIRE = 'http://www.tela-botanica.org/client/annuaire_nouveau/actuelle/jrest/utilisateur/identite-par-courriel/';
+			var SERVICE_ANNUAIRE = 'http://www.tela-botanica.org/service:annuaire:utilisateur/identite-par-courriel/';
 			// Nombre d'observations max autorisé avant transmission
 			var LIMITE_NBRE_TRANSMISSION = 10;
 			// Nombre de photos max autorisées avant sauvegarde
@@ -69,7 +70,6 @@
 		<script src="js/underscore-min.js" type="text/javascript" ></script>	
 		<script src="js/backbone-min.js" type="text/javascript" ></script>	
 		<script src="App.js" type="text/javascript" ></script>
-		<script src="phonegap.js" type="text/javascript" ></script>
 	</head>
 	
 	
