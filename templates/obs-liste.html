@@ -77,10 +77,10 @@
 						
 						<a href='#observation/<%= arr_attributs.id_obs %>'>
 							<span class="muted">
-								<% if (attributs.ce_espece == -1) { %>
-									<%= attributs.texte_libre %>
+								<% if (arr_attributs.ce_espece == -1) { %>
+									<%= arr_attributs.texte_libre %>
 								<% } else { %>
-									<%= attributs.nom_sci %>
+									<%= arr_attributs.nom_sci %>
 								<% } %>
 								<br />
 								Vue le <%= arr_attributs.date %> 
