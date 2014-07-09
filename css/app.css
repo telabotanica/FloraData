@@ -212,8 +212,8 @@ span.suppression-element span {
   -o-background-size: 58px 31px;
   background-size: 58px 31px;
 }
-.tableview-links li > a.suppression-element { border-right: 2px solid #cccccc; }
-.tableview-links li > span.suppression-element { border-right: 2px solid #cccccc; }
+/*.tableview-links li > a.suppression-element { border-right: 2px solid #cccccc; }
+.tableview-links li > span.suppression-element { border-right: 2px solid #cccccc; }*/
 .tableview-links li > a.suppression-element span {
   background: transparent url(../img/detail-suppression-button.png);
   -webkit-background-size: 58px 31px;
